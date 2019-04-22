@@ -44,8 +44,11 @@ const common = {
             chunksSortMode: 'dependency'
         }),
         new CopyWebpackPlugin([
+            {from: path.join(__dirname, '..') + '/config.json', to: 'assets/config'},
             {from: 'src/assets', to: 'assets'}
-        ])
+        ], {
+            debug: true
+        })
     ]
 }
 

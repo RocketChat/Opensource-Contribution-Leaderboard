@@ -6,11 +6,11 @@ const dataPath = '../src/assets/data/data.json'
 const dataBuffer = {}
 
 async function getAllContributorsInfo() {
-    const Config = jsonfile.readFileSync('./config.json')
+    const Config = jsonfile.readFileSync('../config.json')
     const contributors = Config.contributors
 
     Promise.mapSeries(contributors, contributor => {
-        return Promise.delay(500)
+        return Promise.delay(2000)
             .then( async () => {
                 const organization = Config.organization
                 API.getContributorInfo(organization, contributor).then( res => {
@@ -20,7 +20,7 @@ async function getAllContributorsInfo() {
                         if (err) console.error(err)
                     })
                 })
-            }).delay(8000)
+            }).delay(10000)
     })
 }
 

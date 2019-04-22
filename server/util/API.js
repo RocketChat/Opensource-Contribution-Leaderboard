@@ -1,5 +1,5 @@
 const axios = require('axios')
-const Config = require('../config.json')
+const Config = require('../../config.json')
 
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'
