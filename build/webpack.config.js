@@ -17,17 +17,17 @@ const common = {
     entry: {
         app: './src/index.js'
     },
-    resolve: {
-        alias: {
-          '@': resolve('src'),
-        }
-    },
     module: {
         rules: [
             {
                 test: /\.css$/,
                 include: path.resolve(__dirname, '../src'),
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.scss$/,
+                include: path.resolve(__dirname, '../src'),
+                use: ['style-loader', 'css-loader', 'sass-loader']
             }
         ]
     },
