@@ -2,7 +2,7 @@ const Promise = require("bluebird")
 const API = require('./util/API')
 const jsonfile = require('jsonfile')
 
-const dataPath = './data/data.json'
+const dataPath = '../src/assets/data/data.json'
 const dataBuffer = {}
 
 async function getAllContributorsInfo() {

@@ -1,21 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>GSoC Contribution Leaderboard</title>
 </head>
+
 <body>
   <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/"><img src="https://cdn.worldvectorlogo.com/logos/rocket-chat.svg" height="42" width="42"> GSoC Contribution Leaderboard</a>
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/"><img
+        src="https://cdn.worldvectorlogo.com/logos/rocket-chat.svg" height="42" width="42"> GSoC Contribution
+      Leaderboard</a>
     <ul class="navbar-nav px-3">
       <li class="nav-item text-nowrap">
-        <a class="nav-link" id="github" href="https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/" target="_blank" rel="noopener noreferrer">
+        <a class="nav-link" id="github" href="https://github.com/lolimay/GSoC-Contribution-Leaderboard-Node"
+          target="_blank" rel="noopener noreferrer">
           <img src="http://pluspng.com/img-png/github-octocat-vector-png--1600.png" height="45" width="45">
         </a>
       </li>
     </ul>
   </nav>
+  <div class="container">
+    <h2 style="display:inline;">Contributors</h2>
+    <em style="font-size: 16px;color:white">Total: {{total}}</em>
+    <table style="margin: 0; width: 100%; font-size: 16px;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td></td>
+        <td colspan="2" style="font-weight: bold; padding: 32px 8px 8px 8px; color: #333;">
+          Username
+        </td>
+        <td
+          style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
+          <a href="?sort=p">Open PRs</a>
+        </td>
+        <td
+          style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
+          <a href="?sort=m">Merged PRs</a>
+        </td>
+        <td
+          style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
+          <a href="?sort=i">Issues</a>
+        </td>
+      </tr>
+    </table>
+  </div>
 </body>
+
 </html>
