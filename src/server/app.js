@@ -8,7 +8,7 @@ const logPath = '../assets/data/log.json'
 const dataBuffer = jsonfile.readFileSync(dataPath)
 const logBuffer = jsonfile.readFileSync(logPath)
 let interval = 150
-let delay = 1
+let delay = 6
 
 async function getAllContributorsInfo() {
     const Config = jsonfile.readFileSync('./config.json')
@@ -25,10 +25,9 @@ async function getAllContributorsInfo() {
         await Promise.delay(delay * 1000)
                 
         API.getContributorInfo(organization, contributor).then( res => {
-            console.log(res)
             if (res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsLink !== -1 && res.openPRsNumber != -1) {
                 dataBuffer[`${contributor}`] = res
-
+                console.log(res)
                 // Update contributors infomation
                 jsonfile.writeFile(dataPath, dataBuffer, { spaces: 2 }, (err) => {
                     if (err) console.error(err)
