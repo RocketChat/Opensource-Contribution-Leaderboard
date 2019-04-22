@@ -39,6 +39,7 @@ async function getContributorAvatar(contributor) {
 
 async function getOpenPRsNumber(organization, contributor) {
     const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open`
+
     const res = await get(APIHOST + OpenPRsURL)
 
     return res.data.total_count
@@ -46,6 +47,7 @@ async function getOpenPRsNumber(organization, contributor) {
 
 async function getMergedPRsNumber(organization, contributor) {
     const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged`
+
     const res = await get(APIHOST + MergedPRsURL)
 
     return res.data.total_count
@@ -53,6 +55,7 @@ async function getMergedPRsNumber(organization, contributor) {
 
 async function getIssuesNumber(organization, contributor) {
     const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}`
+
     const res = await get(APIHOST + IssuesURL)
 
     return res.data.total_count
@@ -84,5 +87,6 @@ module.exports = {
     getOpenPRsNumber,
     getMergedPRsNumber,
     getIssuesNumber,
-    getContributorInfo
+    getContributorInfo,
+    checkRateLimit
 }

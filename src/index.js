@@ -110,8 +110,8 @@ axios.get('/assets/data/log.json')
         const {starttime, endtime} = res.data
         const relativeTime = moment(new Date(endtime)).from(new Date(starttime))
         console.log(relativeTime)
-        if(relativeTime.match(/[\da]+.+/) != null) {
+        if(relativeTime.match(/[\da]+.+/) !== null) {
             const lastupdate = document.querySelector('.lastupdate')
-            lastupdate.innerText = `Last Updated: ${relativeTime.match(/\d+.+/)[0]} ago`
+            lastupdate.innerText = `Last Updated: ${relativeTime.match(/[\da]+.+/)[0]} ago`
         }
     })
