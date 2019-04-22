@@ -1,7 +1,28 @@
-const request = require('request');
+const Promise = require("bluebird")
+const API = require('./util/API')
+const jsonfile = require('jsonfile')
 
-request('http://www.baidu.com', function (error, response, body) {
-  console.log('error:', error); // Print the error if one occurred
-  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  console.log('body:', body); // Print the HTML for the Google homepage.
-});
+const dataPath = './data/data.json'
+const dataBuffer = {}
+
+async function getAllContributorsInfo() {
+    const Config = jsonfile.readFileSync('./config.json')
+    const contributors = Config.contributors
+
+    Promise.mapSeries(contributors, contributor => {
+        return Promise.delay(500)
+            .then( async () => {
+                const organization = Config.organization
+                API.getContributorInfo(organization, contributor).then( res => {
+                    dataBuffer[`${contributor}`] = res
+                    console.log(dataBuffer)
+                    jsonfile.writeFile(dataPath, dataBuffer, { spaces: 2 }, (err) => {
+                        if (err) console.error(err)
+                    })
+                })
+            }).delay(8000)
+    })
+}
+
+getAllContributorsInfo()
+setInterval(getAllContributorsInfo, 5 * 60 * 1000)
