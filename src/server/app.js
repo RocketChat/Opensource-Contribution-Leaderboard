@@ -3,14 +3,14 @@ const API = require('./util/API')
 const jsonfile = require('jsonfile')
 const moment = require('moment')
 
-const dataPath = '../src/assets/data/data.json'
+const dataPath = '../assets/data/data.json'
 const logPath = '../src/assets/data/log.json'
 const dataBuffer = {}
 const logBuffer = {}
 let interval = 150
 
 async function getAllContributorsInfo() {
-    const Config = jsonfile.readFileSync('../config.json')
+    const Config = jsonfile.readFileSync('./config.json')
     const organization = Config.organization
     const contributors = Config.contributors
 

@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "bluebird": "^3.5.4",
-    "jsonfile": "^5.0.0"
-  }
-}
