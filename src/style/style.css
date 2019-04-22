@@ -66,3 +66,12 @@ td {
 .container {
   max-width: 900px;
 }
+
+.footer {
+  padding: 16px 0!important;
+}
+
+.footer a {
+  font-size: 16px;
+  color: #007bff!important;
+}

@@ -94,3 +94,11 @@ axios.get('/assets/data/data.json')
         })
     })
 
+axios.get('/assets/config/config.json')
+    .then( res => {
+        const {organization, organizationGithubUrl, organizationHomepage} = res.data
+        const footer = document.querySelector('.footer .text-muted')
+        footer.innerHTML = `
+        <a href="${organizationHomepage}" target="_blank" rel="noopener noreferrer">${organizationHomepage}</a> |
+        <a href="${organizationGithubUrl}" target="_blank" rel="noopener noreferrer">Github(${organization})</a>`.trim()
+    })
