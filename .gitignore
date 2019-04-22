@@ -2,3 +2,4 @@
 server/data
 config.json
 assets/config.json
+dist
