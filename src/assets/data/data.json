@@ -115,7 +115,7 @@
     "openPRsNumber": 0,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:prajvalraval+is:open",
     "mergedPRsNumber": 4,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:prajvalraval+is:merged",
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:thedreamsaver+is:merged",
     "issuesNumber": 0,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:prajvalraval"
   },
