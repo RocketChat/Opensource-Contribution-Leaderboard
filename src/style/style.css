@@ -11,6 +11,17 @@ td a {
   font-weight: normal;
 }
 
+table td {
+  border-top: 1px solid #EDEFF2;
+  padding: 16px 8px;
+  font-family: Helvetica, Arial, sans-serif;
+  max-height: 18px;
+  height: 18px!important;
+}
+table tbody tr td {
+  border-top: none!important;
+}
+
 .navbar {
   display: flex;
   align-items: center;
@@ -41,7 +52,7 @@ td a {
   color: #ffffff;
 }
 .nav-link {
-  padding-right: 10px;
+  padding-right: 16px;
 }
 
 #github {
