@@ -16,7 +16,12 @@ axios.get('/assets/data/data.json')
                 issuesNumber: data[username].issuesNumber
             })
         })
-        console.log(contributors)
+
+        // reder total contributor numbers
+        const totalNumbers = list.length
+        const totalEm = document.querySelector('.total')
+        totalEm.innerText = 'Total: ' + totalNumbers
+
         contributors = contributors.sort( (a, b) => {
             if ( a.mergedPRsNumber < b.mergedPRsNumber ){
                 return 1;
@@ -38,7 +43,6 @@ axios.get('/assets/data/data.json')
             }
             return 0;
         })
-        console.log(contributors)
         contributors.forEach( contributor => {
             const tr = document.createElement('tr')
             

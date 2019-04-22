@@ -64,8 +64,8 @@
     "avatarUrl": "https://avatars0.githubusercontent.com/u/30552772?v=4",
     "openPRsNumber": 1,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:snuff4+is:open",
-    "mergedPRsNumber": 7,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:snuff4+is:merged",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:aryankoul+is:merged",
     "issuesNumber": 3,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:snuff4"
   },
@@ -84,8 +84,8 @@
     "avatarUrl": "https://avatars2.githubusercontent.com/u/6867958?v=4",
     "openPRsNumber": 2,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:thayannevls+is:open",
-    "mergedPRsNumber": 7,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:thayannevls+is:merged",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:aditya-kolla+is:merged",
     "issuesNumber": 1,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:thayannevls"
   },
@@ -94,8 +94,8 @@
     "avatarUrl": "https://avatars3.githubusercontent.com/u/32809272?v=4",
     "openPRsNumber": 4,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:dev-ritik+is:open",
-    "mergedPRsNumber": 6,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:dev-ritik+is:merged",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:sudipt1999+is:merged",
     "issuesNumber": 0,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:dev-ritik"
   },
@@ -104,8 +104,8 @@
     "avatarUrl": "https://avatars2.githubusercontent.com/u/30703644?v=4",
     "openPRsNumber": 1,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:nbamir+is:open",
-    "mergedPRsNumber": 6,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:nbamir+is:merged",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:shloak17107+is:merged",
     "issuesNumber": 2,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:nbamir"
   },
@@ -144,8 +144,8 @@
     "avatarUrl": "https://avatars3.githubusercontent.com/u/10170507?v=4",
     "openPRsNumber": 0,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:davide95+is:open",
-    "mergedPRsNumber": 3,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:davide95+is:merged",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:mushroomgenie+is:merged",
     "issuesNumber": 4,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:davide95"
   },
@@ -154,8 +154,8 @@
     "avatarUrl": "https://avatars0.githubusercontent.com/u/32578541?v=4",
     "openPRsNumber": 0,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:codekhal+is:open",
-    "mergedPRsNumber": 3,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:codekhal+is:merged",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:gsunit+is:merged",
     "issuesNumber": 3,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:codekhal"
   },
@@ -234,8 +234,8 @@
     "avatarUrl": "https://avatars3.githubusercontent.com/u/16045021?v=4",
     "openPRsNumber": 0,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:pranay414+is:open",
-    "mergedPRsNumber": 2,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:pranay414+is:merged",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:abrahamks+is:merged",
     "issuesNumber": 2,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:pranay414"
   },
@@ -264,9 +264,309 @@
     "avatarUrl": "https://avatars2.githubusercontent.com/u/30755453?v=4",
     "openPRsNumber": 3,
     "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:supra08+is:open",
-    "mergedPRsNumber": 2,
-    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:supra08+is:merged",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:bolariin+is:merged",
     "issuesNumber": 0,
     "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:supra08"
+  },
+  "thelimitbreaker": {
+    "home": "https://github.com/thelimitbreaker",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/24780524?v=4",
+    "openPRsNumber": 2,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:thelimitbreaker+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:thelimitbreaker+is:merged",
+    "issuesNumber": 6,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:thelimitbreaker"
+  },
+  "eliezer-of": {
+    "home": "https://github.com/eliezer-of",
+    "avatarUrl": "https://avatars2.githubusercontent.com/u/18370669?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:eliezer-of+is:open",
+    "mergedPRsNumber": 9,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:shubhsherl+is:merged",
+    "issuesNumber": 4,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:eliezer-of"
+  },
+  "anhanh11001": {
+    "home": "https://github.com/anhanh11001",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/36192582?v=4",
+    "openPRsNumber": 1,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:anhanh11001+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:anhanh11001+is:merged",
+    "issuesNumber": 4,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:anhanh11001"
+  },
+  "vankineenitawrun": {
+    "home": "https://github.com/vankineenitawrun",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/30470229?v=4",
+    "openPRsNumber": 1,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:vankineenitawrun+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:vankineenitawrun+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:vankineenitawrun"
+  },
+  "bodasadalla98": {
+    "home": "https://github.com/bodasadalla98",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/32247544?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:bodasadalla98+is:open",
+    "mergedPRsNumber": 8,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:ubarsaiyan+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:bodasadalla98"
+  },
+  "aditya-kolla": {
+    "home": "https://github.com/aditya-kolla",
+    "avatarUrl": "https://avatars2.githubusercontent.com/u/31780340?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:aditya-kolla+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:aditya-kolla+is:merged",
+    "issuesNumber": 1,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:aditya-kolla"
+  },
+  "sudipt1999": {
+    "home": "https://github.com/sudipt1999",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/38929617?v=4",
+    "openPRsNumber": 7,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:sudipt1999+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:sudipt1999+is:merged",
+    "issuesNumber": 14,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:sudipt1999"
+  },
+  "shloak17107": {
+    "home": "https://github.com/shloak17107",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/31565271?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:shloak17107+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:shloak17107+is:merged",
+    "issuesNumber": 2,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:shloak17107"
+  },
+  "djorkaeffalexandre": {
+    "home": "https://github.com/djorkaeffalexandre",
+    "avatarUrl": "https://avatars2.githubusercontent.com/u/29778115?v=4",
+    "openPRsNumber": 2,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:djorkaeffalexandre+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:djorkaeffalexandre+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:djorkaeffalexandre"
+  },
+  "adizbek": {
+    "home": "https://github.com/adizbek",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/10253982?v=4",
+    "openPRsNumber": 6,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:adizbek+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:adizbek+is:merged",
+    "issuesNumber": 1,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:adizbek"
+  },
+  "avsingh999": {
+    "home": "https://github.com/avsingh999",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/25536022?v=4",
+    "openPRsNumber": 2,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:avsingh999+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:avsingh999+is:merged",
+    "issuesNumber": 5,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:avsingh999"
+  },
+  "mushroomgenie": {
+    "home": "https://github.com/mushroomgenie",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/24211855?v=4",
+    "openPRsNumber": 1,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:mushroomgenie+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:mushroomgenie+is:merged",
+    "issuesNumber": 1,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:mushroomgenie"
+  },
+  "gsunit": {
+    "home": "https://github.com/gsunit",
+    "avatarUrl": "https://avatars2.githubusercontent.com/u/32139782?v=4",
+    "openPRsNumber": 4,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:gsunit+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:gsunit+is:merged",
+    "issuesNumber": 3,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:gsunit"
+  },
+  "pratyush1197": {
+    "home": "https://github.com/pratyush1197",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/32239181?v=4",
+    "openPRsNumber": 2,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:pratyush1197+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:pratyush1197+is:merged",
+    "issuesNumber": 3,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:pratyush1197"
+  },
+  "promehul": {
+    "home": "https://github.com/promehul",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/32803738?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:promehul+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:promehul+is:merged",
+    "issuesNumber": 1,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:promehul"
+  },
+  "sk1410": {
+    "home": "https://github.com/sk1410",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/46655436?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:sk1410+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:sk1410+is:merged",
+    "issuesNumber": 3,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:sk1410"
+  },
+  "alinasser96": {
+    "home": "https://github.com/alinasser96",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/19759129?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:alinasser96+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:alinasser96+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:alinasser96"
+  },
+  "dtran26": {
+    "home": "https://github.com/dtran26",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/7690403?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:dtran26+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:dtran26+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:dtran26"
+  },
+  "alexfanchina": {
+    "home": "https://github.com/alexfanchina",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/11610348?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:alexfanchina+is:open",
+    "mergedPRsNumber": 2,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:cool-fire+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:alexfanchina"
+  },
+  "abrahamks": {
+    "home": "https://github.com/abrahamks",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/3590693?v=4",
+    "openPRsNumber": 1,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:abrahamks+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:abrahamks+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:abrahamks"
+  },
+  "jaya738": {
+    "home": "https://github.com/jaya738",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/23853537?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:jaya738+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:jaya738+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:jaya738"
+  },
+  "bolariin": {
+    "home": "https://github.com/bolariin",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/24629960?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:bolariin+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:bolariin+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:bolariin"
+  },
+  "gargarchit": {
+    "home": "https://github.com/gargarchit",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/42545374?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:gargarchit+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:gargarchit+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:gargarchit"
+  },
+  "vishal260700": {
+    "home": "https://github.com/vishal260700",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/36950862?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:vishal260700+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:vankineenitawrun+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:vishal260700"
+  },
+  "hv7214": {
+    "home": "https://github.com/hv7214",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/42354803?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:hv7214+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:hv7214+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:hv7214"
+  },
+  "aryankoul": {
+    "home": "https://github.com/aryankoul",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/14865238?v=4",
+    "openPRsNumber": 2,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:aryankoul+is:open",
+    "mergedPRsNumber": 1,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:aryankoul+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:aryankoul"
+  },
+  "ilovrencic": {
+    "home": "https://github.com/ilovrencic",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/29017823?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:ilovrencic+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:ilovrencic+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:ilovrencic"
+  },
+  "mehtabhazra1998": {
+    "home": "https://github.com/mehtabhazra1998",
+    "avatarUrl": "https://avatars3.githubusercontent.com/u/43774678?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:mehtabhazra1998+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:mehtabhazra1998+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:mehtabhazra1998"
+  },
+  "anshulmak": {
+    "home": "https://github.com/anshulmak",
+    "avatarUrl": "https://avatars2.githubusercontent.com/u/22409288?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:anshulmak+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:anshulmak+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:anshulmak"
+  },
+  "smithshelke": {
+    "home": "https://github.com/smithshelke",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/31080954?v=4",
+    "openPRsNumber": 0,
+    "openPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:smithshelke+is:open",
+    "mergedPRsNumber": 0,
+    "mergedPRsLink": "https://github.com/pulls?q=is:pr+org:RocketChat+author:avsingh999+is:merged",
+    "issuesNumber": 0,
+    "issuesLink": "https://github.com/issues?q=is:issue+org:RocketChat+author:smithshelke"
   }
 }
