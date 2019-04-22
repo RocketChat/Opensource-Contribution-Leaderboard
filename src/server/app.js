@@ -4,9 +4,9 @@ const jsonfile = require('jsonfile')
 const moment = require('moment')
 
 const dataPath = '../assets/data/data.json'
-const logPath = '../src/assets/data/log.json'
-const dataBuffer = {}
-const logBuffer = {}
+const logPath = '../assets/data/log.json'
+const dataBuffer = jsonfile.readFileSync(dataPath)
+const logBuffer = jsonfile.readFileSync(logPath)
 let interval = 150
 
 async function getAllContributorsInfo() {
@@ -24,14 +24,14 @@ async function getAllContributorsInfo() {
         await Promise.delay(6000)
                 
         API.getContributorInfo(organization, contributor).then( res => {
-            dataBuffer[`${contributor}`] = res
+            if (res.avatarUrl !== '' | res.issuesNumber !== -1 | res.mergedPRsLink !== -1 | res.openPRsNumber != -1) {
+                dataBuffer[`${contributor}`] = res
 
-            console.log(res)
-
-            // Update contributors infomation
-            jsonfile.writeFile(dataPath, dataBuffer, { spaces: 2 }, (err) => {
-                if (err) console.error(err)
-            })
+                // Update contributors infomation
+                jsonfile.writeFile(dataPath, dataBuffer, { spaces: 2 }, (err) => {
+                    if (err) console.error(err)
+                })
+            }
         })
 
         // Record time

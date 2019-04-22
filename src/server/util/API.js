@@ -1,5 +1,6 @@
 const axios = require('axios')
 const Config = require('../config.json')
+const chalk = require('chalk')
 
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'
@@ -21,20 +22,38 @@ async function get (url, authToken) {
         }
       })
     } catch (err) {
-      console.log(err)
+        const message = err.response.data.message
+        switch (message) {
+            case 'Bad credentials':
+                console.log(chalk.red(('[ERROR] Your GitHub Token is not correct! Please check it in the config.json.')))
+                process.exit()
+                break
+            default:
+                console.log(chalk.red(message))
+        }
     }
 }
 
 async function checkRateLimit() {
+
     const res = await get(APIHOST + '/rate_limit')
 
-    return res.data
+    if (res !== undefined) {
+        return res.data.avatar_url
+    } else {
+        return {}
+    }
 }
 
 async function getContributorAvatar(contributor) {
+
     const res = await get(APIHOST + '/users/' + contributor)
 
-    return res.data.avatar_url
+    if (res !== undefined) {
+        return res.data.avatar_url
+    } else {
+        return ''
+    }
 }
 
 async function getOpenPRsNumber(organization, contributor) {
@@ -42,7 +61,11 @@ async function getOpenPRsNumber(organization, contributor) {
 
     const res = await get(APIHOST + OpenPRsURL)
 
-    return res.data.total_count
+    if (res !== undefined) {
+        return res.data.total_count
+    } else {
+        return -1
+    }
 }
 
 async function getMergedPRsNumber(organization, contributor) {
@@ -50,7 +73,11 @@ async function getMergedPRsNumber(organization, contributor) {
 
     const res = await get(APIHOST + MergedPRsURL)
 
-    return res.data.total_count
+    if (res !== undefined) {
+        return res.data.total_count
+    } else {
+        return -1
+    }
 }
 
 async function getIssuesNumber(organization, contributor) {
@@ -58,7 +85,11 @@ async function getIssuesNumber(organization, contributor) {
 
     const res = await get(APIHOST + IssuesURL)
 
-    return res.data.total_count
+    if (res !== undefined) {
+        return res.data.total_count
+    } else {
+        return -1
+    }
 }
 
 async function getContributorInfo(organization, contributor) {
