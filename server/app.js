@@ -3,7 +3,7 @@ const API = require('./util/API')
 const jsonfile = require('jsonfile')
 
 const dataPath = '../src/assets/data/data.json'
-const dataBuffer = {}
+const dataBuffer = jsonfile.readFileSync('../src/assets/data/data.json')
 
 async function getAllContributorsInfo() {
     const Config = jsonfile.readFileSync('../config.json')
