@@ -1,6 +1,8 @@
 import './style/style.css'
 import './style/bootstrap.css'
 import axios from 'axios'
+import moment, { relativeTimeRounding } from 'moment'
+import { relative } from 'path';
 
 axios.get('/assets/data/data.json')
     .then( res => {
@@ -101,4 +103,14 @@ axios.get('/assets/config/config.json')
         footer.innerHTML = `
         <a href="${organizationHomepage}" target="_blank" rel="noopener noreferrer">${organizationHomepage}</a> |
         <a href="${organizationGithubUrl}" target="_blank" rel="noopener noreferrer">Github(${organization})</a>`.trim()
+    })
+
+axios.get('/assets/data/log.json')
+    .then( res => {
+        const {starttime, endtime} = res.data
+        const releativeTime = moment(new Date(endtime)).from(new Date(starttime))
+        if(releativeTime.match(/\d+.+/) != null) {
+            const lastupdate = document.querySelector('.lastupdate')
+            lastupdate.innerText = `Last Updated: ${releativeTime.match(/\d+.+/)[0]} ago`
+        }
     })
