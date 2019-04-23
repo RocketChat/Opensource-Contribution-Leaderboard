@@ -5,7 +5,7 @@
 
 ## Introduction
 
-This is Node.js implementation of the [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). The original project cannot count the students' contributions correctly because of its complex inter-mechanism. It's not a good idea that we try to record students' contributions ourselves; the smarter approach is to call the GitHub API directly. So I implement a much more simple and faster one with the same frontend but completely different server service. You can view [this site](https://gsoc.lolimay.cn) for realtime preview.
+This is the Node.js implementation of the [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). The original project cannot count the students' contributions correctly because of its complex inner-mechanism. It's not a good idea that we try to record students' contributions ourselves; the smarter approach is to call the GitHub API directly. So I implement a much more simple and faster one with the same frontend but completely different server service. You can view [this site](https://gsoc.lolimay.cn) for realtime preview.
 
 ### Simple
 This new implementation of the [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/) is really simple compared to the original one, whose server-side code is within 150 lines only. It works well with small memory usage.
