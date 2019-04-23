@@ -3,6 +3,7 @@ const API = require('./util/API')
 const jsonfile = require('jsonfile')
 const fs = require('fs')
 
+const dataBasePath = '../assets/data'
 const dataPath = '../assets/data/data.json'
 const logPath = '../assets/data/log.json'
 
@@ -10,6 +11,10 @@ let interval = 150
 let delay = 6
 let dataBuffer = {}
 let logBuffer = {}
+
+if (!fs.existsSync(dataBasePath)) {
+    fs.mkdirSync(dataBasePath)
+}
 
 if (fs.existsSync(dataPath)) {
     dataBuffer = jsonfile.readFileSync(dataPath)
