@@ -64,7 +64,7 @@ async function getOpenPRsNumber(organization, contributor) {
     if (res !== undefined) {
         return res.data.total_count
     } else {
-        return 0
+        return -1
     }
 }
 
@@ -76,7 +76,7 @@ async function getMergedPRsNumber(organization, contributor) {
     if (res !== undefined) {
         return res.data.total_count
     } else {
-        return 0
+        return -1
     }
 }
 
@@ -88,7 +88,7 @@ async function getIssuesNumber(organization, contributor) {
     if (res !== undefined) {
         return res.data.total_count
     } else {
-        return 0
+        return -1
     }
 }
 

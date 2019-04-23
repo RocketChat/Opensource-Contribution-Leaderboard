@@ -25,7 +25,7 @@ async function getAllContributorsInfo() {
         await Promise.delay(delay * 1000)
                 
         API.getContributorInfo(organization, contributor).then( res => {
-            if (res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsLink !== -1 && res.openPRsNumber != -1) {
+            if (res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsNumber !== -1 && res.openPRsNumber != -1) {
                 dataBuffer[`${contributor}`] = res
                 console.log(res)
                 // Update contributors infomation
