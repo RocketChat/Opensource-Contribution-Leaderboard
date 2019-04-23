@@ -1,14 +1,23 @@
 const Promise = require("bluebird")
 const API = require('./util/API')
 const jsonfile = require('jsonfile')
-const moment = require('moment')
+const fs = require('fs')
 
 const dataPath = '../assets/data/data.json'
 const logPath = '../assets/data/log.json'
-const dataBuffer = jsonfile.readFileSync(dataPath)
-const logBuffer = jsonfile.readFileSync(logPath)
+
 let interval = 150
 let delay = 6
+let dataBuffer = {}
+let logBuffer = {}
+
+if (fs.existsSync(dataPath)) {
+    dataBuffer = jsonfile.readFileSync(dataPath)
+}
+
+if (fs.existsSync(logPath)) {
+    logBuffer = jsonfile.readFileSync(logPath)
+}
 
 async function getAllContributorsInfo() {
     const Config = jsonfile.readFileSync('./config.json')
