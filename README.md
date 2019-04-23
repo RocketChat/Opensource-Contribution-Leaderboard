@@ -5,10 +5,10 @@
 
 ## Introduction
 
-This is the Node.js implementation of the [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). The original project cannot count the students' contributions correctly because of its complex inner-mechanism. It's not a good idea that we try to record students' contributions ourselves; the smarter approach is to call the GitHub APIs directly. So I implemented a much more simple and faster one with the same frontend but completely different server service. You can view [this site](https://gsoc.lolimay.cn) for realtime preview.
+This is the Node.js implementation of the [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). The original project cannot count the students' contributions correctly because of its complex inner-mechanism. It's not a good idea that we try to record students' contributions ourselves; the smarter approach is to call the GitHub APIs directly. So I implemented a much more simple and faster one with the same frontend but completely different server service. You can view [this site](https://gsoc.lolimay.cn) for the realtime preview.
 
 ### Simple
-This new implementation of the [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/) is really simple compared to the original one. Its server-side code is within 150 lines only. And It works well with small memory usage.
+This new implementation of the [GSOC-Contribution-Leaderboard](https://gsoc.lolimay.cn) is really simple compared to the original one. Its server-side code is within 150 lines only. And It works well with small memory usage.
 
 ### Stable
 Owning to the new implementation calls the [GitHub APIs](https://developer.github.com/v3/) directly, so it can always fetch the correct contribution information of the students.
@@ -43,6 +43,7 @@ You will see the GSOC Contribution Leaderboard in the [http://localhost:8080](ht
 cd src/server
 node app.js
 ````
+**Note:** If the backend service is not started, the contributions data will not be refreshed.
 
 ## Production
 Generate the static files first by running the following command first:
