@@ -29,7 +29,7 @@ async function get (url, authToken) {
                 process.exit()
                 break
             default:
-                console.log(chalk.red('[ERROR] ' + message))
+                console.log(chalk.yellow('[WARNING] ' + message))
         }
     }
 }
