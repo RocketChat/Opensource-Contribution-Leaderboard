@@ -19,7 +19,7 @@ It requires no database or other environments - Only what you need to do is ensu
 ## Quick Start
 Clone the repository to your local machine and switch into the project root directory:
 ````bash
-git clone git@github.com:lolimay/webpack-scaffold-lolimay.git
+git clone git@github.com:lolimay/GSoC-Contribution-Leaderboard-Node.git
 cd GSoC-Contribution-Leaderboard-Node
 ````
 Create a file named `config.json` (or rename `config-example.json` to `config.json`) in the base directory. Add your Github Auth Token and Organization name and other keys in it as following:
