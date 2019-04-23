@@ -2,4 +2,5 @@
 server/data
 config.json
 assets/config.json
+src/assets/data
 dist
