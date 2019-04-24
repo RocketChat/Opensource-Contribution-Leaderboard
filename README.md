@@ -46,7 +46,7 @@ node app.js
 **Note:** If the backend service is not started, the contributions data will not be refreshed. Please refresh the [http://localhost:8080](http://localhost:8080) after the contributors data was fetched.
 
 ## Production
-Generate the static files first by running the following command first:
+Generate the static files first by running the following command:
 ````bash
 npm run build
 ````
