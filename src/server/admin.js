@@ -1,6 +1,17 @@
-const express = require('express')
-const app = express()
+const http = require('http')
+const jsonfile = require('jsonfile')
+const url = require('url')
 
-app.use(express.static(__dirname + '../'))
+const port = 52050
 
-app.listen(5000)
+const server = http.createServer( (req, res) => {
+    const params = url.parse(req.url, true).query
+
+    try {
+        const { contributors } = jsonfile.readFileSync('./config.json')
+        
+    } catch (ex) {
+        console.log(ex)
+    }
+
+}).listen(port)

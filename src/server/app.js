@@ -6,9 +6,9 @@ const fs = require('fs')
 const dataBasePath = '../assets/data'
 const dataPath = '../assets/data/data.json'
 const logPath = '../assets/data/log.json'
+const { delay } = jsonfile.readFileSync('./config.json')
 
 let interval = 150
-let delay = 6
 let dataBuffer = {}
 let logBuffer = {}
 
