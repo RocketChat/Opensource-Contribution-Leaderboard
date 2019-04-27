@@ -38,7 +38,6 @@ async function getAllContributorsInfo() {
     Promise.mapSeries(contributors, async contributor => {
 
         await Promise.delay(delay * 1000)
-        console.log(delay)
                 
         API.getContributorInfo(organization, contributor).then( res => {
             delay = jsonfile.readFileSync(configPath).delay // update delay
