@@ -115,6 +115,7 @@ async function getContributorInfo(organization, contributor) {
 }
 
 module.exports = {
+    getContributorAvatar,
     getOpenPRsNumber,
     getMergedPRsNumber,
     getIssuesNumber,

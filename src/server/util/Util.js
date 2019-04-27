@@ -6,7 +6,9 @@ function post(req, callback) {
             body += chunk.toString()
         })
 
-        req.on('end', callback(JSON.parse(body)))
+        req.on('end', () => {
+            callback(JSON.parse(body))
+        })
     }
 }
 
