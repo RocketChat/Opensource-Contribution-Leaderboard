@@ -6,10 +6,10 @@ const API = require('./util/API')
 const fs = require('fs')
 const spawn = require('child_process').spawn
 
-const port = 52050
 const configPath = './config.json'
 const admindataPath = './admindata.json'
 const dataPath = '../assets/data/data.json'
+const port = jsonfile.readFileSync(configPath).serverPort
 
 if (!fs.existsSync(admindataPath)) {
     jsonfile.writeFileSync(admindataPath, [] )
