@@ -55,12 +55,32 @@ npm start
 ````
 
 ## Production
-Generate the static files first by running the following command:
+### Generate static files
+Switch your path to the project base directory, and generate the static files first by running the following command:
 ````bash
 npm run build
 ````
-Then copy all the files under the `dist` folder into the domain directory on your server. And now you can see the GSOC Contribution Leaderboard by visiting your domain (eg. [https://gsoc.lolimay.cn](https://gsoc.lolimay.cn)). *BUT THIS IS NOT ENOUGH!*
+Then copy all the files under the `dist` folder into the domain directory on your server. And now you can see the GSOC Contribution Leaderboard by visiting your domain (eg. [https://gsoc.lolimay.cn](https://gsoc.lolimay.cn)).
 
+### Configure Reverse Proxy
+Add the following fragment to your Nginx domain configuration file:
+````nginx
+#!!! Add this for security concern
+location ^~ /server/ {
+    deny all;
+}
+location ^~ /server {
+    deny all;
+}
+# Reverse Proxy
+location /api/
+{
+    proxy_pass http://localhost:52050/;
+    proxy_set_header X-Real-IP $remote_addr;
+}
+````
+
+### Start backend service
 To make backend service run well, please use [pm2](http://pm2.keymetrics.io/) as your Node.js process manager.
 ````bash
 npm install pm2 -g # run this command on your server if pm2 is not installed.
