@@ -34,6 +34,7 @@ Create a file named `config.json` (or copy `config-example.json` to `config.json
 ````
 And then read the [Development](#development) part or [Production](#production) part for the next step.
 ## Development
+Switch your path to the project base directory:
 ````bash
 npm install
 npm start
@@ -43,7 +44,15 @@ You will see the GSOC Contribution Leaderboard in the [http://localhost:8080](ht
 cd src/server
 node app.js
 ````
-**Note:** If the backend service is not started, the contributions data will not be refreshed. Please refresh the [http://localhost:8080](http://localhost:8080) after the contributors data was fetched.
+**Note:** If the backend service is not started, the contributions data will not be refreshed. Please refresh the page after the contributors data was fetched.
+
+### Develop Administration Panel
+You need to start another instance if you'd like to develop administration panel, open a new terminal window (or tab) and try following commands:
+````bash
+cd admin
+npm install
+npm start
+````
 
 ## Production
 Generate the static files first by running the following command:

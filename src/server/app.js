@@ -110,26 +110,26 @@ const server = http.createServer( (req, res) => {
                         return
                     }
 
-                    // Add this contributor in config.json
-                    Config.contributors.push(username)
-                    jsonfile.writeFileSync(configPath, Config, { spaces:2 })
-
-                    // Add this contributor in the data.json
-                    const data = jsonfile.readFileSync(dataPath)
-                    API.getContributorInfo(Config.organization, username).then( result => {
-                        if (result.avatarUrl !== '' && result.issuesNumber !== -1 && result.mergedPRsNumber !== -1 && result.openPRsNumber != -1) {
-                            data[`${username}`] = result
-                            // Update contributors infomation
-                            jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
-                                if (err) console.error(err)
-                            })
-                        }
-                    })
-
                     API.getContributorAvatar(username).then( result => {
                         if (result === '') {
                             res.end(JSON.stringify({ message: 'Not found' }))
                         } else {
+                            // Add this contributor in config.json
+                            Config.contributors.push(username)
+                            jsonfile.writeFileSync(configPath, Config, { spaces:2 })
+
+                            // Add this contributor in the data.json
+                            const data = jsonfile.readFileSync(dataPath)
+                            API.getContributorInfo(Config.organization, username).then( result => {
+                                if (result.avatarUrl !== '' && result.issuesNumber !== -1 && result.mergedPRsNumber !== -1 && result.openPRsNumber != -1) {
+                                    data[`${username}`] = result
+                                    // Update contributors infomation
+                                    jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
+                                        if (err) console.error(err)
+                                    })
+                                }
+                            })
+
                             res.end(JSON.stringify({
                                 message: 'Success',
                                 avatarUrl: result
