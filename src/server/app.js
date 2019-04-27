@@ -17,6 +17,9 @@ if (!fs.existsSync(admindataPath)) {
 
 // spawn - `node refresh.js`
 const refresh = spawn('node', ['refresh.js'], { shell: true, stdio: 'inherit'})
+process.on('exit', () => {
+    refresh.kill() // kill it when exit
+})
 
 const server = http.createServer( (req, res) => {
     const route = url.parse(req.url).pathname
