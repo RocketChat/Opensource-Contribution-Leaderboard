@@ -22,14 +22,17 @@ Clone the repository to your local machine and switch into the project root dire
 git clone git@github.com:lolimay/GSoC-Contribution-Leaderboard-Node.git
 cd GSoC-Contribution-Leaderboard-Node
 ````
-Create a file named `config.json` (or copy `config-example.json` to `config.json`) in the **src/server** directory. Add your Github Auth Token and Organization name and other keys in it as following:
+Copy `config-example.json` to `config.json` in the **src/server** directory. Add your Github Auth Token and Organization name and other keys in it as following:
 ````bash
 {
-    "organization": "",
-    "organizationHomepage": "",
-    "organizationGithubUrl": "",
-    "authToken": "",
-    "contributors": []
+  "organization": "OrgName",
+  "organizationHomepage": "https://<OrgName>/",
+  "organizationGithubUrl": "https://github.com/<OrgName>",
+  "authToken": "",
+  "adminPassword": "123456",
+  "delay": "10",
+  "serverPort": "62050",
+  "contributors": []
 }
 ````
 And then read the [Development](#development) part or [Production](#production) part for the next step.
