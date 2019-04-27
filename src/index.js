@@ -96,7 +96,7 @@ axios.get('/assets/data/data.json')
         })
     })
 
-axios.get('/assets/config/config.json')
+axios.get('/server/config.json')
     .then( res => {
         const {organization, organizationGithubUrl, organizationHomepage} = res.data
         const footer = document.querySelector('.footer .text-muted')

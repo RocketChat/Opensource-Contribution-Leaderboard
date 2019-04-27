@@ -3,6 +3,7 @@
     "organizationHomepage": "https://rocket.chat/",
     "organizationGithubUrl": "https://github.com/RocketChat",
     "authToken": "",
+    "adminPassword": "123456",
     "delay": "6",
     "contributors": [
         "divyanshub024",
