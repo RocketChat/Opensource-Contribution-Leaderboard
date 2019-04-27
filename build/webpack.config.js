@@ -45,7 +45,9 @@ const common = {
         }),
         new CopyWebpackPlugin([
             {from: 'src/assets', to: 'assets'},
-            {from: 'src/server', to: 'server'}
+            {from: 'src/server', to: 'server'},
+            {from: path.join(__dirname, '..') + '/admin/dist', to: 'admin'},
+            {from: path.join(__dirname, '..') + '/admin/dist/assets', to: 'assets'}
         ], {
             debug: true
         })
