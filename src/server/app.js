@@ -5,11 +5,25 @@ const Util = require('./util/Util')
 const API = require('./util/API')
 const fs = require('fs')
 const spawn = require('child_process').spawn
+const express = require('express')
+const app = express()
+const proxy = require('http-proxy-middleware')
+const path = require('path')
 
 const configPath = './config.json'
 const admindataPath = './admindata.json'
 const dataPath = '../assets/data/data.json'
 const port = jsonfile.readFileSync(configPath).serverPort
+const proxyOption = {
+        target: 'http://localhost:'+ port +'/',
+        pathRewrite: {'^/api' : ''},
+        changeOrigin: true
+}
+
+app.use('/api', proxy(proxyOption))
+app.use('/', express.static(path.resolve(__dirname, '..')))
+
+app.listen(8080)
 
 if (!fs.existsSync(admindataPath)) {
     jsonfile.writeFileSync(admindataPath, [] )
