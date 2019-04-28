@@ -22,14 +22,18 @@ async function get (url, authToken) {
         }
       })
     } catch (err) {
-        const message = err.response.data.message
-        switch (message) {
-            case 'Bad credentials':
-                console.log(chalk.red(('[ERROR] Your GitHub Token is not correct! Please check it in the config.json.')))
-                process.exit()
-                break
-            default:
-                console.log(chalk.yellow('[WARNING] ' + message))
+        if (err.response.data.message !== undefined) {
+            const message = err.response.data.message
+            switch (message) {
+                case 'Bad credentials':
+                    console.log(chalk.red(('[ERROR] Your GitHub Token is not correct! Please check it in the config.json.')))
+                    process.exit()
+                    break
+                default:
+                    console.log(chalk.yellow('[WARNING] ' + message))
+            }
+        } else {
+            console.log(err)
         }
     }
 }

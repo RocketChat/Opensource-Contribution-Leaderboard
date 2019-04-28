@@ -6,10 +6,10 @@ const API = require('./util/API')
 const fs = require('fs')
 const spawn = require('child_process').spawn
 
-const port = 52050
 const configPath = './config.json'
 const admindataPath = './admindata.json'
 const dataPath = '../assets/data/data.json'
+const port = jsonfile.readFileSync(configPath).serverPort
 
 if (!fs.existsSync(admindataPath)) {
     jsonfile.writeFileSync(admindataPath, [] )
@@ -17,6 +17,9 @@ if (!fs.existsSync(admindataPath)) {
 
 // spawn - `node refresh.js`
 const refresh = spawn('node', ['refresh.js'], { shell: true, stdio: 'inherit'})
+process.on('exit', () => {
+    refresh.kill() // kill it when exit
+})
 
 const server = http.createServer( (req, res) => {
     const route = url.parse(req.url).pathname
@@ -110,26 +113,26 @@ const server = http.createServer( (req, res) => {
                         return
                     }
 
-                    // Add this contributor in config.json
-                    Config.contributors.push(username)
-                    jsonfile.writeFileSync(configPath, Config, { spaces:2 })
-
-                    // Add this contributor in the data.json
-                    const data = jsonfile.readFileSync(dataPath)
-                    API.getContributorInfo(Config.organization, username).then( result => {
-                        if (result.avatarUrl !== '' && result.issuesNumber !== -1 && result.mergedPRsNumber !== -1 && result.openPRsNumber != -1) {
-                            data[`${username}`] = result
-                            // Update contributors infomation
-                            jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
-                                if (err) console.error(err)
-                            })
-                        }
-                    })
-
                     API.getContributorAvatar(username).then( result => {
                         if (result === '') {
                             res.end(JSON.stringify({ message: 'Not found' }))
                         } else {
+                            // Add this contributor in config.json
+                            Config.contributors.push(username)
+                            jsonfile.writeFileSync(configPath, Config, { spaces:2 })
+
+                            // Add this contributor in the data.json
+                            const data = jsonfile.readFileSync(dataPath)
+                            API.getContributorInfo(Config.organization, username).then( result => {
+                                if (result.avatarUrl !== '' && result.issuesNumber !== -1 && result.mergedPRsNumber !== -1 && result.openPRsNumber != -1) {
+                                    data[`${username}`] = result
+                                    // Update contributors infomation
+                                    jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
+                                        if (err) console.error(err)
+                                    })
+                                }
+                            })
+
                             res.end(JSON.stringify({
                                 message: 'Success',
                                 avatarUrl: result

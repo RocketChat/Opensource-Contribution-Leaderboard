@@ -17,18 +17,22 @@ Clone the repository to your local machine and switch into the project root dire
 git clone git@github.com:lolimay/GSoC-Contribution-Leaderboard-Node.git
 cd GSoC-Contribution-Leaderboard-Node
 ````
-Create a file named `config.json` (or copy `config-example.json` to `config.json`) in the **src/server** directory. Add your Github Auth Token and Organization name and other keys in it as following:
+Copy `config-example.json` to `config.json` in the **src/server** directory. Add your Github Auth Token and Organization name and other keys in it as following:
 ````bash
 {
-    "organization": "",
-    "organizationHomepage": "",
-    "organizationGithubUrl": "",
-    "authToken": "",
-    "contributors": []
+  "organization": "OrgName",
+  "organizationHomepage": "https://<OrgName>/",
+  "organizationGithubUrl": "https://github.com/<OrgName>",
+  "authToken": "",
+  "adminPassword": "123456",
+  "delay": "10",
+  "serverPort": "62050",
+  "contributors": []
 }
 ````
 And then read the [Development](#development) part or [Production](#production) part for the next step.
 ## Development
+Switch your path to the project base directory:
 ````bash
 npm install
 npm start
@@ -38,15 +42,43 @@ You will see the GSOC Contribution Leaderboard in the [http://localhost:8080](ht
 cd src/server
 node app.js
 ````
-**Note:** If the backend service is not started, the contributions data will not be refreshed. Please refresh the [http://localhost:8080](http://localhost:8080) after the contributors data was fetched.
+**Note:** If the backend service is not started, the contributions data will not be refreshed. Please refresh the page after the contributors data was fetched.
+
+### Develop Administration Panel
+You need to start another instance if you'd like to develop administration panel, open a new terminal window (or tab) and try following commands:
+````bash
+cd admin
+npm install
+npm start
+````
 
 ## Production
-Generate the static files first by running the following command:
+### Generate static files
+Switch your path to the project base directory, and generate the static files first by running the following command:
 ````bash
 npm run build
 ````
-Then copy all the files under the `dist` folder into the domain directory on your server. And now you can see the GSOC Contribution Leaderboard by visiting your domain (eg. [https://gsoc.lolimay.cn](https://gsoc.lolimay.cn)). *BUT THIS IS NOT ENOUGH!*
+Then copy all the files under the `dist` folder into the domain directory on your server. And now you can see the GSOC Contribution Leaderboard by visiting your domain (eg. [https://gsoc.lolimay.cn](https://gsoc.lolimay.cn)).
 
+### Configure Reverse Proxy
+Add the following fragment to your Nginx domain configuration file:
+````nginx
+#!!! Add this for security concern
+location ^~ /server/ {
+    deny all;
+}
+location ^~ /server {
+    deny all;
+}
+# Reverse Proxy
+location /api/
+{
+    proxy_pass http://localhost:52050/;
+    proxy_set_header X-Real-IP $remote_addr;
+}
+````
+
+### Start backend service
 To make backend service run well, please use [pm2](http://pm2.keymetrics.io/) as your Node.js process manager.
 ````bash
 npm install pm2 -g # run this command on your server if pm2 is not installed.
