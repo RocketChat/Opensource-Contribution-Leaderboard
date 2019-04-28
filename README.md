@@ -9,7 +9,7 @@ This is the Node.js implementation of the [GSOC-Contribution-Leaderboard](https:
 
 It requires no database or other environments - Only what you need to do is ensuring that your Node.js works well.
 
-Thanks a lot to the project [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/) which gives me much inspiration to work on it!
+This project is inspired by [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). Thanks to the Python team for the work.
 
 ## Quick Start
 Clone the repository to your local machine and switch into the project root directory:
