@@ -51,7 +51,6 @@ npm run serve
 You need to start another instance if you'd like to develop administration panel, open a new terminal window (or tab) and try following commands:
 ````bash
 cd admin
-npm install
 npm start
 ````
 
@@ -62,24 +61,6 @@ Switch your path to the project base directory, and generate the static files fi
 npm run build
 ````
 Then copy all the files under the `dist` folder into the domain directory on your server. And now you can see the GSOC Contribution Leaderboard by visiting your domain (eg. [https://gsoc.lolimay.cn](https://gsoc.lolimay.cn)).
-
-### Configure Reverse Proxy
-Add the following fragment to your Nginx domain configuration file:
-````nginx
-#!!! Add this for security concern
-location ^~ /server/ {
-    deny all;
-}
-location ^~ /server {
-    deny all;
-}
-# Reverse Proxy
-location /api/
-{
-    proxy_pass http://localhost:52050/;
-    proxy_set_header X-Real-IP $remote_addr;
-}
-````
 
 ### Start backend service
 To make backend service run well, please use [pm2](http://pm2.keymetrics.io/) as your Node.js process manager.
