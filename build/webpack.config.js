@@ -7,7 +7,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const optimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const merge = require('webpack-merge')
-const port = '52050' // Dev Port
+const port = '62050' // Dev Port
 
 function resolve (dir) {
     return path.join(__dirname, '..', dir)

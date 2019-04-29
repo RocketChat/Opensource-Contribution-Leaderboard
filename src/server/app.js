@@ -15,15 +15,17 @@ const admindataPath = './admindata.json'
 const dataPath = '../assets/data/data.json'
 const port = jsonfile.readFileSync(configPath).serverPort
 const proxyOption = {
-        target: 'http://localhost:'+ port +'/',
-        pathRewrite: {'^/api' : ''},
-        changeOrigin: true
+    target: 'http://localhost:'+ port +'/',
+    pathRewrite: {'^/api' : ''},
+    changeOrigin: true
 }
 
-app.use('/api', proxy(proxyOption))
-app.use('/', express.static(path.resolve(__dirname, '..')))
+if (process.env.NODE_ENV !== 'development') {
+    app.use('/api', proxy(proxyOption))
+    app.use('/', express.static(path.resolve(__dirname, '..')))
 
-app.listen(8080)
+    app.listen(8080)
+}
 
 if (!fs.existsSync(admindataPath)) {
     jsonfile.writeFileSync(admindataPath, [] )

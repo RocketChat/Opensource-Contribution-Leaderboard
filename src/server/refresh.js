@@ -26,9 +26,9 @@ if (fs.existsSync(logPath)) {
 }
 
 async function getAllContributorsInfo() {
-    const Config = jsonfile.readFileSync(configPath)
-    const organization = Config.organization
-    const contributors = Config.contributors
+    let Config = jsonfile.readFileSync(configPath)
+    let organization = Config.organization
+    let contributors = Config.contributors
 
     interval = contributors.length // update interval
 
@@ -40,7 +40,10 @@ async function getAllContributorsInfo() {
         await Promise.delay(delay * 1000)
                 
         API.getContributorInfo(organization, contributor).then( res => {
-            delay = jsonfile.readFileSync(configPath).delay // update delay
+            Config = jsonfile.readFileSync(configPath) // update Config
+            delay = Config.delay // update delay
+
+            if (!Config.contributors.includes(contributor)) return
 
             if (res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsNumber !== -1 && res.openPRsNumber != -1) {
                 dataBuffer[`${contributor}`] = res

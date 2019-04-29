@@ -30,17 +30,20 @@ Copy `config-example.json` to `config.json` in the **src/server** directory. Add
   "contributors": []
 }
 ````
-And then read the [Development](#development) part or [Production](#production) part for the next step.
+Install the dependencies:
+````bash
+npm run add
+````
+
+And then you can read [Development](#development) part or [Production](#production) part for the next step.
 ## Development
 Switch your path to the project base directory:
 ````bash
-npm install
 npm start
 ````
 You will see the GSOC Contribution Leaderboard in the [http://localhost:8080](http://localhost:8080) if all works well. Then open a new terminal window (or tab) and enter the following commands to start your backend service:
 ````bash
-cd src/server
-node app.js
+npm run serve
 ````
 **Note:** If the backend service is not started, the contributions data will not be refreshed. Please refresh the page after the contributors data was fetched.
 
