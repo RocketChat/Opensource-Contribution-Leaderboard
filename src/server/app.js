@@ -13,6 +13,7 @@ const path = require('path')
 const configPath = './config.json'
 const admindataPath = './admindata.json'
 const dataPath = '../assets/data/data.json'
+const logPath = '../assets/data/log.json'
 const port = jsonfile.readFileSync(configPath).serverPort
 const proxyOption = {
     target: 'http://localhost:'+ port +'/',
@@ -28,13 +29,7 @@ if (process.env.NODE_ENV !== 'development') {
             message: 'Access Forbidden'
         })
     })
-    app.use('/', express.static(path.resolve(__dirname, '..'), {
-        setHeaders(res, path) {
-            if (path.match(/\/assets\/data\/.+.json$/)) {
-                res.set('Cache-Control: no-store')
-            }
-        }
-    }))
+    app.use('/', express.static(path.resolve(__dirname, '..')))
     app.listen(8080)
 }
 
@@ -54,6 +49,14 @@ const server = http.createServer( (req, res) => {
     const { adminPassword } = jsonfile.readFileSync(configPath)
 
     switch (route) {
+        case '/data':
+            res.setHeader('Cache-Control', 'no-store')
+            res.end(JSON.stringify(jsonfile.readFileSync(dataPath)))
+            break
+        case '/log':
+            res.setHeader('Cache-Control', 'no-store')
+            res.end(JSON.stringify(jsonfile.readFileSync(logPath)))
+            break  
         case '/config':
             const Config = jsonfile.readFileSync(configPath)
             res.end(JSON.stringify({

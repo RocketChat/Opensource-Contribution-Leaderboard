@@ -4,7 +4,7 @@ import axios from 'axios'
 import moment, { relativeTimeRounding } from 'moment'
 import { relative } from 'path';
 
-axios.get('/assets/data/data.json')
+axios.get('/api/data')
     .then( res => {
         const table = document.querySelector('table')
         const data = res.data
@@ -105,7 +105,7 @@ axios.get('/api/config')
         <a href="${organizationGithubUrl}" target="_blank" rel="noopener noreferrer">Github(${organization})</a>`.trim()
     })
 
-axios.get('/assets/data/log.json')
+axios.get('/api/log')
     .then( res => {
         const {starttime, endtime} = res.data
         const relativeTime = moment(new Date(endtime)).from(new Date(starttime))
