@@ -30,8 +30,9 @@ Copy `config-example.json` to `config.json` in the **src/server** directory. Add
   "contributors": []
 }
 ````
-Install the dependencies:
+Then switch to the project root directory, install the dependencies:
 ````bash
+cd ../../
 npm run add
 ````
 
@@ -55,21 +56,13 @@ npm start
 ````
 
 ## Production
-### Generate static files
-Switch your path to the project base directory, and generate the static files first by running the following command:
+Generate the static files first by running the following command:
 ````bash
 npm run build
-````
-Then copy all the files under the `dist` folder into the domain directory on your server. And now you can see the GSOC Contribution Leaderboard by visiting your domain (eg. [https://gsoc.lolimay.cn](https://gsoc.lolimay.cn)).
-
-### Start backend service
-To make backend service run well, please use [pm2](http://pm2.keymetrics.io/) as your Node.js process manager.
-````bash
+cd dist/server
 npm install pm2 -g # run this command on your server if pm2 is not installed.
-cd <your-domain-directory>/server # switch to the server directory.
 pm2 start app.js --name "GSOC-Contribution-Leaderboard" # start the backend service
 ````
-Start your backend service by the above commands on the server so that the data can be always refreshed.
 
 ## Acknowledgement
 Thanks a lot for the project [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/) which gives me much inspiration to work on it.
