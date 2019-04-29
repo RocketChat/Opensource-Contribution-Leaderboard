@@ -22,11 +22,16 @@ const proxyOption = {
 
 if (process.env.NODE_ENV !== 'development') {
     app.use('/api', proxy(proxyOption))
+    app.all('/server/*', (req, res, next) => {
+        res.status(403).send(
+        {
+            message: 'Access Forbidden'
+        })
+    })
     app.use('/', express.static(path.resolve(__dirname, '..'), {
         etag: false, // no cache, or the client will not fetch the latest data.json
         maxage: 0
     }))
-
     app.listen(8080)
 }
 
@@ -46,6 +51,14 @@ const server = http.createServer( (req, res) => {
     const { adminPassword } = jsonfile.readFileSync(configPath)
 
     switch (route) {
+        case '/config':
+            const Config = jsonfile.readFileSync(configPath)
+            res.end(JSON.stringify({
+                organization: Config.organization,
+                organizationHomepage: Config.organizationHomepage,
+                organizationGithubUrl: Config.organizationGithubUrl
+            }))
+            break
         case '/login':
             let { delay, contributors } = jsonfile.readFileSync(configPath)
             const contributorsList = []
