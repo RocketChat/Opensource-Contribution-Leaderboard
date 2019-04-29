@@ -40,12 +40,22 @@ submit.addEventListener('click', () => {
             intervalInput.setAttribute('placeholder', delay)
 
             contributors = contributors.sort( (a, b) => {
-                if ( a.username > b.username ){
+                let aTemp = a.username
+                let bTemp = b.username
+                a.username = a.username.toLowerCase()
+                b.username = b.username.toLowerCase()
+                if ( a.username > b.username ) {
+                    a.username = aTemp
+                    b.username = bTemp
                     return 1;
                 }
-                if ( a.username < b.username ){
+                if ( a.username < b.username ) {
+                    a.username = aTemp
+                    b.username = bTemp
                     return -1;
                 }
+                a.username = aTemp
+                b.username = bTemp
                 return 0;
             })
 
@@ -92,8 +102,8 @@ submit.addEventListener('click', () => {
                     return
                 }
 
-                if (interval < 6) {
-                    msgError('Interval cannot be less than 6 seconds')
+                if (interval < 10) {
+                    msgError('Interval cannot be less than 10 seconds')
                     return
                 }
 
