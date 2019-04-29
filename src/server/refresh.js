@@ -17,8 +17,8 @@ if (!fs.existsSync(dataBasePath)) {
     fs.mkdirSync(dataBasePath)
 }
 
-if (fs.existsSync(dataPath)) {
-    dataBuffer = jsonfile.readFileSync(dataPath)
+if (!fs.existsSync(dataPath)) {
+    jsonfile.writeFileSync(dataPath, {} )
 }
 
 if (fs.existsSync(logPath)) {
@@ -38,20 +38,24 @@ async function getAllContributorsInfo() {
     Promise.mapSeries(contributors, async contributor => {
 
         await Promise.delay(delay * 1000)
-                
+
         API.getContributorInfo(organization, contributor).then( res => {
             Config = jsonfile.readFileSync(configPath) // update Config
             delay = Config.delay // update delay
 
-            if (!Config.contributors.includes(contributor)) return
-
             if (res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsNumber !== -1 && res.openPRsNumber != -1) {
-                dataBuffer[`${contributor}`] = res
-                console.log(res)
-                // Update contributors infomation
-                jsonfile.writeFile(dataPath, dataBuffer, { spaces: 2 }, (err) => {
-                    if (err) console.error(err)
-                })
+                
+                dataBuffer = jsonfile.readFileSync(dataPath)
+
+                if (Config.contributors.includes(contributor)) {
+                    dataBuffer[`${contributor}`] = res
+                    console.log(`${contributor} was updated: ${res.openPRsNumber} ${res.mergedPRsNumber} ${res.issuesNumber}`)
+
+                    // Update contributors infomation
+                    jsonfile.writeFile(dataPath, dataBuffer, { spaces: 2 }, (err) => {
+                        if (err) console.error(err)
+                    })
+                }
             }
         })
 
