@@ -22,10 +22,10 @@ const proxyOption = {
 
 if (process.env.NODE_ENV !== 'development') {
     app.use('/api', proxy(proxyOption))
-    app.use('/', express.static(path.resolve(__dirname, '..')), {
+    app.use('/', express.static(path.resolve(__dirname, '..'), {
         etag: false, // no cache, or the client will not fetch the latest data.json
         maxage: 0
-    })
+    }))
 
     app.listen(8080)
 }
