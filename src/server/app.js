@@ -134,7 +134,7 @@ const server = http.createServer( (req, res) => {
                             res.end(JSON.stringify({ message: 'Not found' }))
                         } else {
                             // Add this contributor in config.json
-                            Config.contributors.push(username)
+                            Config.contributors.unshift(username)
                             jsonfile.writeFileSync(configPath, Config, { spaces:2 })
 
                             // Add this contributor in the data.json
