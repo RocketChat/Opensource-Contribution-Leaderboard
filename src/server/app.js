@@ -51,11 +51,17 @@ const server = http.createServer( (req, res) => {
     switch (route) {
         case '/data':
             res.setHeader('Cache-Control', 'no-store')
-            res.end(JSON.stringify(jsonfile.readFileSync(dataPath)))
+            jsonfile.readFile(dataPath, (err, obj) => {
+                if (err) console.log('[ERROR]' + err)
+                res.end(JSON.stringify(obj))
+            })
             break
         case '/log':
             res.setHeader('Cache-Control', 'no-store')
-            res.end(JSON.stringify(jsonfile.readFileSync(logPath)))
+            jsonfile.readFile(logPath, (err, obj) => {
+                if (err) console.log('[ERROR]' + err)
+                res.end(JSON.stringify(obj))
+            })
             break  
         case '/config':
             const Config = jsonfile.readFileSync(configPath)
