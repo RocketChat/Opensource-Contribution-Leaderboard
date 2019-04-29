@@ -29,8 +29,11 @@ if (process.env.NODE_ENV !== 'development') {
         })
     })
     app.use('/', express.static(path.resolve(__dirname, '..'), {
-        etag: false, // no cache, or the client will not fetch the latest data.json
-        maxage: 0
+        setHeaders(res, path) {
+            if (path.match(/\/assets\/data\/.+.json$/)) {
+                res.set('Cache-Control: no-store')
+            }
+        }
     }))
     app.listen(8080)
 }
