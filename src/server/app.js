@@ -72,6 +72,11 @@ const server = http.createServer( (req, res) => {
             }))
             break
         case '/login':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+
             let { delay, contributors } = jsonfile.readFileSync(configPath)
             const contributorsList = []
 
@@ -103,6 +108,11 @@ const server = http.createServer( (req, res) => {
             })
            break
         case '/setInterval':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+
             Util.post(req, params => {
                 const { token, interval } = params
 
@@ -119,6 +129,11 @@ const server = http.createServer( (req, res) => {
             })
             break
         case '/remove':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+
             Util.post(req, params => {
                 const { token, username } = params
 
@@ -144,6 +159,11 @@ const server = http.createServer( (req, res) => {
             })
             break
         case '/add':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+
             Util.post(req, params => {
                 const { token, username } = params
 
@@ -187,7 +207,7 @@ const server = http.createServer( (req, res) => {
             })
             break
         default:
-            res.end('Hello World!')
+            res.end('Permission denied\n')
             break
     }
 }).listen(port)
