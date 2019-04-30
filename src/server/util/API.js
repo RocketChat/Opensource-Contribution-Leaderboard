@@ -22,7 +22,7 @@ async function get (url, authToken) {
         }
       })
     } catch (err) {
-        if (err.response.data.message !== undefined) {
+        if (err.response.data !== undefined) {
             const message = err.response.data.message
             switch (message) {
                 case 'Bad credentials':
