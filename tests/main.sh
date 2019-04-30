@@ -9,6 +9,10 @@ do
     curl https://gsoc.lolimay.cn/vendor.8026c864f07341ef3d54.js
     curl https://gsoc.lolimay.cn/vendor.8026c864f07341ef3d54.js
     curl https://gsoc.lolimay.cn/admin/
+    curl https://gsoc.lolimay.cn/api/add
+    curl https://gsoc.lolimay.cn/api/remove
+    curl https://gsoc.lolimay.cn/api/setInterval
+    curl https://gsoc.lolimay.cn/api/login
     sleep 0.1
     echo -e "\033[33m${i}\n\033[0m"
 done
