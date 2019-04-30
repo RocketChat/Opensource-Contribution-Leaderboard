@@ -27,7 +27,7 @@ const common = {
             {
                 test: /\.scss$/,
                 include: path.resolve(__dirname, '../src'),
-                use: ['style-loader', 'css-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader']
             }
         ]
     },
