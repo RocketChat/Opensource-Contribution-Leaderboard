@@ -39,25 +39,7 @@ submit.addEventListener('click', () => {
             configPanel.classList.remove('hide')
             intervalInput.setAttribute('placeholder', delay)
 
-            contributors = contributors.sort( (a, b) => {
-                let aTemp = a.username
-                let bTemp = b.username
-                a.username = a.username.toLowerCase()
-                b.username = b.username.toLowerCase()
-                if ( a.username > b.username ) {
-                    a.username = aTemp
-                    b.username = bTemp
-                    return 1;
-                }
-                if ( a.username < b.username ) {
-                    a.username = aTemp
-                    b.username = bTemp
-                    return -1;
-                }
-                a.username = aTemp
-                b.username = bTemp
-                return 0;
-            })
+            contributors = sortByAlphabet(contributors, 'username')
 
             totalTd.innerHTML = 'Total: ' + contributors.length
 
@@ -144,13 +126,17 @@ submit.addEventListener('click', () => {
                     if (message === 'Success') {
                         mgsSuccess(`${username} has been added`)
 
+                        contributors.push({username, avatarUrl: res.data.avatarUrl})
+                        contributors = sortByAlphabet(contributors, 'username')
+
                         let insertPos = 0
-                        contributors.forEach( (contributor, index, object) => {
-                            if (contributor.username < username) {
-                                insertPos = index+1
+
+                        contributors.forEach(  (contributor, index) => {
+                            if (contributor.username === username) {
+                                insertPos = index                               
                             }
                         })
-                        contributors.splice(insertPos, 0, {username, avatarUrl: res.data.avatarUrl})
+                        
                         totalTd.innerHTML = 'Total: ' + contributors.length
 
                         const { avatarUrl } = contributors[insertPos]
@@ -166,7 +152,7 @@ submit.addEventListener('click', () => {
         
                         const usernameTd = document.createElement('td')
                         usernameTd.innerHTML = `<a href="${usernameLink}">${username}</a>`
-        
+                        
                         const removeTd = document.createElement('td')
                         removeTd.innerHTML = `<div class="button remove" value="${username}">Remove</div>`
                         removeTd.firstChild.addEventListener('click', e => {
@@ -185,7 +171,7 @@ submit.addEventListener('click', () => {
                     loading.classList.add('hide')
                 })
             })
-        }
+          }
         loading.classList.add('hide')
     })
 })
@@ -258,4 +244,20 @@ function removeContributor(e, contributors, totalTd) {
             }
         })
     })
+}
+
+function sortByAlphabet(array, key) {
+    array.sort( (a, b) => {
+        let x = a[key].toUpperCase()
+        let y = b[key].toUpperCase()
+
+        if (x === y) return 0
+
+        if ( x > y ) {
+            return 1
+        } else {
+            return -1
+        }
+    })
+    return array
 }
