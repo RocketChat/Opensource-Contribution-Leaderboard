@@ -61,6 +61,7 @@ axios.get('/api/data')
             const tdUsername = document.createElement('td')
             const username = document.createElement('a')
             username.href = data[contributor.username].home
+            username.target = '_blank'
             username.innerText = contributor.username
             tdUsername.appendChild(username)
             tr.appendChild(tdUsername)
@@ -72,6 +73,7 @@ axios.get('/api/data')
             const tdOpenPRs = document.createElement('td')
             const openPRs = document.createElement('a')
             openPRs.href = data[contributor.username].openPRsLink
+            openPRs.target = '_blank'
             openPRs.innerText = data[contributor.username].openPRsNumber
             tdOpenPRs.appendChild(openPRs)
             tr.appendChild(tdOpenPRs)
@@ -80,6 +82,7 @@ axios.get('/api/data')
             const tdMergedPRs = document.createElement('td')
             const mergedPRs = document.createElement('a')
             mergedPRs.href = data[contributor.username].mergedPRsLink
+            mergedPRs.target = '_blank'
             mergedPRs.innerText = data[contributor.username].mergedPRsNumber
             tdMergedPRs.appendChild(mergedPRs)
             tr.appendChild(tdMergedPRs)
@@ -88,6 +91,7 @@ axios.get('/api/data')
             const tdIssues = document.createElement('td')
             const issues = document.createElement('a')
             issues.href = data[contributor.username].issuesLink
+            issues.target = '_blank'
             issues.innerText = data[contributor.username].issuesNumber
             tdIssues.appendChild(issues)
             tr.appendChild(tdIssues)
