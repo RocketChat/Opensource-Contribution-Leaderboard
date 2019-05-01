@@ -22,7 +22,11 @@ async function get (url, authToken) {
         }
       })
     } catch (err) {
-        if (err.response.data.message !== undefined) {
+        if (err.code === 'ECONNABORTED') {
+            console.log(chalk.yellow('[WARNING] Time Out.'))
+            return
+        }
+        if (err.response !== undefined) {
             const message = err.response.data.message
             switch (message) {
                 case 'Bad credentials':

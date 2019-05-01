@@ -7,7 +7,11 @@ function post(req, callback) {
         })
 
         req.on('end', () => {
-            callback(JSON.parse(body))
+            try {
+                callback(JSON.parse(body))
+            } catch (ex) {
+                return
+            }
         })
     }
 }
