@@ -5,11 +5,18 @@
 
 ## Introduction
 
-This is the Node.js implementation of the [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). It has the same frontend but a different server implementation compared to the original one. You can view [this site](https://gsoc.lolimay.cn) for the real-time preview.
+A contributions leaderboard for your GSoC organization. Students can track their position on the leaderboard based on the PRs, commits, and issues they've completed across the repositories of your organization on Github. Proudly created and maintained by the GSoC 2019 students and the [Rocket.Chat community](https://github.com/RocketChat).
 
-It requires no database or other environments - Only what you need to do is ensuring that your Node.js works well.
+## Benefits
+- Encourage students to improve their position - by increasing contribution to your organization
+- Easy to setup and administer
+- Realtime organization - wide visibility to top student candidates
 
-This project is inspired by [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). Thanks to the Python team for the work.
+## Main Features
+- Track commits/PRs/issues for GSoC student candidates in real time
+- At a glance view of participating top students
+- Easy administration to add students (even before they have made their very first contribution)
+- Requires no database or other environments - Only what you need to do is ensuring that your Node.js works well
 
 ## Quick Start
 Clone the repository to your local machine and switch into the project root directory:
@@ -65,7 +72,7 @@ pm2 start app.js --name "GSOC-Contribution-Leaderboard" # start the backend serv
 ````
 
 ## Acknowledgement
-Thanks a lot for the project [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/) which gives me much inspiration to work on it.
+This project is inspired by [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). Thanks to the Python team for the work.
 
 ## License
 This project is open source under the Licence [MIT](./LICENSE).
