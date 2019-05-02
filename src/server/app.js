@@ -29,7 +29,11 @@ if (process.env.NODE_ENV !== 'development') {
             message: 'Access Forbidden'
         })
     })
-    app.use('/', express.static(path.resolve(__dirname, '..')))
+    app.use('/', express.static(path.resolve(__dirname, '..'), {
+        setHeaders(res) {
+            res.setHeader('Cache-Control', 'public, max-age=31536000')
+        }
+    }))
     app.listen(8080)
 }
 
