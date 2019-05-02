@@ -1,7 +1,7 @@
 
 <p align="center"><img src="./docs/images/logo.png"></p>
 
-![](./docs/images/demo.png)
+<a href="https://gsoc.rocket.chat/" target="_blank"><img src="./docs/images/demo.png"></a>
 
 ## Introduction
 
