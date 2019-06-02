@@ -20,7 +20,7 @@
     "build": "NODE_ENV=production webpack --config build/webpack.config.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "noty": "^3.2.0-beta"
   }
 }
