@@ -20,7 +20,8 @@
     "axios": "^0.18.1",
     "chalk": "^2.4.2",
     "jsonfile": "^5.0.0",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "set-value": "^3.0.1"
   },
   "scripts": {
     "add": "npm install && npm --prefix src/server install && npm --prefix admin install",
