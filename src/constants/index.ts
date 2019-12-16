@@ -1,0 +1,1 @@
+export const GitHubRepoLink = 'https://github.com/lolimay/GSoC-Contribution-Leaderboard-Node';
