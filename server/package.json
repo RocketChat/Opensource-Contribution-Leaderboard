@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "bluebird": "^3.5.4",
     "chalk": "^2.4.2",
     "express": "^4.16.4",
