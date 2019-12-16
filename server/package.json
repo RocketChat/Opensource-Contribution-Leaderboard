@@ -6,6 +6,6 @@
     "express": "^4.16.4",
     "http-proxy-middleware": "^0.19.1",
     "jsonfile": "^5.0.0",
-    "set-value": "^3.0.1"
+    "set-value": "^2.0.1"
   }
 }
