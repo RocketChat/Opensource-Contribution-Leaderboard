@@ -1,0 +1,23 @@
+{
+    "defaultSeverity": "error",
+    "jsRules": {},
+    "rules": {
+        "ordered-imports": true,
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "no-console": false,
+        "semicolon": true
+    },
+    "rulesDirectory": [],
+    "linterOptions": {
+        "include": [
+            "src/**/*.ts"
+        ],
+        "exclude": [
+            "config/**/*.js",
+            "node_modules/**/*.ts"
+        ]
+    }
+}
