@@ -1,32 +1,29 @@
 {
-  "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "clean-webpack-plugin": "^1.0.1",
-    "copy-webpack-plugin": "^4.6.0",
-    "css-loader": "^2.1.0",
-    "eslint": "^5.14.0",
-    "html-webpack-plugin": "^3.2.0",
-    "inline-manifest-webpack-plugin": "^4.0.2",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
-    "uglifyjs-webpack-plugin": "1.1.6",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.2.1"
-  },
-  "dependencies": {
-    "axios": "^0.18.1",
-    "chalk": "^2.4.2",
-    "jsonfile": "^5.0.0",
-    "moment": "^2.24.0",
-    "set-value": "^3.0.1"
+  "name": "gsoc-contribution-leaderboard-node",
+  "version": "1.0.0",
+  "description": "gsoc-contribution-leaderboard-node",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
   },
   "scripts": {
-    "add": "npm install && npm --prefix src/server install && npm --prefix admin install",
-    "start": "npm run build && NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
-    "build": "npm --prefix admin run build && NODE_ENV=production webpack --config build/webpack.config.js",
-    "serve": "cd src/server && NODE_ENV=development node app.js"
-  }
+    "start": "parcel --host 0.0.0.0 -p 1234 watch index.html --open",
+    "build": "NODE_ENV=production parcel build index.html --no-source-maps",
+    "lint": "npx tslint --project tslint.json",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lolimay/GSoC-Contribution-Leaderboard-Node.git"
+  },
+  "keywords": [
+    "gsoc"
+  ],
+  "author": "shiqi.mei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lolimay/GSoC-Contribution-Leaderboard-Node/issues"
+  },
+  "homepage": "https://github.com/lolimay/GSoC-Contribution-Leaderboard-Node#readme"
 }
