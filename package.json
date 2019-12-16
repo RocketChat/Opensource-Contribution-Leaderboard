@@ -25,5 +25,12 @@
   "bugs": {
     "url": "https://github.com/lolimay/GSoC-Contribution-Leaderboard-Node/issues"
   },
-  "homepage": "https://github.com/lolimay/GSoC-Contribution-Leaderboard-Node#readme"
+  "homepage": "https://github.com/lolimay/GSoC-Contribution-Leaderboard-Node#readme",
+  "devDependencies": {
+    "tslint": "^5.20.1"
+  },
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
 }
