@@ -64,37 +64,55 @@ async function getContributorAvatar(contributor) {
     }
 }
 
-async function getOpenPRsNumber(organization, contributor) {
+async function getOpenPRsCreatedTimes(organization, contributor) {
     const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open`
 
     const res = await get(APIHOST + OpenPRsURL)
 
     if (res !== undefined) {
-        return res.data.total_count
+        res.data.items.forEach((element, index) => {
+            console.log("Open PR index for "+contributor+" "+ index, element["created_at"])
+        })
+        return res.data.items.map((element, index)=> {
+            // console.log("Element "+index, element)
+            return element["created_at"]
+        })
     } else {
         return -1
     }
 }
 
-async function getMergedPRsNumber(organization, contributor) {
+async function getMergedPRsCreatedTimes(organization, contributor) {
     const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged`
 
     const res = await get(APIHOST + MergedPRsURL)
 
     if (res !== undefined) {
-        return res.data.total_count
+        res.data.items.forEach((element, index) => {
+            console.log("Merged PR index for "+contributor+" "+ index, element["created_at"])
+        })
+        return res.data.items.map((element, index)=> {
+            // console.log("Element "+index, element)
+            return element["created_at"]
+        })
     } else {
         return -1
     }
 }
 
-async function getIssuesNumber(organization, contributor) {
+async function getIssuesCreatedTimes(organization, contributor) {
     const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}`
 
     const res = await get(APIHOST + IssuesURL)
 
     if (res !== undefined) {
-        return res.data.total_count
+        res.data.items.forEach((element, index) => {
+            console.log("Issues Created index for "+contributor+" "+ index, element["created_at"])
+        })
+        return res.data.items.map((element, index)=> {
+            // console.log("Element "+index, element)
+            return element["created_at"]
+        })
     } else {
         return -1
     }
@@ -103,30 +121,30 @@ async function getIssuesNumber(organization, contributor) {
 async function getContributorInfo(organization, contributor) {
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
-    const openPRsNumber = await getOpenPRsNumber(organization, contributor)
+    const openPRsCreatedTimes = await getOpenPRsCreatedTimes(organization, contributor)
     const openPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:open`
-    const mergedPRsNumber = await getMergedPRsNumber(organization, contributor)
+    const mergedPRsCreatedTimes = await getMergedPRsCreatedTimes(organization, contributor)
     const mergedPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:merged`
-    const issuesNumber = await getIssuesNumber(organization, contributor)
+    const issuesCreatedTimes = await getIssuesCreatedTimes(organization, contributor)
     const issuesLink = `${BASEURL}/issues?q=is:issue+org:${organization}+author:${contributor}`
 
     return {
         home,
         avatarUrl,
-        openPRsNumber,
+        openPRsCreatedTimes,
         openPRsLink,
-        mergedPRsNumber,
+        mergedPRsCreatedTimes,
         mergedPRsLink,
-        issuesNumber,
+        issuesCreatedTimes,
         issuesLink
     }
 }
 
 module.exports = {
     getContributorAvatar,
-    getOpenPRsNumber,
-    getMergedPRsNumber,
-    getIssuesNumber,
+    getOpenPRsCreatedTimes,
+    getMergedPRsCreatedTimes,
+    getIssuesCreatedTimes,
     getContributorInfo,
     checkRateLimit
 }

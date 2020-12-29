@@ -4,6 +4,8 @@ import axios from 'axios'
 import moment, { relativeTimeRounding } from 'moment'
 import { relative } from 'path';
 
+
+const year = 2018
 axios.get('/api/data')
     .then( res => {
         const table = document.querySelector('table')
@@ -11,11 +13,20 @@ axios.get('/api/data')
         const list = Object.keys(data)
         let contributors = []
         list.forEach( username => {
+            console.log("Open Created Times", data[username].openPRsCreatedTimes.filter((created_time)=> {
+                return (new Date(created_time).getFullYear() == year)
+            }).length)
             contributors.push({
                 username,
-                mergedPRsNumber: data[username].mergedPRsNumber,
-                openPRsNumber: data[username].openPRsNumber,
-                issuesNumber: data[username].issuesNumber
+                mergedPRsNumber: data[username].mergedPRsCreatedTimes.filter((created_time)=> {
+                    return (new Date(created_time).getFullYear() == year)
+                }).length,
+                openPRsNumber: data[username].openPRsCreatedTimes.filter((created_time)=> {
+                    return (new Date(created_time).getFullYear() == year)
+                }).length,
+                issuesNumber: data[username].issuesCreatedTimes.filter((created_time)=> {
+                    return (new Date(created_time).getFullYear() == year)
+                }).length
             })
         })
 
@@ -37,10 +48,10 @@ axios.get('/api/data')
             if ( a.openPRsNumber > b.openPRsNumber ){
                 return -1;
             }
-            if ( a.openPRsNumber < b.openPRsNumber ){
+            if ( a.issuesNumber < b.issuesNumber ){
                 return 1;
             }
-            if ( a.openPRsNumber > b.openPRsNumber ){
+            if ( a.issuesNumber > b.issuesNumber ){
                 return -1;
             }
             return 0;
@@ -71,24 +82,32 @@ axios.get('/api/data')
             // Open PRs
             const tdOpenPRs = document.createElement('td')
             const openPRs = document.createElement('a')
-            openPRs.href = data[contributor.username].openPRsLink
-            openPRs.innerText = data[contributor.username].openPRsNumber
+            openPRs.href = data[contributor.username].openPRsLink+`+created:>=${year}-01-01`
+            console.log("OpenPRsCreatedTimes = ", data[contributor.username])
+            openPRs.innerText = data[contributor.username].openPRsCreatedTimes.filter((created_time)=> {
+                return (new Date(created_time).getFullYear() == year)
+            }).length
+            console.log("Inner Text = ", openPRs.innerText)
             tdOpenPRs.appendChild(openPRs)
             tr.appendChild(tdOpenPRs)
 
             // Merged PRs
             const tdMergedPRs = document.createElement('td')
             const mergedPRs = document.createElement('a')
-            mergedPRs.href = data[contributor.username].mergedPRsLink
-            mergedPRs.innerText = data[contributor.username].mergedPRsNumber
+            mergedPRs.href = data[contributor.username].mergedPRsLink+`+created:>=${year}-01-01`
+            mergedPRs.innerText = data[contributor.username].mergedPRsCreatedTimes.filter((created_time)=> {
+                return (new Date(created_time).getFullYear() == year)
+            }).length
             tdMergedPRs.appendChild(mergedPRs)
             tr.appendChild(tdMergedPRs)
 
             // Issues
             const tdIssues = document.createElement('td')
             const issues = document.createElement('a')
-            issues.href = data[contributor.username].issuesLink
-            issues.innerText = data[contributor.username].issuesNumber
+            issues.href = data[contributor.username].issuesLink+`+created:>=${year}-01-01`
+            issues.innerText = data[contributor.username].issuesCreatedTimes.filter((created_time)=> {
+                return (new Date(created_time).getFullYear() == year)
+            }).length
             tdIssues.appendChild(issues)
             tr.appendChild(tdIssues)
 
