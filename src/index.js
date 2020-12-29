@@ -4,7 +4,7 @@ import axios from 'axios'
 import moment, { relativeTimeRounding } from 'moment'
 import { relative } from 'path';
 
-
+// Make year dynamic once frontend code gets ready
 const year = 2018
 axios.get('/api/data')
     .then( res => {
@@ -13,9 +13,6 @@ axios.get('/api/data')
         const list = Object.keys(data)
         let contributors = []
         list.forEach( username => {
-            console.log("Open Created Times", data[username].openPRsCreatedTimes.filter((created_time)=> {
-                return (new Date(created_time).getFullYear() == year)
-            }).length)
             contributors.push({
                 username,
                 mergedPRsNumber: data[username].mergedPRsCreatedTimes.filter((created_time)=> {
@@ -83,7 +80,6 @@ axios.get('/api/data')
             const tdOpenPRs = document.createElement('td')
             const openPRs = document.createElement('a')
             openPRs.href = data[contributor.username].openPRsLink+`+created:>=${year}-01-01`
-            console.log("OpenPRsCreatedTimes = ", data[contributor.username])
             openPRs.innerText = data[contributor.username].openPRsCreatedTimes.filter((created_time)=> {
                 return (new Date(created_time).getFullYear() == year)
             }).length

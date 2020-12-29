@@ -70,11 +70,7 @@ async function getOpenPRsCreatedTimes(organization, contributor) {
     const res = await get(APIHOST + OpenPRsURL)
 
     if (res !== undefined) {
-        res.data.items.forEach((element, index) => {
-            console.log("Open PR index for "+contributor+" "+ index, element["created_at"])
-        })
-        return res.data.items.map((element, index)=> {
-            // console.log("Element "+index, element)
+        return res.data.items.map((element)=> {
             return element["created_at"]
         })
     } else {
@@ -88,11 +84,7 @@ async function getMergedPRsCreatedTimes(organization, contributor) {
     const res = await get(APIHOST + MergedPRsURL)
 
     if (res !== undefined) {
-        res.data.items.forEach((element, index) => {
-            console.log("Merged PR index for "+contributor+" "+ index, element["created_at"])
-        })
-        return res.data.items.map((element, index)=> {
-            // console.log("Element "+index, element)
+        return res.data.items.map((element)=> {
             return element["created_at"]
         })
     } else {
@@ -106,11 +98,7 @@ async function getIssuesCreatedTimes(organization, contributor) {
     const res = await get(APIHOST + IssuesURL)
 
     if (res !== undefined) {
-        res.data.items.forEach((element, index) => {
-            console.log("Issues Created index for "+contributor+" "+ index, element["created_at"])
-        })
-        return res.data.items.map((element, index)=> {
-            // console.log("Element "+index, element)
+        return res.data.items.map((element)=> {
             return element["created_at"]
         })
     } else {
