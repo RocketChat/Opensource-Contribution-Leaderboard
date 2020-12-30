@@ -37,10 +37,10 @@ axios.get('/api/data')
             if ( a.openPRsNumber > b.openPRsNumber ){
                 return -1;
             }
-            if ( a.openPRsNumber < b.openPRsNumber ){
+            if ( a.issuesNumber < b.issuesNumber ){
                 return 1;
             }
-            if ( a.openPRsNumber > b.openPRsNumber ){
+            if ( a.issuesNumber > b.issuesNumber ){
                 return -1;
             }
             return 0;
