@@ -75,6 +75,14 @@ const development = merge(common, {
                 headers: {
                     'x-real-ip': '61.190.56.217'
                 }
+              },
+            '/socket.io': {
+                target: 'http://localhost:'+ port +'/',
+                changeOrigin: true,
+                secure: false,
+                headers: {
+                    'x-real-ip': '61.190.56.217'
+                }
               }
         }
     },

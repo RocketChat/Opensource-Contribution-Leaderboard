@@ -20,7 +20,8 @@
     "axios": "^0.18.0",
     "chalk": "^2.4.2",
     "jsonfile": "^5.0.0",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "socket.io-client": "^3.0.4"
   },
   "scripts": {
     "add": "npm install && npm --prefix src/server install && npm --prefix admin install",
