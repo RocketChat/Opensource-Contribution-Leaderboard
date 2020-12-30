@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GSoC Contribution Leaderboard</title>
 </head>
 
@@ -21,40 +22,55 @@
       </li>
     </ul>
   </nav>
-  <div class="container">
-    <hr>
-    <h2 style="display:inline;">Contributors</h2>
-    <em class="total" style="font-size: 16px;color:white">Total:</em>
-    <span class="text-muted lastupdate" style="float:right;text-align: right;font-size: 12px;"></span>
-    <table style="margin: 0; width: 100%; font-size: 16px;" cellpadding="0" cellspacing="0">
-      <tr>
-        <td></td>
-        <td colspan="1" style="font-weight: bold; padding: 32px 8px 8px 8px; color: #333;">
-          Username
-        </td>
-        <td></td>
-        <td
-          style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
-          <a href="?sort=p">Open PRs</a>
-        </td>
-        <td
-          style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
-          <a href="?sort=m">Merged PRs</a>
-        </td>
-        <td
-          style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
-          <a href="?sort=i">Issues</a>
-        </td>
-      </tr>
-    </table>
-    <hr>
-  </div>
-  <footer class="footer mt-auto py-3">
-      <div class="container">
-        <span class="text-muted">
-        </span>
+  <div id="content-container">
+    <div id="filter">
+      <input class="input-highlight" type="text" placeholder="Enter Contributor's Username" id="username-filter">
+      <div id="filter-by-date">
+        <label><input type="checkbox" name="date-filter" id="today-filter" value="1">Today</label>
+        <label><input type="checkbox" name="date-filter" id="yesterday-filter" value="2">Yesterday</label>
+        <label><input type="checkbox" name="date-filter" id="this-week-filter" value="3">This week</label>
+        <label><input type="checkbox" name="date-filter" id="this-month-filter" value="4">This month</label>
+        <label><input type="checkbox" name="date-filter" id="this-year-filter" value="5">This year</label>
+        <label><input type="checkbox" name="date-filter" id="custom-date-filter" value="6">Custom date</label>
+        <div id="custom-date-container">
+          <label><span class="custom-date-label">Starts</span><input class="input-highlight" type="date" name="date-picker" id="start-date" required></label>
+          <label><span class="custom-date-label">Ends</span><input class="input-highlight" type="date" name="date-picker" id="end-date" required></label>
+        </div>
       </div>
-    </footer>
+    </div>
+    <div class="container table-container">
+      <hr>
+      <h2 style="display:inline;">Contributors</h2>
+      <em class="total" style="font-size: 16px;color:white">Total:</em>
+      <span class="text-muted lastupdate" style="float:right;text-align: right;font-size: 12px;"></span>
+      <table style="margin: 0; width: 100%; font-size: 16px;" cellpadding="0" cellspacing="0">
+        <tr>
+          <td></td>
+          <td colspan="1" style="font-weight: bold; padding: 32px 8px 8px 8px; color: #333;">
+            Username
+          </td>
+          <td></td>
+          <td
+            style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
+            <a href="?sort=p">Open PRs</a>
+          </td>
+          <td
+            style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
+            <a href="?sort=m">Merged PRs</a>
+          </td>
+          <td
+            style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
+            <a href="?sort=i">Issues</a>
+          </td>
+        </tr>
+      </table>
+      <hr>
+      <footer class="footer mt-auto py-3">
+          <span class="text-muted">
+        </div>
+      </footer>
+    </div>
+  </div>
 </body>
 
 </html>
