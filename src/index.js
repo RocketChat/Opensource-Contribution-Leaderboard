@@ -6,7 +6,7 @@ import { relative } from 'path';
 import { io } from 'socket.io-client';
 
 // Make year dynamic once frontend code gets ready
-const year = 2018
+const year = 2020
 function refreshTable(newData){
     const table = document.querySelector('table')
     const data = newData
@@ -74,6 +74,9 @@ function refreshTable(newData){
         tr.id = contributor.username
         tdUsername.appendChild(username)
         tr.appendChild(tdUsername)
+
+        // empty td tag
+        tr.appendChild(document.createElement('td'))
 
         // Open PRs
         const tdOpenPRs = document.createElement('td')
