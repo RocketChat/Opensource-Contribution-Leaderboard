@@ -20,6 +20,10 @@ const proxyOption = {
     pathRewrite: {'^/api' : ''},
     changeOrigin: true
 }
+const websocketProxyOption = {
+    target: 'http://localhost:'+ port +'/',
+    changeOrigin: true
+}
 
 if (process.env.NODE_ENV !== 'development') {
     app.use('/api', proxy(proxyOption))
@@ -29,6 +33,7 @@ if (process.env.NODE_ENV !== 'development') {
             message: 'Access Forbidden'
         })
     })
+    app.use('/socket.io', proxy(websocketProxyOption))
     app.use('/', express.static(path.resolve(__dirname, '..')))
     app.listen(8080)
 }
@@ -212,6 +217,19 @@ const server = http.createServer( (req, res) => {
     }
 }).listen(port)
 
+const io = require('socket.io')(server);
+io.on('connection', (socket) => {
+    const intervalId = setInterval(() => {
+        jsonfile.readFile(dataPath, (err, obj) => {
+            if (err) console.log('[ERROR]' + err)
+            socket.emit('refresh table', obj);
+        });
+    }, 15000);
+    socket.on('disconnect', () => {
+        clearInterval(intervalId);
+    });
+});
+  
 
 function findContributor(contributorName, admindata) {
     let result = null
