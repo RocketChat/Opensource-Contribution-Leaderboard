@@ -5,18 +5,99 @@ import moment, { relativeTimeRounding } from 'moment'
 import { relative } from 'path';
 import { io } from 'socket.io-client';
 
-function refreshTable(newData){
+let tableData = {}, filterUsername = "", startDate = new Date(0), endDate = new Date();
+
+const filterByUsername = () => {
+    filterUsername = document.getElementById('username-filter').value;
+    refreshTable();
+}
+
+document.getElementById('username-filter').onchange = filterByUsername;
+
+function startOfWeek(date) {
+    const diff = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1);
+    return new Date(date.setDate(diff));
+}
+
+const filterByDates = (event) => {
+    const currBox = event.srcElement;
+    if(currBox.checked) {
+        const checkboxes = document.getElementsByName('date-filter');
+        checkboxes.forEach((checkbox) => {
+            if(currBox != checkbox)
+                checkbox.checked = false;
+        });
+        switch(currBox.value) {
+            case '1':
+                startDate = new Date();
+                break;
+            case '2':
+                startDate = new Date();
+                startDate.setDate(startDate.getDate() - 1);
+                endDate = startDate;
+                break;
+            case '3':
+                startDate = startOfWeek(new Date());
+                endDate = new Date();
+                break;
+            case '4':
+                startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+                endDate = new Date();
+                break;
+            case '5':
+                startDate = new Date(new Date().getFullYear(), 0, 1);
+                endDate = new Date();
+                break;
+            case '6':
+                document.getElementById('custom-date-container').style.display = "block";
+                return;
+        }
+        document.getElementById('start-date').value = null;
+        document.getElementById('end-date').value = null;
+        document.getElementById('custom-date-container').style.display = "none";
+        return refreshTable();
+    } 
+    startDate = new Date(0);
+    endDate = new Date();
+    if(currBox.value == '6'){
+        document.getElementById('start-date').value = null;
+        document.getElementById('end-date').value = null;
+        document.getElementById('custom-date-container').style.display = "none";
+    }
+    refreshTable();
+}
+
+const setStartDate = (event) => {
+    startDate = new Date(event.srcElement.value);
+}
+
+const setEndDate = (event) => {
+    endDate = new Date(event.srcElement.value);
+}
+
+(function() {
+    const checkboxes = document.getElementsByName('date-filter');
+    checkboxes.forEach((checkbox) => {
+        checkbox.onclick = filterByDates;
+    });
+    document.getElementById('start-date').onchange = setStartDate;
+    document.getElementById('end-date').onchange = setEndDate;
+})();
+
+function refreshTable(){
     const table = document.querySelector('table')
-    const data = newData
+    const data = tableData
     const list = Object.keys(data)
     let contributors = []
     list.forEach( username => {
-        contributors.push({
-            username,
-            mergedPRsNumber: data[username].mergedPRsNumber,
-            openPRsNumber: data[username].openPRsNumber,
-            issuesNumber: data[username].issuesNumber
-        })
+        if((filterUsername == "") || (username.toUpperCase().match(`^${filterUsername.toUpperCase()}`))){
+            contributors.push({
+                username,
+                mergedPRsNumber: data[username].mergedPRsNumber,
+                openPRsNumber: data[username].openPRsNumber,
+                issuesNumber: data[username].issuesNumber
+            })
+        }
     })
 
     // reder total contributor numbers
@@ -100,7 +181,8 @@ function refreshTable(newData){
 
 axios.get('/api/data')
     .then( res => {
-        refreshTable(res.data);
+        tableData = res.data;
+        refreshTable();
     })
 
 axios.get('/api/config')
@@ -125,6 +207,7 @@ axios.get('/api/log')
 
 const socket = io();
 socket.on('refresh table', (data) => {
-    refreshTable(data);
+    tableData = data;
+    refreshTable();
 });
     
