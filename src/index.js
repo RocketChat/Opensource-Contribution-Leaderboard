@@ -193,8 +193,6 @@ function refreshTable(){
         const tdMergedPRs = document.createElement('td')
         const mergedPRs = document.createElement('a')
         mergedPRs.href = data[contributor.username].mergedPRsLink+`+created:${formatDate(startDate)}..${formatDate(endDate)}`
-        console.log("Start Date", startDate)
-        console.log("End Date", endDate)
         mergedPRs.innerText = data[contributor.username].mergedPRsCreatedTimes.filter((created_time)=> {
             let createdTime = new Date(created_time)
             return ((startDate <= createdTime) && (createdTime <= endDate))
