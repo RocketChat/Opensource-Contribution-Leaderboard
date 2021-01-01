@@ -65,7 +65,7 @@ async function getContributorAvatar(contributor) {
 }
 
 async function getOpenPRsCreatedTimes(organization, contributor) {
-    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open`
+    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open&per_page=100`
 
     const res = await get(APIHOST + OpenPRsURL)
 
@@ -79,7 +79,7 @@ async function getOpenPRsCreatedTimes(organization, contributor) {
 }
 
 async function getMergedPRsCreatedTimes(organization, contributor) {
-    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged`
+    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged&per_page=100`
 
     const res = await get(APIHOST + MergedPRsURL)
 
@@ -93,7 +93,7 @@ async function getMergedPRsCreatedTimes(organization, contributor) {
 }
 
 async function getIssuesCreatedTimes(organization, contributor) {
-    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}`
+    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}&per_page=100`
 
     const res = await get(APIHOST + IssuesURL)
 

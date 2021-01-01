@@ -5,9 +5,7 @@ import moment, { relativeTimeRounding } from 'moment'
 import { relative } from 'path';
 import { io } from 'socket.io-client';
 
-let tableData = {}, filterUsername = "", startDate = new Date(0), endDate = new Date();
-
-const year = 2020;
+let tableData = {}, filterUsername = "", startDate = new Date(0), endDate = new Date(), localDate = new Date();
 
 const filterByUsername = () => {
     filterUsername = document.getElementById('username-filter').value;
@@ -21,6 +19,20 @@ function startOfWeek(date) {
     return new Date(date.setDate(diff));
 }
 
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 const filterByDates = (event) => {
     const currBox = event.srcElement;
     if(currBox.checked) {
@@ -31,23 +43,27 @@ const filterByDates = (event) => {
         });
         switch(currBox.value) {
             case '1':
-                startDate = new Date();
+                startDate = new Date(localDate.getUTCFullYear(), localDate.getUTCMonth(), localDate.getUTCDate());
+                startDate.setHours(0, 0, 0, 0);
+                endDate = new Date();
                 break;
             case '2':
-                startDate = new Date();
+                startDate = new Date(localDate.getUTCFullYear(), localDate.getUTCMonth(), localDate.getUTCDate());
                 startDate.setDate(startDate.getDate() - 1);
-                endDate = startDate;
+                startDate.setHours(0,0,0,0);
+                endDate = new Date(startDate.getTime());
+                endDate.setHours(23, 59, 59, 59)
                 break;
             case '3':
-                startDate = startOfWeek(new Date());
+                startDate = startOfWeek(new Date(localDate.getUTCFullYear(), localDate.getUTCMonth(), localDate.getUTCDate()));
                 endDate = new Date();
                 break;
             case '4':
-                startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+                startDate = new Date(localDate.getUTCFullYear(), localDate.getUTCFullMonth(), 1);
                 endDate = new Date();
                 break;
             case '5':
-                startDate = new Date(new Date().getFullYear(), 0, 1);
+                startDate = new Date(localDate.getUTCFullYear(), 0, 1);
                 endDate = new Date();
                 break;
             case '6':
@@ -96,13 +112,16 @@ function refreshTable(){
             contributors.push({
                 username,
                 mergedPRsNumber: data[username].mergedPRsCreatedTimes.filter((created_time)=> {
-                    return (new Date(created_time).getFullYear() == year)
+                    let createdTime = new Date(created_time)
+                    return ((startDate <= createdTime) && (createdTime <= endDate))
                 }).length,
                 openPRsNumber: data[username].openPRsCreatedTimes.filter((created_time)=> {
-                    return (new Date(created_time).getFullYear() == year)
+                    let createdTime = new Date(created_time)
+                    return ((startDate <= createdTime) && (createdTime <= endDate))
                 }).length,
                 issuesNumber: data[username].issuesCreatedTimes.filter((created_time)=> {
-                    return (new Date(created_time).getFullYear() == year)
+                    let createdTime = new Date(created_time)
+                    return ((startDate <= createdTime) && (createdTime <= endDate))
                 }).length
             })
         }
@@ -160,22 +179,27 @@ function refreshTable(){
         tr.appendChild(document.createElement('td'))
 
         // Open PRs
+        // console.log("Start Date", startDate)
+        // console.log("End Date", endDate)
         const tdOpenPRs = document.createElement('td')
         const openPRs = document.createElement('a')
-        openPRs.href = data[contributor.username].openPRsLink+`+created:>=${year}-01-01`
+        openPRs.href = data[contributor.username].openPRsLink+`+created:${formatDate(startDate)}..${formatDate(endDate)}`
         openPRs.innerText = data[contributor.username].openPRsCreatedTimes.filter((created_time)=> {
-            return (new Date(created_time).getFullYear() == year)
+            let createdTime = new Date(created_time)
+            return ((startDate <= createdTime) && (createdTime <= endDate))
         }).length
-        console.log("Inner Text = ", openPRs.innerText)
         tdOpenPRs.appendChild(openPRs)
         tr.appendChild(tdOpenPRs)
 
         // Merged PRs
         const tdMergedPRs = document.createElement('td')
         const mergedPRs = document.createElement('a')
-        mergedPRs.href = data[contributor.username].mergedPRsLink+`+created:>=${year}-01-01`
+        mergedPRs.href = data[contributor.username].mergedPRsLink+`+created:${formatDate(startDate)}..${formatDate(endDate)}`
+        console.log("Start Date", startDate)
+        console.log("End Date", endDate)
         mergedPRs.innerText = data[contributor.username].mergedPRsCreatedTimes.filter((created_time)=> {
-            return (new Date(created_time).getFullYear() == year)
+            let createdTime = new Date(created_time)
+            return ((startDate <= createdTime) && (createdTime <= endDate))
         }).length
         tdMergedPRs.appendChild(mergedPRs)
         tr.appendChild(tdMergedPRs)
@@ -183,9 +207,10 @@ function refreshTable(){
         // Issues
         const tdIssues = document.createElement('td')
         const issues = document.createElement('a')
-        issues.href = data[contributor.username].issuesLink+`+created:>=${year}-01-01`
+        issues.href = data[contributor.username].issuesLink+`+created:${formatDate(startDate)}..${formatDate(endDate)}`
         issues.innerText = data[contributor.username].issuesCreatedTimes.filter((created_time)=> {
-            return (new Date(created_time).getFullYear() == year)
+            let createdTime = new Date(created_time)
+            return ((startDate <= createdTime) && (createdTime <= endDate))
         }).length
         tdIssues.appendChild(issues)
         tr.appendChild(tdIssues)
