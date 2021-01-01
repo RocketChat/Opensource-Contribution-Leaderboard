@@ -179,8 +179,6 @@ function refreshTable(){
         tr.appendChild(document.createElement('td'))
 
         // Open PRs
-        // console.log("Start Date", startDate)
-        // console.log("End Date", endDate)
         const tdOpenPRs = document.createElement('td')
         const openPRs = document.createElement('a')
         openPRs.href = data[contributor.username].openPRsLink+`+created:${formatDate(startDate)}..${formatDate(endDate)}`
