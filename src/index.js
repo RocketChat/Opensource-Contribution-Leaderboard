@@ -59,7 +59,7 @@ const filterByDates = (event) => {
                 endDate = new Date();
                 break;
             case '4':
-                startDate = new Date(localDate.getUTCFullYear(), localDate.getUTCFullMonth(), 1);
+                startDate = new Date(localDate.getUTCFullYear(), localDate.getUTCMonth(), 1);
                 endDate = new Date();
                 break;
             case '5':
