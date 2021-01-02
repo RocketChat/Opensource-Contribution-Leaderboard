@@ -64,69 +64,82 @@ async function getContributorAvatar(contributor) {
     }
 }
 
-async function getOpenPRsNumber(organization, contributor) {
-    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open`
+async function getOpenPRsCreatedTimes(organization, contributor, page) {
+    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open&page=${page}&per_page=100`
 
     const res = await get(APIHOST + OpenPRsURL)
 
     if (res !== undefined) {
-        return res.data.total_count
+        return res.data.items.map((element)=> {
+            return element["created_at"]
+        })
     } else {
         return -1
     }
 }
 
-async function getMergedPRsNumber(organization, contributor) {
-    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged`
+async function getMergedPRsCreatedTimes(organization, contributor, page) {
+    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged&page=${page}&per_page=100`
 
     const res = await get(APIHOST + MergedPRsURL)
 
     if (res !== undefined) {
-        return res.data.total_count
+        return await res.data.items.map((element)=> {
+            return element["created_at"]
+        })
     } else {
         return -1
     }
 }
 
-async function getIssuesNumber(organization, contributor) {
-    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}`
+async function getIssuesCreatedTimes(organization, contributor, page) {
+    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}&page=${page}&per_page=100`
 
     const res = await get(APIHOST + IssuesURL)
 
     if (res !== undefined) {
-        return res.data.total_count
+        return res.data.items.map((element)=> {
+            return element["created_at"]
+        })
     } else {
         return -1
     }
 }
 
 async function getContributorInfo(organization, contributor) {
+    var openPRsCreatedTimes = [], mergedPRsCreatedTimes = [], issuesCreatedTimes = []
+    for(var page =1; page<=3; page++)
+    {   
+        openPRsCreatedTimes.push(await getOpenPRsCreatedTimes(organization, contributor, page))
+        mergedPRsCreatedTimes.push(await getMergedPRsCreatedTimes(organization, contributor, page))
+        issuesCreatedTimes.push(await getIssuesCreatedTimes(organization, contributor, page))
+    }
+    openPRsCreatedTimes = openPRsCreatedTimes.flat()
+    mergedPRsCreatedTimes = mergedPRsCreatedTimes.flat()
+    issuesCreatedTimes = issuesCreatedTimes.flat()
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
-    const openPRsNumber = await getOpenPRsNumber(organization, contributor)
     const openPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:open`
-    const mergedPRsNumber = await getMergedPRsNumber(organization, contributor)
     const mergedPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:merged`
-    const issuesNumber = await getIssuesNumber(organization, contributor)
     const issuesLink = `${BASEURL}/issues?q=is:issue+org:${organization}+author:${contributor}`
 
     return {
         home,
         avatarUrl,
-        openPRsNumber,
+        openPRsCreatedTimes,
         openPRsLink,
-        mergedPRsNumber,
+        mergedPRsCreatedTimes,
         mergedPRsLink,
-        issuesNumber,
+        issuesCreatedTimes,
         issuesLink
     }
 }
 
 module.exports = {
     getContributorAvatar,
-    getOpenPRsNumber,
-    getMergedPRsNumber,
-    getIssuesNumber,
+    getOpenPRsCreatedTimes,
+    getMergedPRsCreatedTimes,
+    getIssuesCreatedTimes,
     getContributorInfo,
     checkRateLimit
 }
