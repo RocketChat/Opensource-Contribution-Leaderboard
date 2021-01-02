@@ -5,7 +5,7 @@ import moment, { relativeTimeRounding } from 'moment'
 import { relative } from 'path';
 import { io } from 'socket.io-client';
 
-let tableData = {}, filterUsername = "", startDate = new Date(0), endDate = new Date(), localDate = new Date();
+let tableData = {}, filterUsername = "", startDate = new Date(2020, 10, 21, 0, 0, 0), endDate = new Date(), localDate = new Date();
 
 const filterByUsername = () => {
     filterUsername = document.getElementById('username-filter').value;
