@@ -65,7 +65,7 @@ async function getContributorAvatar(contributor) {
 }
 
 async function getOpenPRsNumber(organization, contributor) {
-    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open`
+    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open+created:>=${Config.startDate}`
 
     const res = await get(APIHOST + OpenPRsURL)
 
@@ -77,7 +77,7 @@ async function getOpenPRsNumber(organization, contributor) {
 }
 
 async function getMergedPRsNumber(organization, contributor) {
-    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged`
+    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged+created:>=${Config.startDate}`
 
     const res = await get(APIHOST + MergedPRsURL)
 
@@ -89,7 +89,7 @@ async function getMergedPRsNumber(organization, contributor) {
 }
 
 async function getIssuesNumber(organization, contributor) {
-    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}`
+    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}+created:>=${Config.startDate}`
 
     const res = await get(APIHOST + IssuesURL)
 
@@ -104,11 +104,11 @@ async function getContributorInfo(organization, contributor) {
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
     const openPRsNumber = await getOpenPRsNumber(organization, contributor)
-    const openPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:open`
+    const openPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:open+created:>=${Config.startDate}`
     const mergedPRsNumber = await getMergedPRsNumber(organization, contributor)
-    const mergedPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:merged`
+    const mergedPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:merged+created:>=${Config.startDate}`
     const issuesNumber = await getIssuesNumber(organization, contributor)
-    const issuesLink = `${BASEURL}/issues?q=is:issue+org:${organization}+author:${contributor}`
+    const issuesLink = `${BASEURL}/issues?q=is:issue+org:${organization}+author:${contributor}+created:>=${Config.startDate}`
 
     return {
         home,
