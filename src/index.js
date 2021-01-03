@@ -46,7 +46,7 @@ function refreshTable(newData){
         return 0;
     })
     table.innerHTML = table.rows[0].innerHTML;
-    contributors.forEach( contributor => {
+    contributors.forEach( (contributor, index) => {
         const tr = document.createElement('tr')
 
         // avatar
@@ -61,10 +61,13 @@ function refreshTable(newData){
         // username
         const tdUsername = document.createElement('td')
         const username = document.createElement('a')
+        const rank = document.createElement('span')
         username.href = data[contributor.username].home
         username.innerText = contributor.username
+        rank.innerText = index + 1
         tr.id = contributor.username
         tdUsername.appendChild(username)
+        tdUsername.appendChild(rank)
         tr.appendChild(tdUsername)
 
         // empty td tag

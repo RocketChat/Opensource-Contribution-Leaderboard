@@ -17,6 +17,7 @@ table td {
   font-family: Helvetica, Arial, sans-serif;
   max-height: 18px;
   height: 18px!important;
+  position: relative;
 }
 table tbody tr td {
   border-top: none!important;
@@ -24,6 +25,12 @@ table tbody tr td {
 
 td {
   text-align: center;
+}
+
+td span {
+  color: white;
+  position: absolute;
+  right: 0;
 }
 
 .navbar {
