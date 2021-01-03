@@ -5,7 +5,7 @@ import moment, { relativeTimeRounding } from 'moment'
 import { relative } from 'path';
 import { io } from 'socket.io-client';
 
-let tableData = {}, filterUsername = "", startDate = new Date(2020, 10, 21, 0, 0, 0), endDate = new Date(), localDate = new Date();
+let tableData = {}, filterUsername = "", startDate = new Date(0), endDate = new Date();
 
 const filterByUsername = () => {
     filterUsername = document.getElementById('username-filter').value;
@@ -19,20 +19,6 @@ function startOfWeek(date) {
     return new Date(date.setDate(diff));
 }
 
-function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-
 const filterByDates = (event) => {
     const currBox = event.srcElement;
     if(currBox.checked) {
@@ -43,27 +29,23 @@ const filterByDates = (event) => {
         });
         switch(currBox.value) {
             case '1':
-                startDate = new Date(localDate.getUTCFullYear(), localDate.getUTCMonth(), localDate.getUTCDate());
-                startDate.setHours(0, 0, 0, 0);
-                endDate = new Date();
+                startDate = new Date();
                 break;
             case '2':
-                startDate = new Date(localDate.getUTCFullYear(), localDate.getUTCMonth(), localDate.getUTCDate());
+                startDate = new Date();
                 startDate.setDate(startDate.getDate() - 1);
-                startDate.setHours(0,0,0,0);
-                endDate = new Date(startDate.getTime());
-                endDate.setHours(23, 59, 59, 59)
+                endDate = startDate;
                 break;
             case '3':
-                startDate = startOfWeek(new Date(localDate.getUTCFullYear(), localDate.getUTCMonth(), localDate.getUTCDate()));
+                startDate = startOfWeek(new Date());
                 endDate = new Date();
                 break;
             case '4':
-                startDate = new Date(localDate.getUTCFullYear(), localDate.getUTCFullMonth(), 1);
+                startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
                 endDate = new Date();
                 break;
             case '5':
-                startDate = new Date(localDate.getUTCFullYear(), 0, 1);
+                startDate = new Date(new Date().getFullYear(), 0, 1);
                 endDate = new Date();
                 break;
             case '6':
@@ -111,18 +93,9 @@ function refreshTable(){
         if((filterUsername == "") || (username.toUpperCase().match(`^${filterUsername.toUpperCase()}`))){
             contributors.push({
                 username,
-                mergedPRsNumber: data[username].mergedPRsCreatedTimes.filter((created_time)=> {
-                    let createdTime = new Date(created_time)
-                    return ((startDate <= createdTime) && (createdTime <= endDate))
-                }).length,
-                openPRsNumber: data[username].openPRsCreatedTimes.filter((created_time)=> {
-                    let createdTime = new Date(created_time)
-                    return ((startDate <= createdTime) && (createdTime <= endDate))
-                }).length,
-                issuesNumber: data[username].issuesCreatedTimes.filter((created_time)=> {
-                    let createdTime = new Date(created_time)
-                    return ((startDate <= createdTime) && (createdTime <= endDate))
-                }).length
+                mergedPRsNumber: data[username].mergedPRsNumber,
+                openPRsNumber: data[username].openPRsNumber,
+                issuesNumber: data[username].issuesNumber
             })
         }
     })
@@ -181,33 +154,24 @@ function refreshTable(){
         // Open PRs
         const tdOpenPRs = document.createElement('td')
         const openPRs = document.createElement('a')
-        openPRs.href = data[contributor.username].openPRsLink+`+created:${formatDate(startDate)}..${formatDate(endDate)}`
-        openPRs.innerText = data[contributor.username].openPRsCreatedTimes.filter((created_time)=> {
-            let createdTime = new Date(created_time)
-            return ((startDate <= createdTime) && (createdTime <= endDate))
-        }).length
+        openPRs.href = data[contributor.username].openPRsLink
+        openPRs.innerText = data[contributor.username].openPRsNumber
         tdOpenPRs.appendChild(openPRs)
         tr.appendChild(tdOpenPRs)
 
         // Merged PRs
         const tdMergedPRs = document.createElement('td')
         const mergedPRs = document.createElement('a')
-        mergedPRs.href = data[contributor.username].mergedPRsLink+`+created:${formatDate(startDate)}..${formatDate(endDate)}`
-        mergedPRs.innerText = data[contributor.username].mergedPRsCreatedTimes.filter((created_time)=> {
-            let createdTime = new Date(created_time)
-            return ((startDate <= createdTime) && (createdTime <= endDate))
-        }).length
+        mergedPRs.href = data[contributor.username].mergedPRsLink
+        mergedPRs.innerText = data[contributor.username].mergedPRsNumber
         tdMergedPRs.appendChild(mergedPRs)
         tr.appendChild(tdMergedPRs)
 
         // Issues
         const tdIssues = document.createElement('td')
         const issues = document.createElement('a')
-        issues.href = data[contributor.username].issuesLink+`+created:${formatDate(startDate)}..${formatDate(endDate)}`
-        issues.innerText = data[contributor.username].issuesCreatedTimes.filter((created_time)=> {
-            let createdTime = new Date(created_time)
-            return ((startDate <= createdTime) && (createdTime <= endDate))
-        }).length
+        issues.href = data[contributor.username].issuesLink
+        issues.innerText = data[contributor.username].issuesNumber
         tdIssues.appendChild(issues)
         tr.appendChild(tdIssues)
 
