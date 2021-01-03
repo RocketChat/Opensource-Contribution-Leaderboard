@@ -82,7 +82,7 @@ const server = http.createServer( (req, res) => {
                 return
             }
 
-            let { delay, contributors } = jsonfile.readFileSync(configPath)
+            let { delay, contributors, startDate } = jsonfile.readFileSync(configPath)
             const contributorsList = []
 
             Util.post(req, async params => {
@@ -105,13 +105,33 @@ const server = http.createServer( (req, res) => {
                         }
                     }))
 
-                    res.end(JSON.stringify({ code: 0, delay, contributors: contributorsList })) // success
+                    res.end(JSON.stringify({ code: 0, delay, contributors: contributorsList, startDate })) // success
                     jsonfile.writeFileSync(admindataPath, contributorsList)
                 } else {
-                    res.end(JSON.stringify({ code: 1, delay: 0, contributors: {} })) // wrong
+                    res.end(JSON.stringify({ code: 1, delay: 0, contributors: {}, startDate: "" })) // wrong
                 }
             })
            break
+        case '/setStartDate':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+            Util.post(req, params => {
+                const { token, startDate } = params
+
+                if (token !== adminPassword) {
+                    res.end(JSON.stringify({ message: 'Authentication failed' }))
+                } else {
+                    // set startDate in config.json
+                    const Config = jsonfile.readFileSync(configPath)
+                    Config.startDate = startDate
+                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+
+                    res.end(JSON.stringify({ message: 'Success' }))
+                }
+            })
+            break
         case '/setInterval':
             if (req.method === 'GET') {
                 res.end('Permission denied\n')

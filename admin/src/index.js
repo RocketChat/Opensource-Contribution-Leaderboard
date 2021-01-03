@@ -23,7 +23,7 @@ submit.addEventListener('click', () => {
     axios.post('/api/login', {
         token: password
     }).then( res => {
-        let { code, delay, contributors } = res.data
+        let { code, delay, contributors, startDate } = res.data
         if (code == 1) {
             msgError('The password is incorrect!')
         }
@@ -34,10 +34,12 @@ submit.addEventListener('click', () => {
             const intervalInput = document.querySelector('.set-interval')
             const table = document.querySelector('.contributors-list')
             const totalTd = document.querySelector('td.total')
+            const startDateInput = document.querySelector('.set-start-date')
 
             loginPanel.classList.add('hide') // hide loading animation
             configPanel.classList.remove('hide')
             intervalInput.setAttribute('placeholder', delay)
+            startDateInput.setAttribute('value', startDate)
 
             contributors = sortByAlphabet(contributors, 'username')
 
@@ -71,6 +73,30 @@ submit.addEventListener('click', () => {
             removeButtons.forEach( removeButton => {
                 removeButton.addEventListener('click', e => {
                     removeContributor(e, contributors, totalTd)
+                })
+            })
+
+            // Set startDate value
+            const setStartDateButton = document.querySelector('.set-start-date-button.button')
+            setStartDateButton.addEventListener('click', () => {
+                const startDate = document.querySelector('.set-start-date').value
+
+                if (startDate === '') {
+                    msgError('Please select date')
+                    return
+                }
+
+                axios.post('/api/setStartDate', {
+                    token: password,
+                    startDate
+                }).then( res => {
+                    const { message } = res.data
+
+                    if (message === 'Success') {
+                        mgsSuccess(`Success`)
+                    } else {
+                        msgError('Unexpected error')
+                    }
                 })
             })
 
