@@ -37,19 +37,19 @@ async function getAllContributorsInfo() {
 
     Promise.mapSeries(contributors, async contributor => {
 
-        await Promise.delay(delay * 3000)
+        await Promise.delay(delay * 1000)
 
         API.getContributorInfo(organization, contributor).then( res => {
             Config = jsonfile.readFileSync(configPath) // update Config
             delay = Config.delay // update delay
 
-            if (res.avatarUrl !== '' && res.issuesCreatedTimes !== -1 && res.mergedPRsCreatedTimes !== -1 && res.openPRsCreatedTimes != -1) {
+            if (res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsNumber !== -1 && res.openPRsNumber != -1) {
                 
                 dataBuffer = jsonfile.readFileSync(dataPath)
 
                 if (Config.contributors.includes(contributor)) {
                     dataBuffer[`${contributor}`] = res
-                    console.log(`${contributor} was updated: ${res.openPRsCreatedTimes.length} ${res.mergedPRsCreatedTimes.length} ${res.issuesCreatedTimes.length}`)
+                    console.log(`${contributor} was updated: ${res.openPRsNumber} ${res.mergedPRsNumber} ${res.issuesNumber}`)
 
                     // Update contributors infomation
                     jsonfile.writeFile(dataPath, dataBuffer, { spaces: 2 }, (err) => {

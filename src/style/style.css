@@ -6,11 +6,6 @@ h2 {
   font-size: 32px!important;
 }
 
-.table-container {
-  margin-left: 0!important;
-  margin-right: 0!important;
-}
-
 td a {
   color: #007bff!important;
   font-weight: normal;
@@ -79,67 +74,4 @@ td {
 .footer a {
   font-size: 16px;
   color: #007bff!important;
-}
-
-#content-container {
-  display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-width: 1375px;
-}
-
-#filter {
-  display: flex;
-  width: 250px;
-  flex-direction: column;
-  border: 1px solid #eeeeee;
-  border-radius: 6px;
-  padding: 13px 10px 10px 10px;
-  margin-top: 90px;
-  height: fit-content;
-}
-
-#username-filter {
-  width: 100%;
-  height: 37px;
-  border: 1px solid #eeeeee;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-#filter-by-date {
-  display: flex;
-  flex-direction: column;
-  margin-top: 12px;
-  padding: 7px;
-}
-
-input[type="checkbox"] {
-  margin: 5px 5px 0 0!important;
-}
-
-#custom-date-container {
-  padding: 8px;
-  display: none;
-}
-
-#custom-date-container label {
-  font-size: small;
-}
-
-input[type="date"] {
-  display: block;
-  border: 1px solid #eee;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.input-highlight:focus {
-  border: 1px solid #4190f8d3!important;
-  outline: #4190f8d3;
-}
-
-.custom-date-label {
-  margin-left: 5px;
 }

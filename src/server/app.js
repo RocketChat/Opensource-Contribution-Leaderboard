@@ -193,7 +193,7 @@ const server = http.createServer( (req, res) => {
                             // Add this contributor in the data.json
                             const data = jsonfile.readFileSync(dataPath)
                             API.getContributorInfo(Config.organization, username).then( result => {
-                                if (result.avatarUrl !== '' && result.issuesCreatedTimes !== -1 && result.mergedPRsCreatedTimes !== -1 && result.openPRsCreatedTimes != -1) {
+                                if (result.avatarUrl !== '' && result.issuesNumber !== -1 && result.mergedPRsNumber !== -1 && result.openPRsNumber != -1) {
                                     data[`${username}`] = result
                                     // Update contributors infomation
                                     jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
