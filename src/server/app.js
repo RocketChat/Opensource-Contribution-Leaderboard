@@ -1,20 +1,20 @@
-import { createServer } from 'http'
-import { readFileSync, writeFileSync, readFile, writeFile } from 'jsonfile'
-import { parse } from 'url'
-import { post } from './util/Util'
-import { getContributorAvatar, getContributorInfo } from './util/API'
-import { existsSync } from 'fs'
-import { spawn } from 'child_process'
-import express, { static } from 'express'
+const http = require('http')
+const jsonfile = require('jsonfile')
+const url = require('url')
+const Util = require('./util/Util')
+const API = require('./util/API')
+const fs = require('fs')
+const spawn = require('child_process').spawn
+const express = require('express')
 const app = express()
-import proxy from 'http-proxy-middleware'
-import { resolve } from 'path'
+const proxy = require('http-proxy-middleware')
+const path = require('path')
 
 const configPath = './config.json'
 const admindataPath = './admindata.json'
 const dataPath = '../assets/data/data.json'
 const logPath = '../assets/data/log.json'
-const port = readFileSync(configPath).serverPort
+const port = jsonfile.readFileSync(configPath).serverPort
 const proxyOption = {
     target: 'http://localhost:'+ port +'/',
     pathRewrite: {'^/api' : ''},
@@ -34,12 +34,12 @@ if (process.env.NODE_ENV !== 'development') {
         })
     })
     app.use('/socket.io', proxy(websocketProxyOption))
-    app.use('/', static(resolve(__dirname, '..')))
+    app.use('/', express.static(path.resolve(__dirname, '..')))
     app.listen(8080)
 }
 
-if (!existsSync(admindataPath)) {
-    writeFileSync(admindataPath, [] )
+if (!fs.existsSync(admindataPath)) {
+    jsonfile.writeFileSync(admindataPath, [] )
 }
 
 // spawn - `node refresh.js`
@@ -48,28 +48,28 @@ process.on('exit', () => {
     refresh.kill() // kill it when exit
 })
 
-const server = createServer( (req, res) => {
-    const route = parse(req.url).pathname
-    const params = parse(req.url, true).query
-    const { adminPassword } = readFileSync(configPath)
+const server = http.createServer( (req, res) => {
+    const route = url.parse(req.url).pathname
+    const params = url.parse(req.url, true).query
+    const { adminPassword } = jsonfile.readFileSync(configPath)
 
     switch (route) {
         case '/data':
             res.setHeader('Cache-Control', 'no-store')
-            readFile(dataPath, (err, obj) => {
+            jsonfile.readFile(dataPath, (err, obj) => {
                 if (err) console.log('[ERROR]' + err)
                 res.end(JSON.stringify(obj))
             })
             break
         case '/log':
             res.setHeader('Cache-Control', 'no-store')
-            readFile(logPath, (err, obj) => {
+            jsonfile.readFile(logPath, (err, obj) => {
                 if (err) console.log('[ERROR]' + err)
                 res.end(JSON.stringify(obj))
             })
             break  
         case '/config':
-            const Config = readFileSync(configPath)
+            const Config = jsonfile.readFileSync(configPath)
             res.end(JSON.stringify({
                 organization: Config.organization,
                 organizationHomepage: Config.organizationHomepage,
@@ -82,20 +82,20 @@ const server = createServer( (req, res) => {
                 return
             }
 
-            let { delay, contributors, startDate } = readFileSync(configPath)
+            let { delay, contributors, startDate } = jsonfile.readFileSync(configPath)
             const contributorsList = []
 
-            post(req, async params => {
+            Util.post(req, async params => {
                 const { token } = params
                 if (token === adminPassword) {
                     await Promise.all(contributors.map( async contributor => {
-                        const admindata = readFileSync('./admindata.json')
+                        const admindata = jsonfile.readFileSync('./admindata.json')
                         const existContributor = findContributor(contributor, admindata)
                         
                         if ( existContributor !== null) {
                             contributorsList.push(existContributor)
                         } else {
-                            const avatarUrl = await getContributorAvatar(contributor)
+                            const avatarUrl = await API.getContributorAvatar(contributor)
                             if(avatarUrl !== '') {
                                 contributorsList.push({
                                     username: contributor,
@@ -106,7 +106,7 @@ const server = createServer( (req, res) => {
                     }))
 
                     res.end(JSON.stringify({ code: 0, delay, contributors: contributorsList, startDate })) // success
-                    writeFileSync(admindataPath, contributorsList)
+                    jsonfile.writeFileSync(admindataPath, contributorsList)
                 } else {
                     res.end(JSON.stringify({ code: 1, delay: 0, contributors: {}, startDate: "" })) // wrong
                 }
@@ -117,16 +117,16 @@ const server = createServer( (req, res) => {
                 res.end('Permission denied\n')
                 return
             }
-            post(req, params => {
+            Util.post(req, params => {
                 const { token, startDate } = params
 
                 if (token !== adminPassword) {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
                     // set startDate in config.json
-                    const Config = readFileSync(configPath)
+                    const Config = jsonfile.readFileSync(configPath)
                     Config.startDate = startDate
-                    writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
 
                     res.end(JSON.stringify({ message: 'Success' }))
                 }
@@ -138,16 +138,16 @@ const server = createServer( (req, res) => {
                 return
             }
 
-            post(req, params => {
+            Util.post(req, params => {
                 const { token, interval } = params
 
                 if (token !== adminPassword) {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
                     // set delay in config.json
-                    const Config = readFileSync(configPath)
+                    const Config = jsonfile.readFileSync(configPath)
                     Config.delay = interval
-                    writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
 
                     res.end(JSON.stringify({ message: 'Success' }))
                 }
@@ -159,25 +159,25 @@ const server = createServer( (req, res) => {
                 return
             }
 
-            post(req, params => {
+            Util.post(req, params => {
                 const { token, username } = params
 
                 if (token !== adminPassword) {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
-                    const Config = readFileSync(configPath)
+                    const Config = jsonfile.readFileSync(configPath)
                     // Remove this contributor in config.json
                     Config.contributors.forEach( (contributor, index, object) => {
                         if (contributor == username) {
                             object.splice(index, 1)
                         }
                     })
-                    writeFileSync(configPath, Config, { spaces:2 })
+                    jsonfile.writeFileSync(configPath, Config, { spaces:2 })
 
                     // Remove this contributor in the data.json
-                    const data = readFileSync(dataPath)
+                    const data = jsonfile.readFileSync(dataPath)
                     delete data[username]
-                    writeFileSync(dataPath, data, { spaces: 2 })
+                    jsonfile.writeFileSync(dataPath, data, { spaces: 2 })
 
                     res.end(JSON.stringify({ message: 'Success' }))
                 }
@@ -189,34 +189,34 @@ const server = createServer( (req, res) => {
                 return
             }
 
-            post(req, params => {
+            Util.post(req, params => {
                 const { token, username } = params
 
                 if (token !== adminPassword) {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
-                    const Config = readFileSync(configPath)
+                    const Config = jsonfile.readFileSync(configPath)
 
                     if (Config.contributors.includes(username)) {
                         res.end(JSON.stringify({ message: `${username} aready exists` }))
                         return
                     }
 
-                    getContributorAvatar(username).then( result => {
+                    API.getContributorAvatar(username).then( result => {
                         if (result === '') {
                             res.end(JSON.stringify({ message: 'Not found' }))
                         } else {
                             // Add this contributor in config.json
                             Config.contributors.unshift(username)
-                            writeFileSync(configPath, Config, { spaces:2 })
+                            jsonfile.writeFileSync(configPath, Config, { spaces:2 })
 
                             // Add this contributor in the data.json
-                            const data = readFileSync(dataPath)
-                            getContributorInfo(Config.organization, username).then( result => {
+                            const data = jsonfile.readFileSync(dataPath)
+                            API.getContributorInfo(Config.organization, username).then( result => {
                                 if (result.avatarUrl !== '' && result.issuesNumber !== -1 && result.mergedPRsNumber !== -1 && result.openPRsNumber != -1) {
                                     data[`${username}`] = result
                                     // Update contributors infomation
-                                    writeFile(dataPath, data, { spaces: 2 }, (err) => {
+                                    jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
                                         if (err) console.error(err)
                                     })
                                 }
@@ -240,7 +240,7 @@ const server = createServer( (req, res) => {
 const io = require('socket.io')(server);
 io.on('connection', (socket) => {
     const intervalId = setInterval(() => {
-        readFile(dataPath, (err, obj) => {
+        jsonfile.readFile(dataPath, (err, obj) => {
             if (err) console.log('[ERROR]' + err)
             socket.emit('refresh table', obj);
         });
