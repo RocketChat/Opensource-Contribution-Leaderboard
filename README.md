@@ -1,4 +1,4 @@
-![Opensource-Contribution-Leaderboard](https://socialify.git.ci/RocketChat/Opensource-Contribution-Leaderboard/image?description=1&descriptionEditable=Open%20Source%20Contribution%20Contributors%20Tracking%20Leaderboard&language=1&theme=Light)
+![Opensource-Contribution-Leaderboard](https://socialify.git.ci/RocketChat/Opensource-Contribution-Leaderboard/image?description=1&descriptionEditable=Open%20Source%20Contribution%20Tracking%20Leaderboard&language=1&theme=Light)
 
 ![](./docs/images/demo.png)
 
