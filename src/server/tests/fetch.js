@@ -1,7 +1,7 @@
-const API = require('../util/API')
-const jsonfile = require('jsonfile')
+import API from '../util/API'
+import { readFileSync, writeFileSync } from 'jsonfile'
 
-const contributors = jsonfile.readFileSync('../../assets/data/data.json')
+const contributors = readFileSync('../../assets/data/data.json')
 const contributorsList = []
 
 for (let contributor in contributors) {
@@ -12,7 +12,7 @@ for (let contributor in contributors) {
     contributorsList.push( {username, avatarUrl} )
 }
 
-jsonfile.writeFileSync('../admindata.json', contributorsList, { spaces: 2 }, err => {
+writeFileSync('../admindata.json', contributorsList, { spaces: 2 }, err => {
     if (err) {
         console.log(err)
     }
