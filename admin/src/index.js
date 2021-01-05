@@ -6,7 +6,7 @@ import './style/noty.css'
 
 const submit = document.querySelector('.submit')
 const passwordInput = document.querySelector('[type=password]')
-let password = ''
+let password = '', repositories = []
 
 submit.addEventListener('click', () => {
     const passwd = document.querySelector('[type=password]').value
@@ -75,6 +75,78 @@ submit.addEventListener('click', () => {
                 removeButton.addEventListener('click', e => {
                     removeContributor(e, contributors, totalTd)
                 })
+            })
+
+            //Get Repositories
+            axios.get('/api/getRepositories', {
+                token: password,
+            }).then( res => {
+                repositories = res.data
+                console.log("Repositories = ",res.data)
+                if (repositories) {
+                    var repoSelect = document.getElementById("repo-select")
+                    repositories.forEach((repoName, index) => {
+                        var myDiv = document.createElement('div'); 
+              
+                        // creating checkbox element 
+                        var checkbox = document.createElement('input'); 
+                        
+                        // Assigning the attributes 
+                        // to created checkbox 
+                        checkbox.type = "checkbox"; 
+                        checkbox.name = repoName; 
+                        checkbox.value = repoName; 
+                        checkbox.id = 'repo'+index; 
+                        
+                        // creating label for checkbox 
+                        var label = document.createElement('label'); 
+                        
+                        // assigning attributes for  
+                        // the created label tag  
+                        label.htmlFor = "id"; 
+                        
+                        // appending the created text to  
+                        // the created label tag  
+                        label.innerHTML = repoName; 
+                        
+                        // appending the checkbox 
+                        // and label to div 
+                        myDiv.appendChild(checkbox); 
+                        myDiv.appendChild(label); 
+                        repoSelect.appendChild(myDiv)
+                    })
+
+                } else {
+                    msgError('Unexpected error')
+                }
+            })
+
+            // Set includedRepositories
+            const setIncludedRepositoriesButton = document.querySelector('.repo-select-button.button')
+            setIncludedRepositoriesButton.addEventListener('click', () => {
+                const startDate = document.querySelector('.set-start-date').value
+                let includedRepositories = []
+                repositories.forEach((repoName, index) => {
+                    var checkbox = document.querySelector('#repo'+index)
+                    if(checkbox.checked)
+                    {
+                        includedRepositories.push(checkbox.name)
+                    }
+                })
+                console.log("Included Repositories = ", includedRepositories)
+
+                // axios.post('/api/setIncludedRepositories', {
+                //     token: password,
+                //     includedRepositories
+                // }).then( res => {
+                //     const { message } = res.data
+
+                //     if (message === 'Success') {
+                //         mgsSuccess(`Success`)
+                //     } else {
+                //         msgError('Unexpected error')
+                //     }
+                // })
             })
 
             // Set startDate value

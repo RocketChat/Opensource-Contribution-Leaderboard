@@ -104,14 +104,30 @@ const server = http.createServer( (req, res) => {
                         }
                     }
                 }))
-
                 res.end(JSON.stringify({ code: 0, delay, contributors: contributorsList, startDate })) // success
                 jsonfile.writeFileSync(admindataPath, contributorsList)
             } else {
-                res.end(JSON.stringify({ code: 1, delay: 0, contributors: {}, startDate: '' })) // wrong
+                res.end(JSON.stringify({ code: 1, delay: 0, contributors: {}, startDate: "" })) // wrong
             }
-        })
-        break
+            })
+           break
+        case '/getRepositories':
+            console.log("reached here")
+            Util.get(req, async () => {
+                // set repositories in data.json
+                const Config = jsonfile.readFileSync(configPath)
+                const repositories = await API.getRepositories(Config.organization)
+                if(repositories!== '')
+                {
+                    Config.repositories = repositories
+                    jsonfile.writeFile(configPath, Config, { spaces: 2 })
+                    res.end(JSON.stringify(repositories))
+                }
+                else{
+                    res.end()
+                }
+            })
+            break
     case '/setStartDate':
         if (req.method === 'GET') {
             res.end('Permission denied\n')

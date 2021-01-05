@@ -53,6 +53,30 @@ async function checkRateLimit() {
     }
 }
 
+async function fetchRepositories(organization, page) {
+    const res = await get(APIHOST + `/orgs/${organization}/repos?per_page=100&page=${page}`)
+        if (res !== undefined) {
+            return res.data.map((element)=> {
+                return element["name"]
+        })} 
+        else {
+            return ''
+        }
+
+}
+
+async function getRepositories(organization) {
+    console.log('Called')
+    const results = []
+    for(var page =1; page<=3; page++)
+    {
+        results.push(await fetchRepositories(organization, page))
+    }
+    results.flat()
+    console.log(results)
+    return results
+}
+
 async function getContributorAvatar(contributor) {
 
     const res = await get(APIHOST + '/users/' + contributor)
@@ -123,6 +147,7 @@ async function getContributorInfo(organization, contributor) {
 }
 
 module.exports = {
+    getRepositories,
     getContributorAvatar,
     getOpenPRsNumber,
     getMergedPRsNumber,
