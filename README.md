@@ -18,6 +18,20 @@ An open source contributors leaderboard for your developers community, Github or
 - Requires no database or other environments - Only what you need to do is to ensure that your Node.js works well
 - Real-time updation of results - Contributions get updated real-time after server start without the need to refresh.
 
+## Deploy with Docker 
+
+Use the automated build image of our [most recent release](https://hub.docker.com/r/rohanlekhwani/opensource-contribution-leaderboard)
+
+```
+docker pull rohanlekhwani/opensource-contribution-leaderboard:latest
+```
+
+and then run
+
+```
+docker run -p 8080:8080 -d rohanlekhwani/opensource-contribution-leaderboard
+```
+
 ## Quick Start
 Clone the repository to your local machine and switch into the project root directory:
 ````bash
