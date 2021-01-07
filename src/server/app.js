@@ -251,7 +251,7 @@ io.on('connection', (socket) => {
 });
   
 
-function findContributor(contributorName, admindata) {
+const findContributor=(contributorName, admindata)=> {
     let result = null
 
     admindata.forEach( contributor => {

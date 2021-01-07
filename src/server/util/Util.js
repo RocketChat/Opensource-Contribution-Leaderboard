@@ -1,4 +1,4 @@
-function post(req, callback) {
+const post=(req, callback)=> {
     if(req.method === 'POST') {
         let body = ''
         
@@ -16,6 +16,6 @@ function post(req, callback) {
     }
 }
 
-module.exports = {
+export default {
     post
 }

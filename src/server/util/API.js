@@ -1,17 +1,17 @@
-const axios = require('axios')
-const Config = require('../config.json')
-const chalk = require('chalk')
+import { get as _get } from 'axios'
+import { authToken as _authToken, startDate } from '../config.json'
+import { yellow, red } from 'chalk'
 
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'
 
 async function get (url, authToken) {
     try {
-      let res = await axios.get(url, {
+      let res = await _get(url, {
           headers: {
               'Accept': 'application/vnd.github.v3+json',
               'User-Agent': 'GSoC-Contribution-Leaderboard',
-              'Authorization': 'token ' + Config.authToken
+              'Authorization': 'token ' + _authToken
           }
       })
       return new Promise((resolve) => {
@@ -23,18 +23,18 @@ async function get (url, authToken) {
       })
     } catch (err) {
         if (err.code === 'ECONNABORTED') {
-            console.log(chalk.yellow('[WARNING] Time Out.'))
+            console.log(yellow('[WARNING] Time Out.'))
             return
         }
         if (err.response !== undefined) {
             const message = err.response.data.message
             switch (message) {
                 case 'Bad credentials':
-                    console.log(chalk.red(('[ERROR] Your GitHub Token is not correct! Please check it in the config.json.')))
+                    console.log(red(('[ERROR] Your GitHub Token is not correct! Please check it in the config.json.')))
                     process.exit()
                     break
                 default:
-                    console.log(chalk.yellow('[WARNING] ' + message))
+                    console.log(yellow('[WARNING] ' + message))
             }
         } else {
             console.log(err)
@@ -65,7 +65,7 @@ async function getContributorAvatar(contributor) {
 }
 
 async function getOpenPRsNumber(organization, contributor) {
-    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open+created:>=${Config.startDate}`
+    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open+created:>=${startDate}`
 
     const res = await get(APIHOST + OpenPRsURL)
 
@@ -77,7 +77,7 @@ async function getOpenPRsNumber(organization, contributor) {
 }
 
 async function getMergedPRsNumber(organization, contributor) {
-    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged+created:>=${Config.startDate}`
+    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged+created:>=${startDate}`
 
     const res = await get(APIHOST + MergedPRsURL)
 
@@ -89,7 +89,7 @@ async function getMergedPRsNumber(organization, contributor) {
 }
 
 async function getIssuesNumber(organization, contributor) {
-    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}+created:>=${Config.startDate}`
+    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}+created:>=${startDate}`
 
     const res = await get(APIHOST + IssuesURL)
 
@@ -104,11 +104,11 @@ async function getContributorInfo(organization, contributor) {
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
     const openPRsNumber = await getOpenPRsNumber(organization, contributor)
-    const openPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:open+created:>=${Config.startDate}`
+    const openPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:open+created:>=${startDate}`
     const mergedPRsNumber = await getMergedPRsNumber(organization, contributor)
-    const mergedPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:merged+created:>=${Config.startDate}`
+    const mergedPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:merged+created:>=${startDate}`
     const issuesNumber = await getIssuesNumber(organization, contributor)
-    const issuesLink = `${BASEURL}/issues?q=is:issue+org:${organization}+author:${contributor}+created:>=${Config.startDate}`
+    const issuesLink = `${BASEURL}/issues?q=is:issue+org:${organization}+author:${contributor}+created:>=${startDate}`
 
     return {
         home,
@@ -122,7 +122,7 @@ async function getContributorInfo(organization, contributor) {
     }
 }
 
-module.exports = {
+export default {
     getContributorAvatar,
     getOpenPRsNumber,
     getMergedPRsNumber,
