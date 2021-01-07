@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  opensource-contribution-leaderboard:
+    image: rohanlekhwani/opensource-contribution-leaderboard:latest
+    volumes:
+      - ./src/server/config.json:/dist/server/config.json
+      - ./src/assets/data:/data
+    ports:
+      - "8080:8080"

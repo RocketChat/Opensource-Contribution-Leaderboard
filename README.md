@@ -20,7 +20,15 @@ An open source contributors leaderboard for your developers community, Github or
 
 ## Deploy with Docker 
 
-Use the automated build image of our [most recent release](https://hub.docker.com/r/rohanlekhwani/opensource-contribution-leaderboard)
+Use `docker-compose` to deploy directly
+
+```
+docker-compose up -d
+```
+
+The configuration file (`src/server/config.json`) can be easily modified locally to reflect changes on the container. The data gets backed up at `/data` inside the container.
+
+OR Use the automated build image of our [most recent release](https://hub.docker.com/r/rohanlekhwani/opensource-contribution-leaderboard)
 
 ```
 docker pull rohanlekhwani/opensource-contribution-leaderboard:latest
