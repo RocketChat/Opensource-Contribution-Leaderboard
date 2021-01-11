@@ -15,6 +15,7 @@ const admindataPath = './admindata.json'
 const dataPath = '../assets/data/data.json'
 const logPath = '../assets/data/log.json'
 const port = jsonfile.readFileSync(configPath).serverPort
+const configBackupPath = "../../configBackup.json";
 const proxyOption = {
     target: 'http://localhost:'+ port +'/',
     pathRewrite: {'^/api' : ''},
@@ -127,6 +128,7 @@ const server = http.createServer( (req, res) => {
                     const Config = jsonfile.readFileSync(configPath)
                     Config.startDate = startDate
                     jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
 
                     res.end(JSON.stringify({ message: 'Success' }))
                 }
@@ -148,6 +150,7 @@ const server = http.createServer( (req, res) => {
                     const Config = jsonfile.readFileSync(configPath)
                     Config.delay = interval
                     jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
 
                     res.end(JSON.stringify({ message: 'Success' }))
                 }
@@ -178,6 +181,7 @@ const server = http.createServer( (req, res) => {
                     const data = jsonfile.readFileSync(dataPath)
                     delete data[username]
                     jsonfile.writeFileSync(dataPath, data, { spaces: 2 })
+                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
 
                     res.end(JSON.stringify({ message: 'Success' }))
                 }
@@ -209,6 +213,7 @@ const server = http.createServer( (req, res) => {
                             // Add this contributor in config.json
                             Config.contributors.unshift(username)
                             jsonfile.writeFileSync(configPath, Config, { spaces:2 })
+                            jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
 
                             // Add this contributor in the data.json
                             const data = jsonfile.readFileSync(dataPath)

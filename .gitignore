@@ -5,3 +5,4 @@ assets/config.json
 src/assets/data
 dist
 tests/config.txt
+configBackup.json
