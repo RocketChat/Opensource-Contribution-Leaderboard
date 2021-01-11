@@ -104,11 +104,11 @@ async function getContributorInfo(organization, contributor) {
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
     const openPRsNumber = await getOpenPRsNumber(organization, contributor)
-    const openPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:open+created:>=${Config.startDate}`
+    const openPRsLink = `${BASEURL}/search?q=type:pr+org:${organization}+author:${contributor}+is:open+created:>=${Config.startDate}`
     const mergedPRsNumber = await getMergedPRsNumber(organization, contributor)
-    const mergedPRsLink = `${BASEURL}/pulls?q=is:pr+org:${organization}+author:${contributor}+is:merged+created:>=${Config.startDate}`
+    const mergedPRsLink = `${BASEURL}/search?q=type:pr+org:${organization}+author:${contributor}+is:merged+created:>=${Config.startDate}`
     const issuesNumber = await getIssuesNumber(organization, contributor)
-    const issuesLink = `${BASEURL}/issues?q=is:issue+org:${organization}+author:${contributor}+created:>=${Config.startDate}`
+    const issuesLink = `${BASEURL}/search?q=type:issue+org:${organization}+author:${contributor}+created:>=${Config.startDate}`
 
     return {
         home,
