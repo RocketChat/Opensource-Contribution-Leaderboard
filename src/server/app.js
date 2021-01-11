@@ -112,29 +112,44 @@ const server = http.createServer( (req, res) => {
             })
            break
         case '/getRepositories':
-            console.log("reached here")
             Util.get(req, async () => {
-                // set repositories in data.json
+                // set repositories in config.json
                 const Config = jsonfile.readFileSync(configPath)
                 const repositories = await API.getRepositories(Config.organization)
                 if(repositories!== '')
                 {
-                    Config.repositories = repositories
+                    Config.repositories = repositories.flat()
                     jsonfile.writeFile(configPath, Config, { spaces: 2 })
-                    res.end(JSON.stringify(repositories))
+                    res.end(JSON.stringify({repositories: Config.repositories, includedRepositories: Config.includedRepositories}))
                 }
                 else{
                     res.end()
                 }
             })
             break
-    case '/setStartDate':
-        if (req.method === 'GET') {
-            res.end('Permission denied\n')
-            return
-        }
-        Util.post(req, params => {
-            const { token, startDate } = params
+        case '/setIncludedRepositories':
+            Util.post(req, params => {
+                const { token, includedRepositories } = params
+
+                if (token !== adminPassword) {
+                    res.end(JSON.stringify({ message: 'Authentication failed' }))
+                } else {
+                    // set includedRepositories in config.json
+                    const Config = jsonfile.readFileSync(configPath)
+                    Config.includedRepositories = includedRepositories
+                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+
+                    res.end(JSON.stringify({ message: 'Success' }))
+                }
+            })
+            break
+        case '/setStartDate':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+            Util.post(req, params => {
+                const { token, startDate } = params
 
             if (token !== adminPassword) {
                 res.end(JSON.stringify({ message: 'Authentication failed' }))

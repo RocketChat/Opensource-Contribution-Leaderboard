@@ -72,8 +72,6 @@ async function getRepositories(organization) {
     {
         results.push(await fetchRepositories(organization, page))
     }
-    results.flat()
-    console.log(results)
     return results
 }
 
@@ -88,8 +86,11 @@ async function getContributorAvatar(contributor) {
     }
 }
 
-async function getOpenPRsNumber(organization, contributor) {
-    const OpenPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Open+created:>=${Config.startDate}`
+async function getOpenPRsNumber(organization, contributor, includedRepositories) {
+    let OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${Config.startDate}`
+    includedRepositories.forEach((repository) => {
+        OpenPRsURL+=`+repo:${organization}/${repository}`
+    })
 
     const res = await get(APIHOST + OpenPRsURL)
 
@@ -100,8 +101,11 @@ async function getOpenPRsNumber(organization, contributor) {
     }
 }
 
-async function getMergedPRsNumber(organization, contributor) {
-    const MergedPRsURL = `/search/issues?q=is:pr+org:${organization}+author:${contributor}+is:Merged+created:>=${Config.startDate}`
+async function getMergedPRsNumber(organization, contributor, includedRepositories) {
+    let MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:>=${Config.startDate}`
+    includedRepositories.forEach((repository) => {
+        MergedPRsURL+=`+repo:${organization}/${repository}`
+    })
 
     const res = await get(APIHOST + MergedPRsURL)
 
@@ -112,8 +116,11 @@ async function getMergedPRsNumber(organization, contributor) {
     }
 }
 
-async function getIssuesNumber(organization, contributor) {
-    const IssuesURL = `/search/issues?q=is:issue+org:${organization}+author:${contributor}+created:>=${Config.startDate}`
+async function getIssuesNumber(organization, contributor, includedRepositories) {
+    let IssuesURL = `/search/issues?q=is:issue+author:${contributor}+created:>=${Config.startDate}`
+    includedRepositories.forEach((repository) => {
+        IssuesURL+=`+repo:${organization}/${repository}`
+    })
 
     const res = await get(APIHOST + IssuesURL)
 
@@ -127,12 +134,17 @@ async function getIssuesNumber(organization, contributor) {
 async function getContributorInfo(organization, contributor) {
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
-    const openPRsNumber = await getOpenPRsNumber(organization, contributor)
-    const openPRsLink = `${BASEURL}/search?q=type:pr+org:${organization}+author:${contributor}+is:open+created:>=${Config.startDate}`
-    const mergedPRsNumber = await getMergedPRsNumber(organization, contributor)
-    const mergedPRsLink = `${BASEURL}/search?q=type:pr+org:${organization}+author:${contributor}+is:merged+created:>=${Config.startDate}`
-    const issuesNumber = await getIssuesNumber(organization, contributor)
-    const issuesLink = `${BASEURL}/search?q=type:issue+org:${organization}+author:${contributor}+created:>=${Config.startDate}`
+    const openPRsNumber = await getOpenPRsNumber(organization, contributor, Config.includedRepositories)
+    let openPRsLink = `${BASEURL}/pulls?q=is:pr+author:${contributor}+is:open+created:>=${Config.startDate}`
+    const mergedPRsNumber = await getMergedPRsNumber(organization, contributor, Config.includedRepositories)
+    let mergedPRsLink = `${BASEURL}/pulls?q=is:pr+author:${contributor}+is:merged+created:>=${Config.startDate}`
+    const issuesNumber = await getIssuesNumber(organization, contributor, Config.includedRepositories)
+    let issuesLink = `${BASEURL}/issues?q=is:issue+author:${contributor}+created:>=${Config.startDate}`
+    Config.includedRepositories.forEach(repository => {
+        openPRsLink+=`repo:${organization}/${repository}`
+        mergedPRsLink+=`repo:${organization}/${repository}`
+        issuesLink+=`repo:${organization}/${repository}`
+    })
 
     return {
         home,

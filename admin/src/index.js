@@ -6,7 +6,7 @@ import './style/noty.css'
 
 const submit = document.querySelector('.submit')
 const passwordInput = document.querySelector('[type=password]')
-let password = '', repositories = []
+let password = '', repositories = [], includedRepositories = []
 
 submit.addEventListener('click', () => {
     const passwd = document.querySelector('[type=password]').value
@@ -81,14 +81,14 @@ submit.addEventListener('click', () => {
             axios.get('/api/getRepositories', {
                 token: password,
             }).then( res => {
-                repositories = res.data
-                console.log("Repositories = ",res.data)
+                repositories = res.data.repositories
+                includedRepositories = res.data.includedRepositories
                 if (repositories) {
-                    var repoSelect = document.getElementById("repo-select")
+                    var repositoriesList = document.querySelector('.repositories-list')
                     repositories.forEach((repoName, index) => {
-                        var myDiv = document.createElement('div'); 
-              
-                        // creating checkbox element 
+                        const repoRow = document.createElement('tr');
+
+                        const checkboxTd = document.createElement('td');
                         var checkbox = document.createElement('input'); 
                         
                         // Assigning the attributes 
@@ -97,23 +97,17 @@ submit.addEventListener('click', () => {
                         checkbox.name = repoName; 
                         checkbox.value = repoName; 
                         checkbox.id = 'repo'+index; 
+                        checkbox.checked = includedRepositories.includes(repoName)? true: false; 
+
+                        checkboxTd.appendChild(checkbox)
                         
-                        // creating label for checkbox 
-                        var label = document.createElement('label'); 
-                        
-                        // assigning attributes for  
-                        // the created label tag  
-                        label.htmlFor = "id"; 
-                        
-                        // appending the created text to  
-                        // the created label tag  
-                        label.innerHTML = repoName; 
-                        
-                        // appending the checkbox 
-                        // and label to div 
-                        myDiv.appendChild(checkbox); 
-                        myDiv.appendChild(label); 
-                        repoSelect.appendChild(myDiv)
+                        const repositoryTd = document.createElement('td')
+                        repositoryTd.innerHTML = repoName
+                        repositoryTd.style.textAlign = "right"
+
+                        repoRow.appendChild(repositoryTd)
+                        repoRow.appendChild(checkboxTd)
+                        repositoriesList.appendChild(repoRow)
                     })
 
                 } else {
@@ -122,9 +116,8 @@ submit.addEventListener('click', () => {
             })
 
             // Set includedRepositories
-            const setIncludedRepositoriesButton = document.querySelector('.repo-select-button.button')
+            document.querySelectorAll('.inclusion-exclusion-save-button.colored-button').forEach((setIncludedRepositoriesButton) => {
             setIncludedRepositoriesButton.addEventListener('click', () => {
-                const startDate = document.querySelector('.set-start-date').value
                 let includedRepositories = []
                 repositories.forEach((repoName, index) => {
                     var checkbox = document.querySelector('#repo'+index)
@@ -133,20 +126,40 @@ submit.addEventListener('click', () => {
                         includedRepositories.push(checkbox.name)
                     }
                 })
-                console.log("Included Repositories = ", includedRepositories)
 
-                // axios.post('/api/setIncludedRepositories', {
-                //     token: password,
-                //     includedRepositories
-                // }).then( res => {
-                //     const { message } = res.data
+                axios.post('/api/setIncludedRepositories', {
+                    token: password,
+                    includedRepositories
+                }).then( res => {
+                    const { message } = res.data
 
-                //     if (message === 'Success') {
-                //         mgsSuccess(`Success`)
-                //     } else {
-                //         msgError('Unexpected error')
-                //     }
-                // })
+                    if (message === 'Success') {
+                        mgsSuccess(`Success! Selected Repositories have been updated!`)
+                    } else {
+                        msgError('Unexpected error')
+                    }
+                })
+            })
+        })
+            
+            // Show Inclusion/Exclusion
+            const showIncludeExclude = document.querySelector('.include-exclude-page-button.colored-button')
+            showIncludeExclude.addEventListener('click', () => {
+                const inclusionExclusionPage = document.querySelector('.inclusion-exclusion')
+                const configPanel = document.querySelector('.config-panel')
+                configPanel.classList.add('hide')
+                inclusionExclusionPage.classList.remove('hide')
+
+
+            })
+
+            //Hide Inclusion/Exclusion
+            const hideIncludeExclude = document.querySelector('.inclusion-exclusion-back-button.colored-button')
+            hideIncludeExclude.addEventListener('click', () => {
+                const inclusionExclusionPage = document.querySelector('.inclusion-exclusion')
+                const configPanel = document.querySelector('.config-panel')
+                inclusionExclusionPage.classList.add('hide')
+                configPanel.classList.remove('hide')
             })
 
             // Set startDate value

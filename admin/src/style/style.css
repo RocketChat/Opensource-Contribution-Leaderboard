@@ -36,6 +36,23 @@ h3 {
   background: #ecf5ff;
 }
 
+.colored-button {
+  display: inline-block;
+  background:#48c5f1;
+  color:#fff!important;
+  border: .5px solid #dcdfe6;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  user-select: none;
+}
+.colored-button:hover {
+  color:#409eff!important;
+  border-color: #c6e2ff;
+  background: #ecf5ff;
+}
+
 .container {
     max-width: 800px;
     margin: 10px auto;
@@ -97,6 +114,14 @@ input {
     background: rgba(255, 255, 255, 1);
     box-shadow: 0.5px 0.5px 5px 0 rgb(150, 150, 200);
     margin-bottom: 100px;
+}
+
+.inclusion-exclusion {
+  border-radius: 3px;
+  padding: 20px 100px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0.5px 0.5px 5px 0 rgb(150, 150, 200);
+  margin-bottom: 100px;
 }
 
 table {
