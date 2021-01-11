@@ -78,9 +78,7 @@ submit.addEventListener('click', () => {
             })
 
             //Get Repositories
-            axios.get('/api/getRepositories', {
-                token: password,
-            }).then( res => {
+            axios.get('/api/getRepositories').then( res => {
                 repositories = res.data.repositories
                 includedRepositories = res.data.includedRepositories
                 if (repositories) {
@@ -149,8 +147,6 @@ submit.addEventListener('click', () => {
                 const configPanel = document.querySelector('.config-panel')
                 configPanel.classList.add('hide')
                 inclusionExclusionPage.classList.remove('hide')
-
-
             })
 
             //Hide Inclusion/Exclusion
