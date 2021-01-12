@@ -112,15 +112,18 @@ const server = http.createServer( (req, res) => {
             })
            break
         case '/getRepositories':
+            if (req.method !== 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+
             Util.get(req, async () => {
-                // set repositories in config.json
+                // get repositories
                 const Config = jsonfile.readFileSync(configPath)
                 const repositories = await API.getRepositories(Config.organization)
                 if(repositories!== '')
                 {
-                    Config.repositories = repositories.flat()
-                    jsonfile.writeFile(configPath, Config, { spaces: 2 })
-                    res.end(JSON.stringify({repositories: Config.repositories, includedRepositories: Config.includedRepositories}))
+                    res.end(JSON.stringify({repositories: repositories.flat(), includedRepositories: Config.includedRepositories}))
                 }
                 else{
                     res.end()
@@ -128,6 +131,11 @@ const server = http.createServer( (req, res) => {
             })
             break
         case '/setIncludedRepositories':
+            if (req.method !== 'POST') {
+                res.end('Permission denied\n')
+                return
+            }
+
             Util.post(req, params => {
                 const { token, includedRepositories } = params
 
@@ -138,6 +146,7 @@ const server = http.createServer( (req, res) => {
                     const Config = jsonfile.readFileSync(configPath)
                     Config.includedRepositories = includedRepositories
                     jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
 
                     res.end(JSON.stringify({ message: 'Success' }))
                 }

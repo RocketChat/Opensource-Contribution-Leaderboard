@@ -166,7 +166,7 @@ table tr:hover {
   border-color: #409eff;
 }
 
-.add-contributor-button, .set-interval-button, .set-start-date-button .repo-select-button {
+.add-contributor-button, .set-interval-button, .set-start-date-button {
   margin-left: 10px;
   border-radius: 5px;
   padding: 5px 15px;

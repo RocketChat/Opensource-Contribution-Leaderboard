@@ -18,19 +18,7 @@ function post(req, callback) {
 
 function get(req, callback) {
     if(req.method === 'GET') {
-        let body = ''
-        
-        req.on('data', chunk => {
-            body += chunk.toString()
-        })
-
-        req.on('end', () => {
-            try {
-                callback()
-            } catch (ex) {
-                return
-            }
-        })
+        callback()
     }
 }
 
