@@ -67,7 +67,7 @@ async function fetchRepositories(organization, page) {
 
 async function getRepositories(organization) {
     const results = []
-    let page = 1
+    let page = 1, repositories = []
     while(true)
     {
         repositories = await fetchRepositories(organization, page)
