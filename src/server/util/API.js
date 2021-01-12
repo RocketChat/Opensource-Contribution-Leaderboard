@@ -135,15 +135,15 @@ async function getContributorInfo(organization, contributor) {
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
     const openPRsNumber = await getOpenPRsNumber(organization, contributor, Config.includedRepositories)
-    let openPRsLink = `${BASEURL}/pulls?q=is:pr+author:${contributor}+is:open+created:>=${Config.startDate}`
+    let openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:>=${Config.startDate}`
     const mergedPRsNumber = await getMergedPRsNumber(organization, contributor, Config.includedRepositories)
-    let mergedPRsLink = `${BASEURL}/pulls?q=is:pr+author:${contributor}+is:merged+created:>=${Config.startDate}`
+    let mergedPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:merged+created:>=${Config.startDate}`
     const issuesNumber = await getIssuesNumber(organization, contributor, Config.includedRepositories)
-    let issuesLink = `${BASEURL}/issues?q=is:issue+author:${contributor}+created:>=${Config.startDate}`
+    let issuesLink = `${BASEURL}/search?q=type:issue+author:${contributor}+created:>=${Config.startDate}`
     Config.includedRepositories.forEach(repository => {
-        openPRsLink+=`repo:${organization}/${repository}`
-        mergedPRsLink+=`repo:${organization}/${repository}`
-        issuesLink+=`repo:${organization}/${repository}`
+        openPRsLink+=`+repo:${organization}/${repository}`
+        mergedPRsLink+=`+repo:${organization}/${repository}`
+        issuesLink+=`+repo:${organization}/${repository}`
     })
 
     return {
