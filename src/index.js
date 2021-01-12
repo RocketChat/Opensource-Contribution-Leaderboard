@@ -78,6 +78,9 @@ function refreshTable(newData){
         const openPRs = document.createElement('a')
         openPRs.href = data[contributor.username].openPRsLink
         openPRs.innerText = data[contributor.username].openPRsNumber
+        if(data[contributor.username].openPRsNumber === 0){
+            openPRs.className = 'inactiveLink'
+        }
         tdOpenPRs.appendChild(openPRs)
         tr.appendChild(tdOpenPRs)
 
@@ -86,6 +89,9 @@ function refreshTable(newData){
         const mergedPRs = document.createElement('a')
         mergedPRs.href = data[contributor.username].mergedPRsLink
         mergedPRs.innerText = data[contributor.username].mergedPRsNumber
+        if(data[contributor.username].mergedPRsNumber === 0){
+            mergedPRs.className = 'inactiveLink'
+        }
         tdMergedPRs.appendChild(mergedPRs)
         tr.appendChild(tdMergedPRs)
 
@@ -94,6 +100,9 @@ function refreshTable(newData){
         const issues = document.createElement('a')
         issues.href = data[contributor.username].issuesLink
         issues.innerText = data[contributor.username].issuesNumber
+        if(data[contributor.username].issuesNumber === 0){
+            issues.className = 'inactiveLink'
+        }
         tdIssues.appendChild(issues)
         tr.appendChild(tdIssues)
 

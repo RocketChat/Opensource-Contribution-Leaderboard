@@ -82,3 +82,8 @@ td span {
   font-size: 16px;
   color: #007bff!important;
 }
+
+.inactiveLink {
+  pointer-events: none;
+  cursor: default;
+}
