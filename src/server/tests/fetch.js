@@ -1,10 +1,9 @@
-const API = require('../util/API')
 const jsonfile = require('jsonfile')
 
 const contributors = jsonfile.readFileSync('../../assets/data/data.json')
 const contributorsList = []
 
-for (let contributor in contributors) {
+for (var contributor in contributors) {
 
     const username = contributor
     const { avatarUrl } = contributors[contributor]

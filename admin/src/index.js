@@ -1,6 +1,7 @@
+/*global layer*/
 import './style/style.css'
 import axios from 'axios'
-import Noty, { button } from 'noty'
+import Noty from 'noty'
 import './style/noty.css'
 
 const submit = document.querySelector('.submit')
@@ -93,7 +94,7 @@ submit.addEventListener('click', () => {
                     const { message } = res.data
 
                     if (message === 'Success') {
-                        mgsSuccess(`Success`)
+                        mgsSuccess('Success')
                     } else {
                         msgError('Unexpected error')
                     }
@@ -122,7 +123,7 @@ submit.addEventListener('click', () => {
                     const { message } = res.data
 
                     if (message === 'Success') {
-                        mgsSuccess(`Success`)
+                        mgsSuccess('Success')
                         intervalInput.value = ''
                         intervalInput.setAttribute('placeholder', interval)
                     } else {
@@ -197,7 +198,7 @@ submit.addEventListener('click', () => {
                     loading.classList.add('hide')
                 })
             })
-          }
+        }
         loading.classList.add('hide')
     })
 })
@@ -222,7 +223,7 @@ function msgError(msg) {
             close: 'wbBounceOut'
         },
         layout: 'topCenter'
-      }).show()
+    }).show()
 }
 
 function mgsSuccess(msg) {
@@ -237,7 +238,7 @@ function mgsSuccess(msg) {
             close: 'wbBounceOut'
         },
         layout: 'topCenter'
-      }).show()
+    }).show()
 }
 
 function removeContributor(e, contributors, totalTd) {

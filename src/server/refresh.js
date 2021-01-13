@@ -1,4 +1,4 @@
-const Promise = require("bluebird")
+const Promise = require('bluebird')
 const API = require('./util/API')
 const jsonfile = require('jsonfile')
 const fs = require('fs')
