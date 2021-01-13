@@ -3,7 +3,7 @@ const jsonfile = require('jsonfile')
 const contributors = jsonfile.readFileSync('../../assets/data/data.json')
 const contributorsList = []
 
-for (var contributor in contributors) {
+for (let contributor in contributors) {
 
     const username = contributor
     const { avatarUrl } = contributors[contributor]
