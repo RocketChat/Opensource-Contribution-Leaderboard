@@ -1,9 +1,8 @@
 import './style/style.css'
 import './style/bootstrap.css'
 import axios from 'axios'
-import moment, { relativeTimeRounding } from 'moment'
-import { relative } from 'path';
-import { io } from 'socket.io-client';
+import moment from 'moment'
+import { io } from 'socket.io-client'
 
 function refreshTable(newData){
     const table = document.querySelector('table')
@@ -26,26 +25,26 @@ function refreshTable(newData){
 
     contributors = contributors.sort( (a, b) => {
         if ( a.mergedPRsNumber < b.mergedPRsNumber ){
-            return 1;
+            return 1
         }
         if ( a.mergedPRsNumber > b.mergedPRsNumber ){
-            return -1;
+            return -1
         }
         if ( a.openPRsNumber < b.openPRsNumber ){
-            return 1;
+            return 1
         }
         if ( a.openPRsNumber > b.openPRsNumber ){
-            return -1;
+            return -1
         }
         if ( a.issuesNumber < b.issuesNumber ){
-            return 1;
+            return 1
         }
         if ( a.issuesNumber > b.issuesNumber ){
-            return -1;
+            return -1
         }
-        return 0;
+        return 0
     })
-    table.innerHTML = table.rows[0].innerHTML;
+    table.innerHTML = table.rows[0].innerHTML
     contributors.forEach( (contributor, index) => {
         const tr = document.createElement('tr')
 
@@ -112,7 +111,7 @@ function refreshTable(newData){
 
 axios.get('/api/data')
     .then( res => {
-        refreshTable(res.data);
+        refreshTable(res.data)
     })
 
 axios.get('/api/config')
@@ -135,8 +134,8 @@ axios.get('/api/log')
         }
     })
 
-const socket = io();
+const socket = io()
 socket.on('refresh table', (data) => {
-    refreshTable(data);
-});
+    refreshTable(data)
+})
     

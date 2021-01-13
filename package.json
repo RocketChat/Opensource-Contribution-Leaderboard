@@ -1,11 +1,12 @@
 {
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^10.1.0",
     "clean-webpack-plugin": "^1.0.1",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
-    "eslint": "^5.14.0",
+    "eslint": "^6.8.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^4.3.7",
     "inline-manifest-webpack-plugin": "^4.0.2",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "sass-loader": "^7.1.0",
@@ -27,6 +28,13 @@
     "add": "npm install && npm --prefix src/server install && npm --prefix admin install",
     "start": "npm run build && NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
     "build": "npm --prefix admin run build && NODE_ENV=production webpack --config build/webpack.config.js",
-    "serve": "cd src/server && NODE_ENV=development node app.js"
+    "serve": "cd src/server && NODE_ENV=development node app.js",
+    "lint": "eslint ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint"
+    }
   }
 }

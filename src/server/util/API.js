@@ -5,22 +5,22 @@ const chalk = require('chalk')
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'
 
-async function get (url, authToken) {
+async function get (url, _authToken) {
     try {
-      let res = await axios.get(url, {
-          headers: {
-              'Accept': 'application/vnd.github.v3+json',
-              'User-Agent': 'GSoC-Contribution-Leaderboard',
-              'Authorization': 'token ' + Config.authToken
-          }
-      })
-      return new Promise((resolve) => {
-        if (res.code === 0) {
-          resolve(res)
-        } else {
-          resolve(res)
-        }
-      })
+        let res = await axios.get(url, {
+            headers: {
+                'Accept': 'application/vnd.github.v3+json',
+                'User-Agent': 'GSoC-Contribution-Leaderboard',
+                'Authorization': 'token ' + Config.authToken
+            }
+        })
+        return new Promise((resolve) => {
+            if (res.code === 0) {
+                resolve(res)
+            } else {
+                resolve(res)
+            }
+        })
     } catch (err) {
         if (err.code === 'ECONNABORTED') {
             console.log(chalk.yellow('[WARNING] Time Out.'))
@@ -29,12 +29,12 @@ async function get (url, authToken) {
         if (err.response !== undefined) {
             const message = err.response.data.message
             switch (message) {
-                case 'Bad credentials':
-                    console.log(chalk.red(('[ERROR] Your GitHub Token is not correct! Please check it in the config.json.')))
-                    process.exit()
-                    break
-                default:
-                    console.log(chalk.yellow('[WARNING] ' + message))
+            case 'Bad credentials':
+                console.log(chalk.red(('[ERROR] Your GitHub Token is not correct! Please check it in the config.json.')))
+                process.exit()
+                break
+            default:
+                console.log(chalk.yellow('[WARNING] ' + message))
             }
         } else {
             console.log(err)

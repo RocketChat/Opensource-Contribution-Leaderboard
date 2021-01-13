@@ -1,4 +1,3 @@
-const API = require('../util/API')
 const jsonfile = require('jsonfile')
 
 const contributors = jsonfile.readFileSync('../../assets/data/data.json')
