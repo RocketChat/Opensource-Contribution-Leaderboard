@@ -71,11 +71,11 @@ async function getRepositories(organization) {
     while(true)
     {
         repositories = await fetchRepositories(organization, page)
-        if(repositories.length === 0)
+        results.push(repositories)
+        if(repositories.length <= 99)
         {
             break
         }
-        results.push(repositories)
         page++
     }
     return results

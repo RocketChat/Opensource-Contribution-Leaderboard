@@ -16,13 +16,6 @@ function post(req, callback) {
     }
 }
 
-function get(req, callback) {
-    if(req.method === 'GET') {
-        callback()
-    }
-}
-
 module.exports = {
-    post,
-    get
+    post
 }

@@ -116,14 +116,11 @@ const server = http.createServer( (req, res) => {
                 res.end('Permission denied\n')
                 return
             }
-
-            Util.get(req, async () => {
-                // get repositories
-                const Config = jsonfile.readFileSync(configPath)
-                const repositories = await API.getRepositories(Config.organization)
+            let { organization, includedRepositories } = jsonfile.readFileSync(configPath)
+            API.getRepositories(organization).then(repositories => {
                 if(repositories!== '')
                 {
-                    res.end(JSON.stringify({repositories: repositories.flat(), includedRepositories: Config.includedRepositories}))
+                    res.end(JSON.stringify({repositories: repositories.flat(), includedRepositories: includedRepositories}))
                 }
                 else{
                     res.end()
