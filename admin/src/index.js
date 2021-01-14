@@ -84,24 +84,24 @@ submit.addEventListener('click', () => {
                 if (repositories) {
                     var repositoriesList = document.querySelector('.repositories-list')
                     repositories.forEach((repoName, index) => {
-                        const repoRow = document.createElement('tr');
+                        const repoRow = document.createElement('tr')
 
-                        const checkboxTd = document.createElement('td');
-                        var checkbox = document.createElement('input'); 
+                        const checkboxTd = document.createElement('td')
+                        var checkbox = document.createElement('input') 
                         
                         // Assigning the attributes 
                         // to created checkbox 
-                        checkbox.type = "checkbox"; 
-                        checkbox.name = repoName; 
-                        checkbox.value = repoName; 
-                        checkbox.id = 'repo'+index; 
-                        checkbox.checked = includedRepositories.includes(repoName)? true: false; 
+                        checkbox.type = 'checkbox' 
+                        checkbox.name = repoName 
+                        checkbox.value = repoName 
+                        checkbox.id = 'repo'+index 
+                        checkbox.checked = includedRepositories.includes(repoName)? true: false 
 
                         checkboxTd.appendChild(checkbox)
                         
                         const repositoryTd = document.createElement('td')
                         repositoryTd.innerHTML = repoName
-                        repositoryTd.style.textAlign = "right"
+                        repositoryTd.style.textAlign = 'right'
 
                         repoRow.appendChild(repositoryTd)
                         repoRow.appendChild(checkboxTd)
@@ -115,30 +115,30 @@ submit.addEventListener('click', () => {
 
             // Set includedRepositories
             document.querySelectorAll('.inclusion-exclusion-save-button.colored-button').forEach((setIncludedRepositoriesButton) => {
-            setIncludedRepositoriesButton.addEventListener('click', () => {
-                let includedRepositories = []
-                repositories.forEach((repoName, index) => {
-                    var checkbox = document.querySelector('#repo'+index)
-                    if(checkbox.checked)
-                    {
-                        includedRepositories.push(checkbox.name)
-                    }
-                })
+                setIncludedRepositoriesButton.addEventListener('click', () => {
+                    let includedRepositories = []
+                    repositories.forEach((repoName, index) => {
+                        var checkbox = document.querySelector('#repo'+index)
+                        if(checkbox.checked)
+                        {
+                            includedRepositories.push(checkbox.name)
+                        }
+                    })
 
-                axios.post('/api/setIncludedRepositories', {
-                    token: password,
-                    includedRepositories
-                }).then( res => {
-                    const { message } = res.data
+                    axios.post('/api/setIncludedRepositories', {
+                        token: password,
+                        includedRepositories
+                    }).then( res => {
+                        const { message } = res.data
 
-                    if (message === 'Success') {
-                        mgsSuccess(`Success! Selected Repositories have been updated!`)
-                    } else {
-                        msgError('Unexpected error')
-                    }
+                        if (message === 'Success') {
+                            mgsSuccess('Success! Selected Repositories have been updated!')
+                        } else {
+                            msgError('Unexpected error')
+                        }
+                    })
                 })
             })
-        })
             
             // Show Inclusion/Exclusion
             const showIncludeExclude = document.querySelector('.include-exclude-page-button.colored-button')

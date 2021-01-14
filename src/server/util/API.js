@@ -55,26 +55,26 @@ async function checkRateLimit() {
 
 async function fetchRepositories(organization, page) {
     const res = await get(APIHOST + `/orgs/${organization}/repos?per_page=100&page=${page}`)
-        if (res !== undefined) {
-            return res.data.map((element)=> {
-                return element["name"]
+    if (res !== undefined) {
+        return res.data.map((element)=> {
+            return element['name']
         })} 
-        else {
-            return ''
-        }
+    else {
+        return ''
+    }
 
 }
 
 async function getRepositories(organization) {
     const results = []
-    let page = 1, repositories = []
-    while(true)
+    let page = 1, repositories = [], fetchFlag = true
+    while(fetchFlag)
     {
         repositories = await fetchRepositories(organization, page)
         results.push(repositories)
         if(repositories.length <= 99)
         {
-            break
+            fetchFlag = false
         }
         page++
     }
