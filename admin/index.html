@@ -17,6 +17,9 @@
         </div>
     </div>
     <div class="config-panel hide">
+      <div style="text-align: right;">
+        <div class="include-exclude-page-button colored-button" style="margin-left: auto;">Include/Exclude Repositories</div>
+      </div>
       <div class="general-settings">
         <h3>General</h3>
         <div>
@@ -49,6 +52,30 @@
               </tr>
         </table>
       </div>
+    </div>
+    <div class="inclusion-exclusion hide">
+      <div style="display: flex; justify-content: space-between;">
+        <div class="inclusion-exclusion-back-button colored-button">Back</div>
+        <div class="inclusion-exclusion-save-button colored-button">Save</div>
+      </div>
+
+      <h1 style="text-align: center; color: black; margin-left: 0;">Inclusion Exclusion List</h1>
+      <br>
+      <h4 style="text-align: left;">Check/Uncheck the checkbox corresponding to each repository to include/exclude the repository for scoring and hit Save</h4>
+
+      <table class="repositories-list">
+        <tr>
+          <td colspan="1" style="text-align:center; font-weight: bold; padding: 32px 8px 8px 8px; color: #333;">
+            Repository
+          </td>
+          <td colspan="1" style="font-weight: bold; padding: 32px 8px 8px 8px; color: #333;">
+            Included/Excluded
+          </td>
+        </tr>
+      </table>
+      <br>
+      <br>
+      <div class="inclusion-exclusion-save-button colored-button">Save</div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>

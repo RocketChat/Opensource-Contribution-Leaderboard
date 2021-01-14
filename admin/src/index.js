@@ -6,7 +6,7 @@ import './style/noty.css'
 
 const submit = document.querySelector('.submit')
 const passwordInput = document.querySelector('[type=password]')
-let password = ''
+let password = '', repositories = [], includedRepositories = []
 
 submit.addEventListener('click', () => {
     const passwd = document.querySelector('[type=password]').value
@@ -75,6 +75,87 @@ submit.addEventListener('click', () => {
                 removeButton.addEventListener('click', e => {
                     removeContributor(e, contributors, totalTd)
                 })
+            })
+
+            //Get Repositories
+            axios.get('/api/getRepositories').then( res => {
+                repositories = res.data.repositories
+                includedRepositories = res.data.includedRepositories
+                if (repositories) {
+                    var repositoriesList = document.querySelector('.repositories-list')
+                    repositories.forEach((repoName, index) => {
+                        const repoRow = document.createElement('tr')
+
+                        const checkboxTd = document.createElement('td')
+                        var checkbox = document.createElement('input') 
+                        
+                        // Assigning the attributes 
+                        // to created checkbox 
+                        checkbox.type = 'checkbox' 
+                        checkbox.name = repoName 
+                        checkbox.value = repoName 
+                        checkbox.id = 'repo'+index 
+                        checkbox.checked = includedRepositories.includes(repoName)? true: false 
+
+                        checkboxTd.appendChild(checkbox)
+                        
+                        const repositoryTd = document.createElement('td')
+                        repositoryTd.innerHTML = repoName
+                        repositoryTd.style.textAlign = 'right'
+
+                        repoRow.appendChild(repositoryTd)
+                        repoRow.appendChild(checkboxTd)
+                        repositoriesList.appendChild(repoRow)
+                    })
+
+                } else {
+                    msgError('Unexpected error')
+                }
+            })
+
+            // Set includedRepositories
+            document.querySelectorAll('.inclusion-exclusion-save-button.colored-button').forEach((setIncludedRepositoriesButton) => {
+                setIncludedRepositoriesButton.addEventListener('click', () => {
+                    let includedRepositories = []
+                    repositories.forEach((repoName, index) => {
+                        var checkbox = document.querySelector('#repo'+index)
+                        if(checkbox.checked)
+                        {
+                            includedRepositories.push(checkbox.name)
+                        }
+                    })
+
+                    axios.post('/api/setIncludedRepositories', {
+                        token: password,
+                        includedRepositories
+                    }).then( res => {
+                        const { message } = res.data
+
+                        if (message === 'Success') {
+                            mgsSuccess('Success! Selected Repositories have been updated!')
+                        } else {
+                            msgError('Unexpected error')
+                        }
+                    })
+                })
+            })
+            
+            // Show Inclusion/Exclusion
+            const showIncludeExclude = document.querySelector('.include-exclude-page-button.colored-button')
+            showIncludeExclude.addEventListener('click', () => {
+                const inclusionExclusionPage = document.querySelector('.inclusion-exclusion')
+                const configPanel = document.querySelector('.config-panel')
+                configPanel.classList.add('hide')
+                inclusionExclusionPage.classList.remove('hide')
+            })
+
+            //Hide Inclusion/Exclusion
+            const hideIncludeExclude = document.querySelector('.inclusion-exclusion-back-button.colored-button')
+            hideIncludeExclude.addEventListener('click', () => {
+                const inclusionExclusionPage = document.querySelector('.inclusion-exclusion')
+                const configPanel = document.querySelector('.config-panel')
+                inclusionExclusionPage.classList.add('hide')
+                configPanel.classList.remove('hide')
             })
 
             // Set startDate value

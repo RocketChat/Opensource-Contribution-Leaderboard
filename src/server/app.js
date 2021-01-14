@@ -104,11 +104,48 @@ const server = http.createServer( (req, res) => {
                         }
                     }
                 }))
-
                 res.end(JSON.stringify({ code: 0, delay, contributors: contributorsList, startDate })) // success
                 jsonfile.writeFileSync(admindataPath, contributorsList)
             } else {
                 res.end(JSON.stringify({ code: 1, delay: 0, contributors: {}, startDate: '' })) // wrong
+            }
+        })
+        break
+    case '/getRepositories':
+        if (req.method !== 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
+        var { organization, includedRepositories } = jsonfile.readFileSync(configPath)
+        API.getRepositories(organization).then(repositories => {
+            if(repositories!== '')
+            {
+                res.end(JSON.stringify({repositories: repositories.flat(), includedRepositories: includedRepositories}))
+            }
+            else{
+                res.end()
+            }
+        })
+        break
+    case '/setIncludedRepositories':
+        if (req.method !== 'POST') {
+            res.end('Permission denied\n')
+            return
+        }
+
+        Util.post(req, params => {
+            const { token, includedRepositories } = params
+
+            if (token !== adminPassword) {
+                res.end(JSON.stringify({ message: 'Authentication failed' }))
+            } else {
+                // set includedRepositories in config.json
+                const Config = jsonfile.readFileSync(configPath)
+                Config.includedRepositories = includedRepositories
+                jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+
+                res.end(JSON.stringify({ message: 'Success' }))
             }
         })
         break
