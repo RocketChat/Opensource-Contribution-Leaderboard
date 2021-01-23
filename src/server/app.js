@@ -26,6 +26,14 @@ const websocketProxyOption = {
     changeOrigin: true
 }
 
+Object.defineProperty(Array.prototype, 'flat', {
+    value: function(depth = 1) {
+        return this.reduce(function (flat, toFlatten) {
+            return flat.concat((Array.isArray(toFlatten) && (depth>1)) ? toFlatten.flat(depth-1) : toFlatten)
+        }, [])
+    }
+})
+
 if (process.env.NODE_ENV !== 'development') {
     app.use('/api', proxy(proxyOption))
     app.all('/server/*', (req, res, next) => {
@@ -253,7 +261,7 @@ const server = http.createServer( (req, res) => {
 
                         // Add this contributor in the data.json
                         const data = jsonfile.readFileSync(dataPath)
-                        API.getContributorInfo(Config.organization, username).then( result => {
+                        API.getContributorInfo(Config.organization, username, Config.includedRepositories).then( result => {
                             if (result.avatarUrl !== '' && result.issuesNumber !== -1 && result.mergedPRsNumber !== -1 && result.openPRsNumber != -1) {
                                 data[`${username}`] = result
                                 // Update contributors infomation
