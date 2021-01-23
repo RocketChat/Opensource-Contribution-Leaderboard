@@ -24,43 +24,43 @@ function refreshTable(newData) {
     totalEm.innerText = 'Total: ' + totalNumbers
 
     contributors = contributors.sort((a, b) => {
-        var first, second, third // criteria is specified here
+        var pref1, pref2, pref3 // preference is specified here
         const queryString = window.location.search
         const urlParams = new URLSearchParams(queryString)
         switch (urlParams.get('sort')) { //assigns according to parameter-sort (default 'm')
             case 'p':
-                first = "openPRsNumber"
-                second = "mergedPRsNumber"
-                third = "issuesNumber"
+                pref1 = "openPRsNumber"
+                pref2 = "mergedPRsNumber"
+                pref3 = "issuesNumber"
                 break;
             case 'i':
-                first = "issuesNumber"
-                second = "mergedPRsNumber"
-                third = "openPRsNumber"
+                pref1 = "issuesNumber"
+                pref2 = "mergedPRsNumber"
+                pref3 = "openPRsNumber"
                 break;
 
             default:
-                first = "mergedPRsNumber"
-                second = "openPRsNumber"
-                third = "issuesNumber"
+                pref1 = "mergedPRsNumber"
+                pref2 = "openPRsNumber"
+                pref3 = "issuesNumber"
                 break;
         }
-        if (a[first] < b[first]) {
+        if (a[pref1] < b[pref1]) {
             return 1
         }
-        if (a[first] > b[first]) {
+        if (a[pref1] > b[pref1]) {
             return -1
         }
-        if (a[second] < b[second]) {
+        if (a[pref2] < b[pref2]) {
             return 1
         }
-        if (a[second] > b[second]) {
+        if (a[pref2] > b[pref2]) {
             return -1
         }
-        if (a[third] < b[third]) {
+        if (a[pref3] < b[pref3]) {
             return 1
         }
-        if (a[third] > b[third]) {
+        if (a[pref3] > b[pref3]) {
             return -1
         }
         return 0
