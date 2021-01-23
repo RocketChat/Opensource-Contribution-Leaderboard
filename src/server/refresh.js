@@ -29,6 +29,7 @@ async function getAllContributorsInfo() {
     let Config = jsonfile.readFileSync(configPath)
     let organization = Config.organization
     let contributors = Config.contributors
+    let includedRepositories = Config.includedRepositories
 
     interval = contributors.length < 150 ? 150 : (contributors.length + 10) // update interval
 
@@ -39,7 +40,7 @@ async function getAllContributorsInfo() {
 
         await Promise.delay(delay * 1000)
 
-        API.getContributorInfo(organization, contributor).then( res => {
+        API.getContributorInfo(organization, contributor, includedRepositories).then( res => {
             Config = jsonfile.readFileSync(configPath) // update Config
             delay = Config.delay // update delay
 
