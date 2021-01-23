@@ -30,7 +30,7 @@ async function getAllContributorsInfo() {
     let organization = Config.organization
     let contributors = Config.contributors
 
-    interval = contributors.length // update interval
+    interval = contributors.length < 150 ? 150 : (contributors.length + 10) // update interval
 
     // Record time
     logBuffer.starttime = Date.now()
