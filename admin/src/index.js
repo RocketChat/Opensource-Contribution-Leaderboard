@@ -217,8 +217,8 @@ submit.addEventListener('click', () => {
             const addContributorButton = document.querySelector('.add-contributor-button.button')
 
             addContributorButton.addEventListener('click', () => {
-                const username = document.querySelector('.add-contributor').value
-
+                const usernameField = document.querySelector('.add-contributor')
+                const username = usernameField.value
                 if (username === '') {
                     msgError('your input is empty')
                     return
@@ -273,6 +273,7 @@ submit.addEventListener('click', () => {
 
                         $('tr')[insertPos].after(tr)
 
+                        usernameField.value = ''
                     } else {
                         msgError(message)
                     }
