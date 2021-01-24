@@ -43,8 +43,8 @@ docker run -p 8080:8080 -d rohanlekhwani/opensource-contribution-leaderboard
 ## Quick Start
 Clone the repository to your local machine and switch into the project root directory:
 ````bash
-git clone git@github.com:RocketChat/GSoC-Contribution-Leaderboard-Node.git
-cd GSoC-Contribution-Leaderboard-Node
+git clone git@github.com:RocketChat/Opensource-Contribution-Leaderboard.git
+cd Opensource-Contribution-Leaderboard
 ````
 Copy `config-example.json` to `config.json` in the **src/server** directory. Add your Github Auth Token and Organization name and other keys in it as following:
 ````bash
