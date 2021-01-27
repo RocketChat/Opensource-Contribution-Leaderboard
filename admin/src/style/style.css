@@ -147,14 +147,14 @@ table tr:hover {
   background: rgba(234, 241, 251, .4); 
 }
 
-.add-contributor, .set-interval, .set-start-date {
+.add-contributor, .set-interval, .set-start-date, .set-end-date {
   border: 1px solid #dcdfe6;
   padding: 0 15px;
   margin-bottom: 20px;
   margin-left: 10px;
 }
 
-.set-start-date {
+.set-start-date, .set-end-date {
   width: 133px;
 }
 
@@ -162,11 +162,11 @@ table tr:hover {
   width: 20px;
 }
 
-.add-contributor:focus, .set-interval:focus, .set-start-date:focus {
+.add-contributor:focus, .set-interval:focus, .set-start-date:focus, .set-end-date {
   border-color: #409eff;
 }
 
-.add-contributor-button, .set-interval-button, .set-start-date-button {
+.add-contributor-button, .set-interval-button, .set-start-date-button, .set-end-date-button {
   margin-left: 10px;
   border-radius: 5px;
   padding: 5px 15px;

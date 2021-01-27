@@ -179,46 +179,46 @@ const server = http.createServer( (req, res) => {
             }
         })
         break
-        case '/setEndDate':
-            if (req.method === 'GET') {
-                res.end('Permission denied\n')
-                return
+    case '/setEndDate':
+        if (req.method === 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
+        Util.post(req, params => {
+            const { token, endDate } = params
+
+            if (token !== adminPassword) {
+                res.end(JSON.stringify({ message: 'Authentication failed' }))
+            } else {
+                // set endDate in config.json
+                const Config = jsonfile.readFileSync(configPath)
+                Config.endDate = endDate
+                jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+
+                res.end(JSON.stringify({ message: 'Success' }))
             }
-            Util.post(req, params => {
-                const { token, endDate } = params
-    
-                if (token !== adminPassword) {
-                    res.end(JSON.stringify({ message: 'Authentication failed' }))
-                } else {
-                    // set endDate in config.json
-                    const Config = jsonfile.readFileSync(configPath)
-                    Config.endDate = endDate
-                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
-                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
-    
-                    res.end(JSON.stringify({ message: 'Success' }))
-                }
-            })
+        })
         break
-        case '/setEndDateCheckbox':
-            if (req.method === 'GET') {
-                res.end('Permission denied\n')
-                return
+    case '/setEndDateCheckbox':
+        if (req.method === 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
+        Util.post(req, params => {
+            const { token, checkboxValue } = params
+            if (token !== adminPassword) {
+                res.end(JSON.stringify({ message: 'Authentication failed' }))
+            } else {
+                // set endDateCheckbox in config.json
+                const Config = jsonfile.readFileSync(configPath)
+                Config.endDateCheckbox = checkboxValue
+                jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+
+                res.end(JSON.stringify({ message: 'Success' }))
             }
-            Util.post(req, params => {
-                const { token, checkboxValue } = params
-                if (token !== adminPassword) {
-                    res.end(JSON.stringify({ message: 'Authentication failed' }))
-                } else {
-                    // set endDateCheckbox in config.json
-                    const Config = jsonfile.readFileSync(configPath)
-                    Config.endDateCheckbox = checkboxValue
-                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
-                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
-    
-                    res.end(JSON.stringify({ message: 'Success' }))
-                }
-            })
+        })
         break
     case '/setInterval':
         if (req.method === 'GET') {

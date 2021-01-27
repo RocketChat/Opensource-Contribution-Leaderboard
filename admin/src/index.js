@@ -24,7 +24,7 @@ submit.addEventListener('click', () => {
     axios.post('/api/login', {
         token: password
     }).then( res => {
-        let { code, delay, contributors, startDate } = res.data
+        let { code, delay, contributors, startDate, endDate, endDateCheckbox:endDateCheckboxValue } = res.data
         if (code == 1) {
             msgError('The password is incorrect!')
         }
@@ -36,11 +36,15 @@ submit.addEventListener('click', () => {
             const table = document.querySelector('.contributors-list')
             const totalTd = document.querySelector('td.total')
             const startDateInput = document.querySelector('.set-start-date')
+            const endDateInput = document.querySelector('.set-end-date')
+            const endDateCheckbox = document.querySelector('.set-end-date-checkbox')
 
             loginPanel.classList.add('hide') // hide loading animation
             configPanel.classList.remove('hide')
             intervalInput.setAttribute('placeholder', delay)
             startDateInput.setAttribute('value', startDate)
+            endDateInput.setAttribute('value', endDate)
+            endDateCheckbox.checked = endDateCheckboxValue
 
             contributors = sortByAlphabet(contributors, 'username')
 
@@ -182,6 +186,52 @@ submit.addEventListener('click', () => {
                 })
             })
 
+            //set endDate
+            const setendDateButton = document.querySelector('.set-end-date-button.button')
+            setendDateButton.addEventListener('click', () => {
+                const endDate = document.querySelector('.set-end-date').value
+
+                if (endDate === '') {
+                    msgError('Please select date')
+                    return
+                }
+
+                axios.post('/api/setEndDate', {
+                    token: password,
+                    endDate
+                }).then( res => {
+                    const { message } = res.data
+
+                    if (message === 'Success') {
+                        mgsSuccess('Success')
+                    } else {
+                        msgError('Unexpected error')
+                    }
+                })
+            })
+
+            const setEndDateCheckbox = document.querySelector('.set-end-date-checkbox')
+            setEndDateCheckbox.addEventListener('click', () =>{
+                const checkboxValue = setEndDateCheckbox.checked
+
+                if (typeof checkboxValue !== 'boolean') {
+                    msgError('Please select date')
+                    return
+                }
+
+                axios.post('/api/setEndDateCheckbox', {
+                    token: password,
+                    checkboxValue: checkboxValue
+                }).then( res => {
+                    const { message } = res.data
+                    if (message === 'Success') {
+                        mgsSuccess('Success')
+                    } else {
+                        msgError('Unexpected error')
+                    }
+                })
+            })
+
             // Set interval value
             const setIntervalButton = document.querySelector('.set-interval-button.button')
             setIntervalButton.addEventListener('click', () => {
@@ -290,8 +340,6 @@ passwordInput.addEventListener('keydown', event => {
         submit.dispatchEvent(new Event('click'))
     }
 })
-
-
 
 function msgError(msg) {
     new Noty({
