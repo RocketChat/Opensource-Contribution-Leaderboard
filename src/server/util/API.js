@@ -128,12 +128,24 @@ async function getIssuesNumber(IssuesURL) {
 async function getContributorInfo(organization, contributor, includedRepositories) {
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
-    let OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${Config.startDate}`
-    let openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:>=${Config.startDate}`
-    let MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:>=${Config.startDate}`
-    let mergedPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:merged+created:>=${Config.startDate}`
-    let IssuesURL = `/search/issues?q=is:issue+author:${contributor}+created:>=${Config.startDate}`
-    let issuesLink = `${BASEURL}/search?q=type:issue+author:${contributor}+created:>=${Config.startDate}`
+    let OpenPRsURL, openPRsLink, MergedPRsURL, mergedPRsLink, IssuesURL, issuesLink
+    if( Config.endDateCheckbox ) {
+        OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:${Config.startDate}..${Config.endDate}`
+        openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:${Config.startDate}..${Config.endDate}`
+        MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:${Config.startDate}..${Config.endDate}`
+        mergedPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:merged+created:${Config.startDate}..${Config.endDate}`
+        IssuesURL = `/search/issues?q=is:issue+author:${contributor}+created:${Config.startDate}..${Config.endDate}`
+        issuesLink = `${BASEURL}/search?q=type:issue+author:${contributor}+created:${Config.startDate}..${Config.endDate}`
+    }
+    else {
+        OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${Config.startDate}`
+        openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:>=${Config.startDate}`
+        MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:>=${Config.startDate}`
+        mergedPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:merged+created:>=${Config.startDate}`
+        IssuesURL = `/search/issues?q=is:issue+author:${contributor}+created:>=${Config.startDate}`
+        issuesLink = `${BASEURL}/search?q=type:issue+author:${contributor}+created:>=${Config.startDate}`
+    }
+
     includedRepositories.forEach(repository => {
         openPRsLink+=`+repo:${organization}/${repository}`
         mergedPRsLink+=`+repo:${organization}/${repository}`

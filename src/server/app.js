@@ -9,6 +9,7 @@ const express = require('express')
 const app = express()
 const proxy = require('http-proxy-middleware')
 const path = require('path')
+const { type } = require('os')
 
 const configPath = './config.json'
 const admindataPath = './admindata.json'
@@ -90,7 +91,7 @@ const server = http.createServer( (req, res) => {
             return
         }
 
-        var { delay, contributors, startDate } = jsonfile.readFileSync(configPath)
+        var { delay, contributors, startDate, endDate, endDateCheckbox } = jsonfile.readFileSync(configPath)
         var contributorsList = []
 
         Util.post(req, async params => {
@@ -112,10 +113,10 @@ const server = http.createServer( (req, res) => {
                         }
                     }
                 }))
-                res.end(JSON.stringify({ code: 0, delay, contributors: contributorsList, startDate })) // success
+                res.end(JSON.stringify({ code: 0, delay, contributors: contributorsList, startDate, endDate, endDateCheckbox })) // success
                 jsonfile.writeFileSync(admindataPath, contributorsList)
             } else {
-                res.end(JSON.stringify({ code: 1, delay: 0, contributors: {}, startDate: '' })) // wrong
+                res.end(JSON.stringify({ code: 1, delay: 0, contributors: {}, startDate: '', endDate: '', endDateCheckbox: false })) // wrong
             }
         })
         break
@@ -177,6 +178,47 @@ const server = http.createServer( (req, res) => {
                 res.end(JSON.stringify({ message: 'Success' }))
             }
         })
+        break
+        case '/setEndDate':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+            Util.post(req, params => {
+                const { token, endDate } = params
+    
+                if (token !== adminPassword) {
+                    res.end(JSON.stringify({ message: 'Authentication failed' }))
+                } else {
+                    // set endDate in config.json
+                    const Config = jsonfile.readFileSync(configPath)
+                    Config.endDate = endDate
+                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+    
+                    res.end(JSON.stringify({ message: 'Success' }))
+                }
+            })
+        break
+        case '/setEndDateCheckbox':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+            Util.post(req, params => {
+                const { token, checkboxValue } = params
+                if (token !== adminPassword) {
+                    res.end(JSON.stringify({ message: 'Authentication failed' }))
+                } else {
+                    // set endDateCheckbox in config.json
+                    const Config = jsonfile.readFileSync(configPath)
+                    Config.endDateCheckbox = checkboxValue
+                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+    
+                    res.end(JSON.stringify({ message: 'Success' }))
+                }
+            })
         break
     case '/setInterval':
         if (req.method === 'GET') {
