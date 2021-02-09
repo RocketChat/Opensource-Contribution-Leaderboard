@@ -59,7 +59,7 @@ submit.addEventListener('click', () => {
                 avatarTd.appendChild(avatarImg)
 
                 const usernameTd = document.createElement('td')
-                usernameTd.innerHTML = `<a href="${usernameLink}">${username}</a>`
+                usernameTd.innerHTML = `<a href="${usernameLink}" target="_blank" rel="noopener noreferrer">${username}</a>`
 
                 const removeTd = document.createElement('td')
                 removeTd.innerHTML = `<div class="button remove" value="${username}">Remove</div>`
@@ -259,7 +259,7 @@ submit.addEventListener('click', () => {
                         avatarTd.appendChild(avatarImg)
         
                         const usernameTd = document.createElement('td')
-                        usernameTd.innerHTML = `<a href="${usernameLink}">${username}</a>`
+                        usernameTd.innerHTML = `<a href="${usernameLink}" target="_blank" rel="noopener noreferrer">${username}</a>`
                         
                         const removeTd = document.createElement('td')
                         removeTd.innerHTML = `<div class="button remove" value="${username}">Remove</div>`
