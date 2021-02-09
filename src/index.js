@@ -83,6 +83,8 @@ function refreshTable(newData) {
         const username = document.createElement('a')
         const rank = document.createElement('span')
         username.href = data[contributor.username].home
+        username.target = "_blank"
+        username.rel = "noopener noreferrer"
         username.innerText = contributor.username
         rank.innerText = index + 1
         tr.id = contributor.username
@@ -97,6 +99,8 @@ function refreshTable(newData) {
         const tdOpenPRs = document.createElement('td')
         const openPRs = document.createElement('a')
         openPRs.href = data[contributor.username].openPRsLink
+        openPRs.target = "_blank"
+        openPRs.rel = "noopener noreferrer"
         openPRs.innerText = data[contributor.username].openPRsNumber
         if (data[contributor.username].openPRsNumber === 0) {
             openPRs.className = 'inactiveLink'
@@ -109,6 +113,8 @@ function refreshTable(newData) {
         const mergedPRs = document.createElement('a')
         mergedPRs.href = data[contributor.username].mergedPRsLink
         mergedPRs.innerText = data[contributor.username].mergedPRsNumber
+        mergedPRs.target = "_blank"
+        mergedPRs.rel = "noopener noreferrer"
         if (data[contributor.username].mergedPRsNumber === 0) {
             mergedPRs.className = 'inactiveLink'
         }
@@ -120,6 +126,8 @@ function refreshTable(newData) {
         const issues = document.createElement('a')
         issues.href = data[contributor.username].issuesLink
         issues.innerText = data[contributor.username].issuesNumber
+        issues.target = "_blank"
+        issues.rel = "noopener noreferrer"
         if (data[contributor.username].issuesNumber === 0) {
             issues.className = 'inactiveLink'
         }
