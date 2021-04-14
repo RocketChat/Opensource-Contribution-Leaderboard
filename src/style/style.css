@@ -28,9 +28,9 @@ td {
 }
 
 td span {
-  color: white;
+  /* color: white;
   position: absolute;
-  right: 0;
+  right: 0; */
 }
 
 .navbar {

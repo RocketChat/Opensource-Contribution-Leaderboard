@@ -81,17 +81,19 @@ function refreshTable(newData) {
         // username
         const tdUsername = document.createElement('td')
         const username = document.createElement('a')
-        const rank = document.createElement('span')
         username.href = data[contributor.username].home
         username.innerText = contributor.username
-        rank.innerText = index + 1
         tr.id = contributor.username
         tdUsername.appendChild(username)
-        tdUsername.appendChild(rank)
         tr.appendChild(tdUsername)
 
-        // empty td tag
-        tr.appendChild(document.createElement('td'))
+        // Rank
+        const tdRank = document.createElement('td')
+        const rank = document.createElement('span')
+        rank.style.color = "#007bff"
+        rank.innerText = index + 1
+        tdRank.appendChild(rank)
+        tr.appendChild(tdRank)
 
         // Open PRs
         const tdOpenPRs = document.createElement('td')
