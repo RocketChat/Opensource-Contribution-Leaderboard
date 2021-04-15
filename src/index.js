@@ -130,7 +130,7 @@ function refreshTable(newData) {
         // Open PRs
         const tdOpenPRs = document.createElement('td')
         const openPRs = createLink(openPRsLink, openPRsNumber, {
-            className: openPRsNumber === 0 ? 'inactive' : '',
+            className: openPRsNumber === 0 ? 'inactiveLink' : '',
         })
         tdOpenPRs.appendChild(openPRs)
         tr.appendChild(tdOpenPRs)
@@ -138,7 +138,7 @@ function refreshTable(newData) {
         // Merged PRs
         const tdMergedPRs = document.createElement('td')
         const mergedPRs = createLink(mergedPRsLink, mergedPRsNumber, {
-            className: mergedPRsNumber === 0 ? 'inactive' : '',
+            className: mergedPRsNumber === 0 ? 'inactiveLink' : '',
         })
         tdMergedPRs.appendChild(mergedPRs)
         tr.appendChild(tdMergedPRs)
@@ -146,7 +146,7 @@ function refreshTable(newData) {
         // Issues
         const tdIssues = document.createElement('td')
         const issues = createLink(issuesLink, issuesNumber, {
-            className: issuesNumber === 0 ? 'inactive' : '',
+            className: issuesNumber === 0 ? 'inactiveLink' : '',
         })
         tdIssues.appendChild(issues)
         tr.appendChild(tdIssues)
