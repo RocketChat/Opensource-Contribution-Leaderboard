@@ -81,20 +81,22 @@ function refreshTable(newData) {
         // username
         const tdUsername = document.createElement('td')
         const username = document.createElement('a')
-        const rank = document.createElement('span')
         username.href = data[contributor.username].home
         username.innerText = contributor.username
-        rank.innerText = index + 1
         tr.id = contributor.username
-        const total = document.createElement('span');
-        total.innerText = data[contributor.username].openPRsNumber + data[contributor.username].mergedPRsNumber
         tdUsername.appendChild(username)
         tr.appendChild(tdUsername)
 
+        // ranks
+        const rank = document.createElement('span')
+        rank.innerText = index + 1
         const tdRank = document.createElement('td')
         tdRank.appendChild(rank)
         tr.appendChild(tdRank)
 
+        // total
+        const total = document.createElement('span')
+        total.innerText = data[contributor.username].openPRsNumber + data[contributor.username].mergedPRsNumber
         const tdTotal = document.createElement('td')
         tdTotal.appendChild(total)
         tr.appendChild(tdTotal)
