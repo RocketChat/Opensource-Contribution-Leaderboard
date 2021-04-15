@@ -66,6 +66,9 @@ function refreshTable(newData) {
         return 0
     })
     table.innerHTML = table.rows[0].innerHTML
+    var allOpenPRs = 0
+    var allMergedPRs = 0
+    var allIssues = 0
     contributors.forEach((contributor, index) => {
         const tr = document.createElement('tr')
 
@@ -127,7 +130,17 @@ function refreshTable(newData) {
         tr.appendChild(tdIssues)
 
         table.appendChild(tr)
+
+        allOpenPRs = allOpenPRs + data[contributor.username].openPRsNumber
+        allMergedPRs = allMergedPRs + data[contributor.username].mergedPRsNumber
+        allIssues = allIssues + data[contributor.username].issuesNumber
     })
+    const allOpenPRsRef = document.getElementById('allOpenPRs')
+    const allMergedPRsRef = document.getElementById('allMergedPRs')
+    const allIssuesRef = document.getElementById('allIssues')
+    allOpenPRsRef.innerText = ' ' + allOpenPRs
+    allMergedPRsRef.innerText = ' ' + allMergedPRs
+    allIssuesRef.innerText = ' ' + allIssues
 }
 
 axios.get('/api/data')
