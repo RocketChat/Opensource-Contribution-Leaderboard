@@ -138,9 +138,11 @@ function refreshTable(newData) {
     const allOpenPRsRef = document.getElementById('allOpenPRs')
     const allMergedPRsRef = document.getElementById('allMergedPRs')
     const allIssuesRef = document.getElementById('allIssues')
+    const allContributionsInfoRef = document.getElementById('allContributionsInfo')
     allOpenPRsRef.innerText = ' ' + allOpenPRs
     allMergedPRsRef.innerText = ' ' + allMergedPRs
     allIssuesRef.innerText = ' ' + allIssues
+    allContributionsInfoRef.innerText = allMergedPRs + ' Merged PRs, ' + allOpenPRs + ' Open PRs, and ' + allIssues + ' Issues.'
 }
 
 axios.get('/api/data')
