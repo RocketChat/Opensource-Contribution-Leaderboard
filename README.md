@@ -93,6 +93,13 @@ npm install pm2 -g # run this command on your server if pm2 is not installed.
 pm2 start app.js --name "GSOC-Contribution-Leaderboard" # start the backend service
 ````
 
+## Automated Data Fetch REST API
+REST API endpoints are available to fetch important leaderboard data real-time. 
+
+The API uses the cached `data.json` file which is created and regularly updated on starting up the server. This means that if the API is called in the middle of a data fetch cycle, the data returned by it at any time would be based off the data present in the `data.json` at that time. Since the leaderboard itself displays data using the `data.json` file, the data fetched by the API and that displayed on the leaderboard will *always be consistent* at any given time.
+
+Details about the API endpoints and their responses can be found in the [REST-API](/REST-API.md) file. 
+
 ## Acknowledgement
 This project is inspired by [GSOC-Contribution-Leaderboard](https://github.com/shubhsherl/GSoC-Contribution-Leaderboard/). Thanks to the Python team for the work.
 
