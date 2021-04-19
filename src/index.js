@@ -28,22 +28,22 @@ function refreshTable(newData) {
         const queryString = window.location.search
         const urlParams = new URLSearchParams(queryString)
         switch (urlParams.get('sort')) { //assigns according to parameter-sort (default 'm')
-            case 'p':
-                pref1 = "openPRsNumber"
-                pref2 = "mergedPRsNumber"
-                pref3 = "issuesNumber"
-                break;
-            case 'i':
-                pref1 = "issuesNumber"
-                pref2 = "mergedPRsNumber"
-                pref3 = "openPRsNumber"
-                break;
+        case 'p':
+            pref1 = 'openPRsNumber'
+            pref2 = 'mergedPRsNumber'
+            pref3 = 'issuesNumber'
+            break
+        case 'i':
+            pref1 = 'issuesNumber'
+            pref2 = 'mergedPRsNumber'
+            pref3 = 'openPRsNumber'
+            break
 
-            default:
-                pref1 = "mergedPRsNumber"
-                pref2 = "openPRsNumber"
-                pref3 = "issuesNumber"
-                break;
+        default:
+            pref1 = 'mergedPRsNumber'
+            pref2 = 'openPRsNumber'
+            pref3 = 'issuesNumber'
+            break
         }
         if (a[pref1] < b[pref1]) {
             return 1
