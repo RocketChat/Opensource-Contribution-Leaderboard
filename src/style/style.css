@@ -1,26 +1,28 @@
 body {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }
 
 h2 {
-  font-size: 32px!important;
+  font-size: 32px !important;
 }
 
 td a {
-  color: #007bff!important;
+  color: #007bff !important;
   font-weight: normal;
 }
 
 table td {
-  border-top: 1px solid #EDEFF2;
+  border-top: 1px solid #edeff2;
   padding: 2px 8px;
   font-family: Helvetica, Arial, sans-serif;
   max-height: 18px;
-  height: 18px!important;
+  height: 18px !important;
   position: relative;
 }
 table tbody tr td {
-  border-top: none!important;
+  border-top: none !important;
 }
 
 td {
@@ -36,14 +38,14 @@ td span {
 .navbar {
   display: flex;
   align-items: center;
-  padding: 0!important;
+  padding: 0 !important;
   justify-content: space-between;
-  background: #343A40;
+  background: #343a40;
   font-size: 16px;
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-  border-radius: 0!important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  border-radius: 0 !important;
   box-sizing: border-box;
-  min-height: 61px!important;
+  min-height: 61px !important;
   height: 61px;
 }
 
@@ -51,8 +53,8 @@ td span {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 15px!important;
-  font-size: 20px!important;
+  padding: 5px 15px !important;
+  font-size: 20px !important;
   color: #ffffff;
   white-space: nowrap;
 }
@@ -75,15 +77,47 @@ td span {
 }
 
 .footer {
-  padding: 16px 0!important;
+  padding: 16px 0 !important;
 }
 
 .footer a {
   font-size: 16px;
-  color: #007bff!important;
+  color: #007bff !important;
 }
 
 .inactiveLink {
   pointer-events: none;
   cursor: default;
+}
+
+.btn {
+  padding: 8px 30px;
+  border-radius: 6px;
+  border: none;
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  background-color: #808080;
+  height: 36px;
+}
+
+.btn:hover {
+  text-decoration: none;
+  background-color: #383838;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:after {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  content: "";
+  position: relative;
+  top: -10px;
+  right: -5px;
 }
