@@ -245,7 +245,8 @@ const server = http.createServer( (req, res) => {
             } else {
                 const Config = jsonfile.readFileSync(configPath)
 
-                if (Config.contributors.includes(username)) {
+                if ((Config.contributors.map(contributor => contributor.toLowerCase()))
+                    .includes(username.toLowerCase().trim())) {
                     res.end(JSON.stringify({ message: `${username} aready exists` }))
                     return
                 }
