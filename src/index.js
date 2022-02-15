@@ -72,6 +72,15 @@ function refreshTable(newData) {
     contributors.forEach((contributor, index) => {
         const tr = document.createElement('tr')
 
+        const tdRank = document.createElement('td')
+        const tdRankDiv = document.createElement('div')
+        tdRankDiv.innerText = index+1
+        tdRankDiv.height = '42'
+        tdRankDiv.width = '42'
+        tdRank.appendChild(tdRankDiv)
+        tdRank.setAttribute('class','hidden-md hidden-lg')
+        tr.appendChild(tdRank)
+
         // avatar
         const tdAvatar = document.createElement('td')
         const avatar = document.createElement('img')
@@ -87,6 +96,7 @@ function refreshTable(newData) {
         const rank = document.createElement('span')
         username.href = data[contributor.username].home
         username.innerText = contributor.username
+        username.target= "_blank"
         rank.innerText = index + 1
         tr.id = contributor.username
         tdUsername.appendChild(username)
@@ -104,7 +114,9 @@ function refreshTable(newData) {
         if (data[contributor.username].openPRsNumber === 0) {
             openPRs.className = 'inactiveLink'
         }
+        openPRs.target = "_blank"
         tdOpenPRs.appendChild(openPRs)
+        tdOpenPRs.setAttribute('class','visible-md visible-lg')
         tr.appendChild(tdOpenPRs)
 
         // Merged PRs
@@ -112,10 +124,12 @@ function refreshTable(newData) {
         const mergedPRs = document.createElement('a')
         mergedPRs.href = data[contributor.username].mergedPRsLink
         mergedPRs.innerText = data[contributor.username].mergedPRsNumber
-        if (data[contributor.username].mergedPRsNumber === 0) {
+         if (data[contributor.username].mergedPRsNumber === 0) {
             mergedPRs.className = 'inactiveLink'
         }
+        mergedPRs.target = "_blank"
         tdMergedPRs.appendChild(mergedPRs)
+        tdMergedPRs.setAttribute('class','visible-md visible-lg')
         tr.appendChild(tdMergedPRs)
 
         // Issues
@@ -123,10 +137,12 @@ function refreshTable(newData) {
         const issues = document.createElement('a')
         issues.href = data[contributor.username].issuesLink
         issues.innerText = data[contributor.username].issuesNumber
+        issues.target = "_blank"
         if (data[contributor.username].issuesNumber === 0) {
             issues.className = 'inactiveLink'
         }
         tdIssues.appendChild(issues)
+        tdIssues.setAttribute('class','visible-md visible-lg')
         tr.appendChild(tdIssues)
 
         table.appendChild(tr)
