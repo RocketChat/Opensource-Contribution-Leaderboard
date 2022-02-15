@@ -96,7 +96,6 @@ function refreshTable(newData) {
         const rank = document.createElement('span')
         username.href = data[contributor.username].home
         username.innerText = contributor.username
-        username.target= '_blank'
         rank.innerText = index + 1
         tr.id = contributor.username
         tdUsername.appendChild(username)
@@ -114,7 +113,6 @@ function refreshTable(newData) {
         if (data[contributor.username].openPRsNumber === 0) {
             openPRs.className = 'inactiveLink'
         }
-        openPRs.target = '_blank'
         tdOpenPRs.appendChild(openPRs)
         tdOpenPRs.setAttribute('class','visible-md visible-lg')
         tr.appendChild(tdOpenPRs)
@@ -127,7 +125,6 @@ function refreshTable(newData) {
         if (data[contributor.username].mergedPRsNumber === 0) {
             mergedPRs.className = 'inactiveLink'
         }
-        mergedPRs.target = '_blank'
         tdMergedPRs.appendChild(mergedPRs)
         tdMergedPRs.setAttribute('class','visible-md visible-lg')
         tr.appendChild(tdMergedPRs)
@@ -137,7 +134,6 @@ function refreshTable(newData) {
         const issues = document.createElement('a')
         issues.href = data[contributor.username].issuesLink
         issues.innerText = data[contributor.username].issuesNumber
-        issues.target = '_blank'
         if (data[contributor.username].issuesNumber === 0) {
             issues.className = 'inactiveLink'
         }
