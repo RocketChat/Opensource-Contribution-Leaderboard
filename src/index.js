@@ -88,6 +88,7 @@ function refreshTable(newData) {
         username.href = data[contributor.username].home
         username.innerText = contributor.username
         rank.innerText = index + 1
+        rank.style.color = '#999999'
         tr.id = contributor.username
         tdUsername.appendChild(username)
         tdUsername.appendChild(rank)
