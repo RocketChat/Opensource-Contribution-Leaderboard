@@ -147,6 +147,12 @@ async function getContributorInfo(
         MergedPRsURL += `+repo:${organization}/${repository}`
         IssuesURL += `+repo:${organization}/${repository}`
     })
+    openPRsLink += '+-label:chore'
+    mergedPRsLink += '+-label:chore'
+    issuesLink += '+-label:chore'
+    OpenPRsURL += '+-label:chore'
+    MergedPRsURL += '+-label:chore'
+    IssuesURL += '+-label:chore'
     const openPRsNumber = await getOpenPRsNumber(OpenPRsURL)
     const mergedPRsNumber = await getMergedPRsNumber(MergedPRsURL)
     const issuesNumber = await getIssuesNumber(IssuesURL)
