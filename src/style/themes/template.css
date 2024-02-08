@@ -1,0 +1,45 @@
+/* 
+	Usage: 
+		- Use the template given below to customise your own theme
+			Ex: ./dark.css
+		- import your theme in ./index.js
+			Ex: import './style/themes/dark.css'
+		- add your theme-name class to the <body> of root index.html
+			Ex: <body class="dark">
+*/
+
+/*
+.theme-name {
+	--background: ;
+
+	--font-family: ;
+
+	--navbar-background: ;
+	--navbar-text-color: ;
+	--navbar-shadow: ;
+
+	--heading-font-family:;
+	--heading-font-size: ;
+	--heading-color: ;
+
+	--link-color: ;
+
+	--total-color: ;
+
+	--last-update-color: ;
+
+	--table-background: ;
+	--table-border-color: ;
+	--table-header-primary-color: ;
+	--table-header-secondary-color: ;
+	--table-header-data-color: ;
+	--table-cell-padding: ;
+	--table-font-family: ;
+	--table-cell-max-height: ;
+	--table-cell-height: ;
+	--table-cell-text-align: ;
+
+	--all-contribution-info-color: ;
+
+	--footer-link-color: ;
+} */

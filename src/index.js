@@ -1,5 +1,6 @@
 import './style/style.css'
-import './style/bootstrap.css'
+import './style/themes/dark.css'
+import './style/themes/blue.css'
 import axios from 'axios'
 import moment from 'moment'
 import { io } from 'socket.io-client'
