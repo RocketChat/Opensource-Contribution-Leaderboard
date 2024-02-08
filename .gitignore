@@ -6,3 +6,4 @@ src/assets/data
 dist
 tests/config.txt
 configBackup.json
+**/.DS_Store
