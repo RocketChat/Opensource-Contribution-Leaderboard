@@ -72,6 +72,15 @@ function refreshTable(newData) {
     contributors.forEach((contributor, index) => {
         const tr = document.createElement('tr')
 
+        const tdRank = document.createElement('td')
+        const tdRankDiv = document.createElement('div')
+        tdRankDiv.innerText = index+1
+        tdRankDiv.height = '42'
+        tdRankDiv.width = '42'
+        tdRank.appendChild(tdRankDiv)
+        tdRank.setAttribute('class','hidden-md hidden-lg')
+        tr.appendChild(tdRank)
+
         // avatar
         const tdAvatar = document.createElement('td')
         const avatar = document.createElement('img')
@@ -105,6 +114,7 @@ function refreshTable(newData) {
             openPRs.className = 'inactiveLink'
         }
         tdOpenPRs.appendChild(openPRs)
+        tdOpenPRs.setAttribute('class','visible-md visible-lg')
         tr.appendChild(tdOpenPRs)
 
         // Merged PRs
@@ -116,6 +126,7 @@ function refreshTable(newData) {
             mergedPRs.className = 'inactiveLink'
         }
         tdMergedPRs.appendChild(mergedPRs)
+        tdMergedPRs.setAttribute('class','visible-md visible-lg')
         tr.appendChild(tdMergedPRs)
 
         // Issues
@@ -127,6 +138,7 @@ function refreshTable(newData) {
             issues.className = 'inactiveLink'
         }
         tdIssues.appendChild(issues)
+        tdIssues.setAttribute('class','visible-md visible-lg')
         tr.appendChild(tdIssues)
 
         table.appendChild(tr)
