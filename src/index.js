@@ -72,6 +72,11 @@ function refreshTable(newData) {
     contributors.forEach((contributor, index) => {
         const tr = document.createElement('tr')
 
+        // Rank
+        const tdRank = document.createElement('td')
+        tdRank.innerText = index + 1
+        tr.appendChild(tdRank)
+
         // avatar
         const tdAvatar = document.createElement('td')
         const avatar = document.createElement('img')
