@@ -145,10 +145,10 @@ function refreshTable(newData) {
     allContributionsInfoRef.innerText = allMergedPRs + ' Merged PRs, ' + allOpenPRs + ' Open PRs, and ' + allIssues + ' Issues.'
 }
 
-axios.get('/api/data')
-    .then(res => {
-        refreshTable(res.data)
-    })
+axios.get('/api/data').then(res => {
+    Object.keys(res.data).length != 0 ? stopLoader() : ''
+    refreshTable(res.data)
+})
 
 axios.get('/api/config')
     .then(res => {
@@ -172,5 +172,11 @@ axios.get('/api/log')
 
 const socket = io()
 socket.on('refresh table', (data) => {
+    data ? stopLoader() : null
     refreshTable(data)
 })
+
+function stopLoader() {
+    const loader = document.querySelector('.loader')
+    loader.style.display = 'none'
+}
