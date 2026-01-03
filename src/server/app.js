@@ -118,11 +118,12 @@ const server = http
                             if (existContributor !== null) {
                                 contributorsList.push(existContributor)
                             } else {
-                                const avatarUrl = await API.getContributorAvatar(contributor)
+                                const { avatarUrl, joiningDate } = await API.getContributorProfile(contributor)
                                 if (avatarUrl !== '') {
                                     contributorsList.push({
                                         username: contributor,
                                         avatarUrl: avatarUrl,
+                                        joiningDate: joiningDate,
                                     })
                                 }
                             }
@@ -285,8 +286,8 @@ const server = http
                         return
                     }
 
-                    API.getContributorAvatar(username).then((result) => {
-                        if (result === '') {
+                    API.getContributorProfile(username).then((result) => {
+                        if (result.avatarUrl === '') {
                             res.end(JSON.stringify({ message: 'Not found' }))
                         } else {
                             // Add this contributor in config.json
@@ -318,7 +319,8 @@ const server = http
                             res.end(
                                 JSON.stringify({
                                     message: 'Success',
-                                    avatarUrl: result,
+                                    avatarUrl: result.avatarUrl,
+                                    joiningDate: result.joiningDate
                                 })
                             )
                         }

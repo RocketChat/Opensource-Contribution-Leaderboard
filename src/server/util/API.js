@@ -85,13 +85,19 @@ async function getRepositories(organization) {
     return results
 }
 
-async function getContributorAvatar(contributor) {
+async function getContributorProfile(contributor) {
     const res = await get(APIHOST + '/users/' + contributor)
 
     if (res !== undefined) {
-        return res.data.avatar_url
+        return {
+            avatarUrl: res.data.avatar_url,
+            joiningDate: res.data.created_at.split('T')[0]
+        }
     } else {
-        return ''
+        return {
+            avatarUrl: '',
+            joiningDate: ''
+        }
     }
 }
 
@@ -131,7 +137,7 @@ async function getContributorInfo(
     includedRepositories
 ) {
     const home = BASEURL + '/' + contributor
-    const avatarUrl = await getContributorAvatar(contributor)
+    const { avatarUrl, joiningDate } = await getContributorProfile(contributor)
     let OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${Config.startDate}`
     let openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:>=${Config.startDate}`
     let MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:>=${Config.startDate}`
@@ -160,6 +166,7 @@ async function getContributorInfo(
     return {
         home,
         avatarUrl,
+        joiningDate,
         openPRsNumber,
         openPRsLink,
         mergedPRsNumber,
@@ -235,7 +242,7 @@ async function getRanks(data, parameter = 'mergedprs') {
 
 module.exports = {
     getRepositories,
-    getContributorAvatar,
+    getContributorProfile,
     getOpenPRsNumber,
     getMergedPRsNumber,
     getIssuesNumber,

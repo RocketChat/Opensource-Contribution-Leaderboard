@@ -90,6 +90,16 @@ function refreshTable(newData) {
         rank.innerText = index + 1
         tr.id = contributor.username
         tdUsername.appendChild(username)
+        
+        // joining date
+        if (data[contributor.username].joiningDate) {
+            const joiningDate = document.createElement('div')
+            joiningDate.innerText = `Joined: ${data[contributor.username].joiningDate}`
+            joiningDate.style.fontSize = '10px'
+            joiningDate.style.color = '#666'
+            tdUsername.appendChild(joiningDate)
+        }
+
         tdUsername.appendChild(rank)
         tr.appendChild(tdUsername)
 
