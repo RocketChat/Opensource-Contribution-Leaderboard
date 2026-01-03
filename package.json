@@ -3,6 +3,7 @@
     "babel-eslint": "^10.1.0",
     "clean-webpack-plugin": "^1.0.1",
     "copy-webpack-plugin": "^4.6.0",
+    "cross-env": "^10.1.0",
     "css-loader": "^2.1.0",
     "eslint": "^6.8.0",
     "html-webpack-plugin": "^3.2.0",
@@ -26,9 +27,9 @@
   },
   "scripts": {
     "add": "npm install && npm --prefix src/server install && npm --prefix admin install",
-    "start": "npm run build && NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
-    "build": "npm --prefix admin run build && NODE_ENV=production webpack --config build/webpack.config.js",
-    "serve": "cd src/server && NODE_ENV=development node app.js",
+    "start": "npm run build && cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
+    "build": "npm --prefix admin run build && cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production webpack --config build/webpack.config.js",
+    "serve": "cd src/server && cross-env NODE_ENV=development node app.js",
     "lint": "eslint ."
   },
   "husky": {
