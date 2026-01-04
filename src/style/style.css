@@ -87,3 +87,10 @@ td span {
   pointer-events: none;
   cursor: default;
 }
+
+.joining-date {
+  font-size: 12px;
+  color: #9BA2AB;
+  margin-top: 4px;
+  text-align: left;
+}

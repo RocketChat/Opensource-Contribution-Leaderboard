@@ -85,12 +85,27 @@ function refreshTable(newData) {
         const tdUsername = document.createElement('td')
         const username = document.createElement('a')
         const rank = document.createElement('span')
+
         username.href = data[contributor.username].home
         username.innerText = contributor.username
         rank.innerText = index + 1
-        tr.id = contributor.username
+
         tdUsername.appendChild(username)
         tdUsername.appendChild(rank)
+
+        // joining date (if available)
+        const joiningDate =
+            data[contributor.username].joinedAt ||
+            data[contributor.username].createdAt
+
+        if (joiningDate) {
+            const joined = document.createElement('div')
+                joined.className = 'joining-date'
+                joined.innerText = `Joined: ${moment(joiningDate).format('MMM YYYY')}`
+                tdUsername.appendChild(joined)
+            }
+
+        tr.id = contributor.username
         tr.appendChild(tdUsername)
 
         // empty td tag
