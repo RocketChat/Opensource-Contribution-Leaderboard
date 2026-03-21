@@ -310,12 +310,9 @@ const server = http
                         if (result === '') {
                             res.end(JSON.stringify({ message: 'Not found' }))
                         } else if (!result) {
-                            res.end(
-                                JSON.stringify({
-                                    message:
-                    'Unable to fetch contributor profile. Check GitHub token and network connectivity.',
-                                })
-                            )
+                            res.end(JSON.stringify({
+                                message: 'Unable to fetch contributor profile. Check GitHub token and network connectivity.',
+                            }))
                         } else {
                             // Add this contributor in config.json
                             Config.contributors.unshift(username)

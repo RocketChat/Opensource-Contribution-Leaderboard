@@ -29,42 +29,29 @@ async function getAllContributorsInfo() {
     let Config = jsonfile.readFileSync(configPath)
     let organization = Config.organization
     let contributors = Array.isArray(Config.contributors) ? Config.contributors : []
-    let includedRepositories = Array.isArray(Config.includedRepositories)
-        ? Config.includedRepositories
-        : []
+    let includedRepositories = Array.isArray(Config.includedRepositories) ? Config.includedRepositories : []
 
     interval = contributors.length < 150 ? 150 : (contributors.length + 10) // update interval
 
     // Record time
     logBuffer.starttime = Date.now()
 
-    Promise.mapSeries(contributors, async (contributor) => {
+    Promise.mapSeries(contributors, async contributor => {
 
         await Promise.delay(delay * 1000)
 
         try {
-            const res = await API.getContributorInfo(
-                organization,
-                contributor,
-                includedRepositories
-            )
+            const res = await API.getContributorInfo(organization, contributor, includedRepositories)
             Config = jsonfile.readFileSync(configPath) // update Config
             delay = Config.delay // update delay
 
-            if (
-                res &&
-                res.avatarUrl !== '' &&
-                res.issuesNumber !== -1 &&
-                res.mergedPRsNumber !== -1 &&
-                res.openPRsNumber !== -1
-            ) {
+            if (res && res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsNumber !== -1 && res.openPRsNumber !== -1) {
+                
                 dataBuffer = jsonfile.readFileSync(dataPath)
 
                 if (Config.contributors.includes(contributor)) {
                     dataBuffer[`${contributor}`] = res
-                    console.log(
-                        `${contributor} was updated: ${res.openPRsNumber} ${res.mergedPRsNumber} ${res.issuesNumber}`
-                    )
+                    console.log(`${contributor} was updated: ${res.openPRsNumber} ${res.mergedPRsNumber} ${res.issuesNumber}`)
 
                     // Update contributors infomation
                     jsonfile.writeFile(dataPath, dataBuffer, { spaces: 2 }, (err) => {
@@ -72,16 +59,10 @@ async function getAllContributorsInfo() {
                     })
                 }
             } else {
-                console.log(
-                    `[WARNING] Skipped update for ${contributor}. Check GitHub token, rate limit, or network status.`
-                )
+                console.log(`[WARNING] Skipped update for ${contributor}. Check GitHub token, rate limit, or network status.`)
             }
         } catch (err) {
-            console.log(
-                `[ERROR] Failed to update ${contributor}: ${
-                    err && err.message ? err.message : err
-                }`
-            )
+            console.log(`[ERROR] Failed to update ${contributor}: ${err && err.message ? err.message : err}`)
         }
 
         // Record time

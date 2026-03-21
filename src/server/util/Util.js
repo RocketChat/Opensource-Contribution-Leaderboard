@@ -1,8 +1,8 @@
 function post(req, res, callback) {
-    if (req.method === 'POST') {
+    if(req.method === 'POST') {
         let body = ''
-
-        req.on('data', (chunk) => {
+        
+        req.on('data', chunk => {
             body += chunk.toString()
         })
 
