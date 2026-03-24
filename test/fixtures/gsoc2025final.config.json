@@ -1,0 +1,12 @@
+{
+    "organization": "RocketChat",
+    "organizationHomepage": "https://rocket.chat/",
+    "organizationGithubUrl": "https://github.com/RocketChat",
+    "authToken": "",
+    "adminPassword": "123456",
+    "delay": "10",
+    "serverPort": "62050",
+    "contributors": [],
+    "startDate": "2024-12-01",
+    "includedRepositories": []
+}

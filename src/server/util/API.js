@@ -1,6 +1,12 @@
 const axios = require('axios')
-const Config = require('../config.json')
 const chalk = require('chalk')
+const path = require('path')
+
+const Config = require(
+    process.env.LEADERBOARD_CONFIG_PATH
+        ? path.resolve(process.env.LEADERBOARD_CONFIG_PATH)
+        : path.resolve(__dirname, '../config.json')
+)
 
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'

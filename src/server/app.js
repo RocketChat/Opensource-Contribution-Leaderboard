@@ -10,19 +10,33 @@ const app = express()
 const proxy = require('http-proxy-middleware')
 const path = require('path')
 
-const configPath = './config.json'
-const admindataPath = './admindata.json'
-const dataPath = '../assets/data/data.json'
-const logPath = '../assets/data/log.json'
-const port = jsonfile.readFileSync(configPath).serverPort
-const configBackupPath = '../../configBackup.json'
+function resolvePathFromEnv(envName, defaultRelativeToCwd) {
+    if (process.env[envName]) {
+        return path.resolve(process.env[envName])
+    }
+    return path.resolve(process.cwd(), defaultRelativeToCwd)
+}
+
+const configPath = resolvePathFromEnv('LEADERBOARD_CONFIG_PATH', 'config.json')
+const admindataPath = resolvePathFromEnv('LEADERBOARD_ADMINDATA_PATH', 'admindata.json')
+const dataPath = resolvePathFromEnv('LEADERBOARD_DATA_PATH', '../assets/data/data.json')
+const logPath = resolvePathFromEnv('LEADERBOARD_LOG_PATH', '../assets/data/log.json')
+const configBackupPath = process.env.LEADERBOARD_CONFIG_BACKUP_PATH
+    ? path.resolve(process.env.LEADERBOARD_CONFIG_BACKUP_PATH)
+    : path.resolve(process.cwd(), '../../configBackup.json')
+
+const httpPort =
+    process.env.LEADERBOARD_PORT !== undefined && process.env.LEADERBOARD_PORT !== ''
+        ? Number(process.env.LEADERBOARD_PORT)
+        : Number(jsonfile.readFileSync(configPath).serverPort)
+
 const proxyOption = {
-    target: 'http://localhost:' + port + '/',
+    target: 'http://localhost:' + httpPort + '/',
     pathRewrite: { '^/api': '' },
     changeOrigin: true,
 }
 const websocketProxyOption = {
-    target: 'http://localhost:' + port + '/',
+    target: 'http://localhost:' + httpPort + '/',
     changeOrigin: true,
 }
 
@@ -54,17 +68,17 @@ if (!fs.existsSync(admindataPath)) {
     jsonfile.writeFileSync(admindataPath, [])
 }
 
-// spawn - `node refresh.js`
-const refresh = spawn('node', ['refresh.js'], {
-    shell: true,
-    stdio: 'inherit',
-})
-process.on('exit', () => {
-    refresh.kill() // kill it when exit
-})
+if (process.env.LEADERBOARD_SKIP_REFRESH !== '1') {
+    const refresh = spawn('node', ['refresh.js'], {
+        shell: true,
+        stdio: 'inherit',
+    })
+    process.on('exit', () => {
+        refresh.kill()
+    })
+}
 
-const server = http
-    .createServer((req, res) => {
+const server = http.createServer((req, res) => {
         const route = url.parse(req.url).pathname
         const { adminPassword } = jsonfile.readFileSync(configPath)
 
@@ -109,7 +123,7 @@ const server = http
                 if (token === adminPassword) {
                     await Promise.all(
                         contributors.map(async (contributor) => {
-                            const admindata = jsonfile.readFileSync('./admindata.json')
+                            const admindata = jsonfile.readFileSync(admindataPath)
                             const existContributor = findContributor(
                                 contributor,
                                 admindata
@@ -408,7 +422,6 @@ const server = http
             break
         }
     })
-    .listen(port)
 
 const io = require('socket.io')(server)
 io.on('connection', (socket) => {
@@ -422,6 +435,10 @@ io.on('connection', (socket) => {
         clearInterval(intervalId)
     })
 })
+
+server.listen(httpPort)
+
+module.exports = { server }
 
 function findContributor(contributorName, admindata) {
     let result = null
