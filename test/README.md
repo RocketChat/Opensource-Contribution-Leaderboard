@@ -6,7 +6,7 @@ This directory holds automated regression tests for stable leaderboard behavior.
 
 Fixtures:
 
-- `fixtures/gsoc2025final.data.json` is copied from `contrib/rocketchat/gsoc/2025/gsoc2025final.json`.
+- `../contrib/rocketchat/gsoc/2025/gsoc2025final.json` is the canonical snapshot used as the fixed leaderboard input.
 - `fixtures/gsoc2025final.expected.json` is the checked-in golden output generated from the current stable ranking logic and used for regression comparisons.
 
 Run from the repo root:

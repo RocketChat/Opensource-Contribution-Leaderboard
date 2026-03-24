@@ -6,7 +6,10 @@ const path = require('path')
 const net = require('net')
 
 const fixturesDir = path.resolve(__dirname, 'fixtures')
-const dataPath = path.join(fixturesDir, 'gsoc2025final.data.json')
+const dataPath = path.resolve(
+    __dirname,
+    '../contrib/rocketchat/gsoc/2025/gsoc2025final.json'
+)
 const expectedPath = path.join(fixturesDir, 'gsoc2025final.expected.json')
 const configPath = path.join(fixturesDir, 'gsoc2025final.config.json')
 const logPath = path.join(fixturesDir, 'gsoc2025final.log.json')
@@ -102,6 +105,14 @@ after(async () => {
                 resolve()
             })
         })
+    }
+
+    if (fs.existsSync(admindataPath)) {
+        fs.unlinkSync(admindataPath)
+    }
+
+    if (fs.existsSync(configBackupPath)) {
+        fs.unlinkSync(configBackupPath)
     }
 
     delete process.env.LEADERBOARD_SKIP_REFRESH
