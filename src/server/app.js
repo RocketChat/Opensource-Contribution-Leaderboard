@@ -10,12 +10,12 @@ const app = express()
 const proxy = require('http-proxy-middleware')
 const path = require('path')
 
-const configPath = './config.json'
-const admindataPath = './admindata.json'
-const dataPath = '../assets/data/data.json'
-const logPath = '../assets/data/log.json'
-const port = jsonfile.readFileSync(configPath).serverPort
-const configBackupPath = '../../configBackup.json'
+const configPath = process.env.LEADERBOARD_CONFIG_PATH || './config.json'
+const admindataPath = process.env.LEADERBOARD_ADMINDATA_PATH || './admindata.json'
+const dataPath = process.env.LEADERBOARD_DATA_PATH || '../assets/data/data.json'
+const logPath = process.env.LEADERBOARD_LOG_PATH || '../assets/data/log.json'
+const port = process.env.LEADERBOARD_PORT || jsonfile.readFileSync(configPath).serverPort
+const configBackupPath = process.env.LEADERBOARD_CONFIG_BACKUP_PATH || '../../configBackup.json'
 const proxyOption = {
     target: 'http://localhost:' + port + '/',
     pathRewrite: { '^/api': '' },
@@ -55,13 +55,15 @@ if (!fs.existsSync(admindataPath)) {
 }
 
 // spawn - `node refresh.js`
-const refresh = spawn('node', ['refresh.js'], {
-    shell: true,
-    stdio: 'inherit',
-})
-process.on('exit', () => {
-    refresh.kill() // kill it when exit
-})
+if (process.env.LEADERBOARD_SKIP_REFRESH !== '1') {
+    const refresh = spawn('node', ['refresh.js'], {
+        shell: true,
+        stdio: 'inherit',
+    })
+    process.on('exit', () => {
+        refresh.kill() // kill it when exit
+    })
+}
 
 const server = http
     .createServer((req, res) => {
@@ -104,12 +106,12 @@ const server = http
             )
             var contributorsList = []
 
-            Util.post(req, async (params) => {
+            Util.post(req, res, async (params) => {
                 const { token } = params
                 if (token === adminPassword) {
                     await Promise.all(
                         contributors.map(async (contributor) => {
-                            const admindata = jsonfile.readFileSync('./admindata.json')
+                            const admindata = jsonfile.readFileSync(admindataPath)
                             const existContributor = findContributor(
                                 contributor,
                                 admindata
@@ -176,7 +178,7 @@ const server = http
                 return
             }
 
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, includedRepositories } = params
 
                 if (token !== adminPassword) {
@@ -197,7 +199,7 @@ const server = http
                 res.end('Permission denied\n')
                 return
             }
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, startDate } = params
 
                 if (token !== adminPassword) {
@@ -219,7 +221,7 @@ const server = http
                 return
             }
 
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, interval } = params
 
                 if (token !== adminPassword) {
@@ -241,7 +243,7 @@ const server = http
                 return
             }
 
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, username } = params
 
                 if (token !== adminPassword) {
@@ -272,7 +274,7 @@ const server = http
                 return
             }
 
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, username } = params
 
                 if (token !== adminPassword) {
@@ -410,6 +412,8 @@ const server = http
     })
     .listen(port)
 
+module.exports = { server }
+
 const io = require('socket.io')(server)
 io.on('connection', (socket) => {
     const intervalId = setInterval(() => {
@@ -423,14 +427,4 @@ io.on('connection', (socket) => {
     })
 })
 
-function findContributor(contributorName, admindata) {
-    let result = null
-
-    admindata.forEach((contributor) => {
-        if (contributor.username === contributorName) {
-            result = contributor
-        }
-    })
-
-    return result
-}
+const findContributor = Util.findContributor

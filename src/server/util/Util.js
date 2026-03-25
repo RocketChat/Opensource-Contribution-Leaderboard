@@ -1,4 +1,4 @@
-function post(req, callback) {
+function post(req, res, callback) {
     if(req.method === 'POST') {
         let body = ''
         
@@ -10,12 +10,26 @@ function post(req, callback) {
             try {
                 callback(JSON.parse(body))
             } catch (ex) {
-                return
+                res.writeHead(400, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify({ message: 'Invalid JSON body' }))
             }
         })
     }
 }
 
+function findContributor(contributorName, admindata) {
+    let result = null
+
+    admindata.forEach((contributor) => {
+        if (contributor.username === contributorName) {
+            result = contributor
+        }
+    })
+
+    return result
+}
+
 module.exports = {
-    post
+    post,
+    findContributor
 }

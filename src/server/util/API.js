@@ -1,6 +1,9 @@
 const axios = require('axios')
-const Config = require('../config.json')
 const chalk = require('chalk')
+
+const Config = process.env.LEADERBOARD_CONFIG_PATH
+    ? require(require('path').resolve(process.env.LEADERBOARD_CONFIG_PATH))
+    : require('../config.json')
 
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'
@@ -35,7 +38,6 @@ async function get(url, _authToken) {
                         '[ERROR] Your GitHub Token is not correct! Please check it in the config.json.'
                     )
                 )
-                process.exit()
                 break
             default:
                 console.log(chalk.yellow('[WARNING] ' + message))
