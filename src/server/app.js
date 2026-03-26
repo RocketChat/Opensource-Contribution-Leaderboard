@@ -102,346 +102,346 @@ if (process.env.LEADERBOARD_SKIP_REFRESH !== '1') {
 }
 
 const server = http.createServer((req, res) => {
-        const route = url.parse(req.url).pathname
-        const adminPassword = getAdminPassword()
+    const route = url.parse(req.url).pathname
+    const adminPassword = getAdminPassword()
 
-        switch (route) {
-        case '/data':
-            res.setHeader('Cache-Control', 'no-store')
-            jsonfile.readFile(dataPath, (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
-                res.end(JSON.stringify(obj))
+    switch (route) {
+    case '/data':
+        res.setHeader('Cache-Control', 'no-store')
+        jsonfile.readFile(dataPath, (err, obj) => {
+            if (err) console.log('[ERROR]' + err)
+            res.end(JSON.stringify(obj))
+        })
+        break
+    case '/log':
+        res.setHeader('Cache-Control', 'no-store')
+        jsonfile.readFile(logPath, (err, obj) => {
+            if (err) console.log('[ERROR]' + err)
+            res.end(JSON.stringify(obj))
+        })
+        break
+    case '/config':
+        var Config = getOrganizationConfig()
+        res.end(
+            JSON.stringify({
+                organization: Config.organization,
+                organizationHomepage: Config.organizationHomepage,
+                organizationGithubUrl: Config.organizationGithubUrl,
             })
-            break
-        case '/log':
-            res.setHeader('Cache-Control', 'no-store')
-            jsonfile.readFile(logPath, (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
-                res.end(JSON.stringify(obj))
-            })
-            break
-        case '/config':
-            var Config = getOrganizationConfig()
-            res.end(
-                JSON.stringify({
-                    organization: Config.organization,
-                    organizationHomepage: Config.organizationHomepage,
-                    organizationGithubUrl: Config.organizationGithubUrl,
-                })
-            )
-            break
-        case '/login':
-            if (req.method === 'GET') {
-                res.end('Permission denied\n')
-                return
-            }
+        )
+        break
+    case '/login':
+        if (req.method === 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
 
-            var { delay, contributors, startDate } = getConfig()
-            var contributorsList = []
+        var { delay, contributors, startDate } = getConfig()
+        var contributorsList = []
 
-            Util.post(req, async (params) => {
-                const { token } = params
-                if (token === adminPassword) {
-                    await Promise.all(
-                        contributors.map(async (contributor) => {
-                            const admindata = jsonfile.readFileSync(admindataPath)
-                            const existContributor = findContributor(
-                                contributor,
-                                admindata
-                            )
+        Util.post(req, async (params) => {
+            const { token } = params
+            if (token === adminPassword) {
+                await Promise.all(
+                    contributors.map(async (contributor) => {
+                        const admindata = jsonfile.readFileSync(admindataPath)
+                        const existContributor = findContributor(
+                            contributor,
+                            admindata
+                        )
 
-                            if (existContributor !== null) {
-                                contributorsList.push(existContributor)
-                            } else {
-                                const avatarUrl = await API.getContributorAvatar(contributor)
-                                if (avatarUrl !== '') {
-                                    contributorsList.push({
-                                        username: contributor,
-                                        avatarUrl: avatarUrl,
-                                    })
-                                }
+                        if (existContributor !== null) {
+                            contributorsList.push(existContributor)
+                        } else {
+                            const avatarUrl = await API.getContributorAvatar(contributor)
+                            if (avatarUrl !== '') {
+                                contributorsList.push({
+                                    username: contributor,
+                                    avatarUrl: avatarUrl,
+                                })
                             }
-                        })
-                    )
-                    res.end(
-                        JSON.stringify({
-                            code: 0,
-                            delay,
-                            contributors: contributorsList,
-                            startDate,
-                        })
-                    ) // success
-                    jsonfile.writeFileSync(admindataPath, contributorsList)
-                } else {
-                    res.end(
-                        JSON.stringify({
-                            code: 1,
-                            delay: 0,
-                            contributors: {},
-                            startDate: '',
-                        })
-                    ) // wrong
-                }
-            })
-            break
-        case '/getRepositories':
-            if (req.method !== 'GET') {
-                res.end('Permission denied\n')
-                return
-            }
-            var { includedRepositories } = getConfig()
-            API.getRepositories(getOrganizationConfig().organization).then((repositories) => {
-                if (repositories !== '') {
-                    res.end(
-                        JSON.stringify({
-                            repositories: repositories.flat(),
-                            includedRepositories: includedRepositories,
-                        })
-                    )
-                } else {
-                    res.end()
-                }
-            })
-            break
-        case '/setIncludedRepositories':
-            if (req.method !== 'POST') {
-                res.end('Permission denied\n')
-                return
-            }
-
-            Util.post(req, (params) => {
-                const { token, includedRepositories } = params
-
-                if (token !== adminPassword) {
-                    res.end(JSON.stringify({ message: 'Authentication failed' }))
-                } else {
-                    // set includedRepositories in config.json
-                    const Config = getConfig()
-                    Config.includedRepositories = includedRepositories
-                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
-                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
-
-                    res.end(JSON.stringify({ message: 'Success' }))
-                }
-            })
-            break
-        case '/setStartDate':
-            if (req.method === 'GET') {
-                res.end('Permission denied\n')
-                return
-            }
-            Util.post(req, (params) => {
-                const { token, startDate } = params
-
-                if (token !== adminPassword) {
-                    res.end(JSON.stringify({ message: 'Authentication failed' }))
-                } else {
-                    // set startDate in config.json
-                    const Config = getConfig()
-                    Config.startDate = startDate
-                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
-                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
-
-                    res.end(JSON.stringify({ message: 'Success' }))
-                }
-            })
-            break
-        case '/setInterval':
-            if (req.method === 'GET') {
-                res.end('Permission denied\n')
-                return
-            }
-
-            Util.post(req, (params) => {
-                const { token, interval } = params
-
-                if (token !== adminPassword) {
-                    res.end(JSON.stringify({ message: 'Authentication failed' }))
-                } else {
-                    // set delay in config.json
-                    const Config = getConfig()
-                    Config.delay = interval
-                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
-                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
-
-                    res.end(JSON.stringify({ message: 'Success' }))
-                }
-            })
-            break
-        case '/remove':
-            if (req.method === 'GET') {
-                res.end('Permission denied\n')
-                return
-            }
-
-            Util.post(req, (params) => {
-                const { token, username } = params
-
-                if (token !== adminPassword) {
-                    res.end(JSON.stringify({ message: 'Authentication failed' }))
-                } else {
-                    const Config = getConfig()
-                    // Remove this contributor in config.json
-                    Config.contributors.forEach((contributor, index, object) => {
-                        if (contributor == username) {
-                            object.splice(index, 1)
                         }
                     })
-                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
-
-                    // Remove this contributor in the data.json
-                    const data = jsonfile.readFileSync(dataPath)
-                    delete data[username]
-                    jsonfile.writeFileSync(dataPath, data, { spaces: 2 })
-                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
-
-                    res.end(JSON.stringify({ message: 'Success' }))
-                }
-            })
-            break
-        case '/add':
-            if (req.method === 'GET') {
-                res.end('Permission denied\n')
-                return
+                )
+                res.end(
+                    JSON.stringify({
+                        code: 0,
+                        delay,
+                        contributors: contributorsList,
+                        startDate,
+                    })
+                ) // success
+                jsonfile.writeFileSync(admindataPath, contributorsList)
+            } else {
+                res.end(
+                    JSON.stringify({
+                        code: 1,
+                        delay: 0,
+                        contributors: {},
+                        startDate: '',
+                    })
+                ) // wrong
             }
+        })
+        break
+    case '/getRepositories':
+        if (req.method !== 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
+        var { includedRepositories } = getConfig()
+        API.getRepositories(getOrganizationConfig().organization).then((repositories) => {
+            if (repositories !== '') {
+                res.end(
+                    JSON.stringify({
+                        repositories: repositories.flat(),
+                        includedRepositories: includedRepositories,
+                    })
+                )
+            } else {
+                res.end()
+            }
+        })
+        break
+    case '/setIncludedRepositories':
+        if (req.method !== 'POST') {
+            res.end('Permission denied\n')
+            return
+        }
 
-            Util.post(req, (params) => {
-                const { token, username } = params
+        Util.post(req, (params) => {
+            const { token, includedRepositories } = params
 
-                if (token !== adminPassword) {
-                    res.end(JSON.stringify({ message: 'Authentication failed' }))
-                } else {
-                    const Config = getConfig()
+            if (token !== adminPassword) {
+                res.end(JSON.stringify({ message: 'Authentication failed' }))
+            } else {
+                // set includedRepositories in config.json
+                const Config = getConfig()
+                Config.includedRepositories = includedRepositories
+                jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
 
-                    if (Config.contributors.includes(username)) {
-                        res.end(JSON.stringify({ message: `${username} aready exists` }))
-                        return
+                res.end(JSON.stringify({ message: 'Success' }))
+            }
+        })
+        break
+    case '/setStartDate':
+        if (req.method === 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
+        Util.post(req, (params) => {
+            const { token, startDate } = params
+
+            if (token !== adminPassword) {
+                res.end(JSON.stringify({ message: 'Authentication failed' }))
+            } else {
+                // set startDate in config.json
+                const Config = getConfig()
+                Config.startDate = startDate
+                jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+
+                res.end(JSON.stringify({ message: 'Success' }))
+            }
+        })
+        break
+    case '/setInterval':
+        if (req.method === 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
+
+        Util.post(req, (params) => {
+            const { token, interval } = params
+
+            if (token !== adminPassword) {
+                res.end(JSON.stringify({ message: 'Authentication failed' }))
+            } else {
+                // set delay in config.json
+                const Config = getConfig()
+                Config.delay = interval
+                jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+
+                res.end(JSON.stringify({ message: 'Success' }))
+            }
+        })
+        break
+    case '/remove':
+        if (req.method === 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
+
+        Util.post(req, (params) => {
+            const { token, username } = params
+
+            if (token !== adminPassword) {
+                res.end(JSON.stringify({ message: 'Authentication failed' }))
+            } else {
+                const Config = getConfig()
+                // Remove this contributor in config.json
+                Config.contributors.forEach((contributor, index, object) => {
+                    if (contributor == username) {
+                        object.splice(index, 1)
                     }
+                })
+                jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
 
-                    API.getContributorAvatar(username).then((result) => {
-                        if (result === '') {
-                            res.end(JSON.stringify({ message: 'Not found' }))
-                        } else {
-                            // Add this contributor in config.json
-                            Config.contributors.unshift(username)
-                            jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
-                            jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+                // Remove this contributor in the data.json
+                const data = jsonfile.readFileSync(dataPath)
+                delete data[username]
+                jsonfile.writeFileSync(dataPath, data, { spaces: 2 })
+                jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
 
-                            // Add this contributor in the data.json
-                            const data = jsonfile.readFileSync(dataPath)
-                            API.getContributorInfo(
-                                getOrganizationConfig().organization,
-                                username,
-                                Config.includedRepositories,
-                                Config.startDate
-                            ).then((contributorInfo) => {
-                                if (
-                                    contributorInfo.avatarUrl !== '' &&
+                res.end(JSON.stringify({ message: 'Success' }))
+            }
+        })
+        break
+    case '/add':
+        if (req.method === 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
+
+        Util.post(req, (params) => {
+            const { token, username } = params
+
+            if (token !== adminPassword) {
+                res.end(JSON.stringify({ message: 'Authentication failed' }))
+            } else {
+                const Config = getConfig()
+
+                if (Config.contributors.includes(username)) {
+                    res.end(JSON.stringify({ message: `${username} aready exists` }))
+                    return
+                }
+
+                API.getContributorAvatar(username).then((result) => {
+                    if (result === '') {
+                        res.end(JSON.stringify({ message: 'Not found' }))
+                    } else {
+                        // Add this contributor in config.json
+                        Config.contributors.unshift(username)
+                        jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                        jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+
+                        // Add this contributor in the data.json
+                        const data = jsonfile.readFileSync(dataPath)
+                        API.getContributorInfo(
+                            getOrganizationConfig().organization,
+                            username,
+                            Config.includedRepositories,
+                            Config.startDate
+                        ).then((contributorInfo) => {
+                            if (
+                                contributorInfo.avatarUrl !== '' &&
                                     contributorInfo.issuesNumber !== -1 &&
                                     contributorInfo.mergedPRsNumber !== -1 &&
                                     contributorInfo.openPRsNumber !== -1
-                                ) {
-                                    data[`${username}`] = contributorInfo
-                                    // Update contributors infomation
-                                    jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
-                                        if (err) console.error(err)
-                                    })
-                                }
-                            })
-
-                            res.end(
-                                JSON.stringify({
-                                    message: 'Success',
-                                    avatarUrl: result,
+                            ) {
+                                data[`${username}`] = contributorInfo
+                                // Update contributors infomation
+                                jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
+                                    if (err) console.error(err)
                                 })
-                            )
-                        }
-                    })
-                }
-            })
-            break
-        case '/stats':
-            if (req.method !== 'GET') {
-                res.end('Permission denied\n')
-                return
+                            }
+                        })
+
+                        res.end(
+                            JSON.stringify({
+                                message: 'Success',
+                                avatarUrl: result,
+                            })
+                        )
+                    }
+                })
             }
+        })
+        break
+    case '/stats':
+        if (req.method !== 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
 
-            jsonfile.readFile(dataPath, async (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
-                res.end(JSON.stringify(await API.getStats(obj)))
-            })
-            break
-        case '/rank':
-            if (req.method !== 'GET') {
-                res.end('Permission denied\n')
-                return
-            }
+        jsonfile.readFile(dataPath, async (err, obj) => {
+            if (err) console.log('[ERROR]' + err)
+            res.end(JSON.stringify(await API.getStats(obj)))
+        })
+        break
+    case '/rank':
+        if (req.method !== 'GET') {
+            res.end('Permission denied\n')
+            return
+        }
 
-            jsonfile.readFile(dataPath, async (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
-                const query = url.parse(req.url, true).query
+        jsonfile.readFile(dataPath, async (err, obj) => {
+            if (err) console.log('[ERROR]' + err)
+            const query = url.parse(req.url, true).query
 
-                // Gets list of contributors sorted by parameter if provided
-                // else defaults to sorting by mergedprs
-                const contributors = await API.getRanks(obj, query.parameter)
+            // Gets list of contributors sorted by parameter if provided
+            // else defaults to sorting by mergedprs
+            const contributors = await API.getRanks(obj, query.parameter)
 
-                // Responds with rank of username
-                if (query.username) {
-                    const rank =
+            // Responds with rank of username
+            if (query.username) {
+                const rank =
                         contributors
                             .map((c) => c.toLowerCase())
                             .indexOf(query.username.toLowerCase()) + 1
-                    res.end(
-                        JSON.stringify(
-                            rank
-                                ? {
-                                    username: query.username,
-                                    rank: rank,
-                                }
-                                : { error: `Contributor ${query.username} doesn't exist` }
-                        )
+                res.end(
+                    JSON.stringify(
+                        rank
+                            ? {
+                                username: query.username,
+                                rank: rank,
+                            }
+                            : { error: `Contributor ${query.username} doesn't exist` }
                     )
-                }
-                // Responds with sorted list of contributors
-                else {
-                    res.end(JSON.stringify({ ranks: contributors }))
-                }
-            })
-            break
-
-        case '/contributor':
-            if (req.method !== 'GET') {
-                res.end('Permission denied\n')
-                return
+                )
             }
+            // Responds with sorted list of contributors
+            else {
+                res.end(JSON.stringify({ ranks: contributors }))
+            }
+        })
+        break
 
-            jsonfile.readFile(dataPath, async (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
-                const query = url.parse(req.url, true).query
-
-                if (query.username) {
-                    res.end(
-                        JSON.stringify(
-                            obj[query.username]
-                                ? obj[query.username]
-                                : { error: `Contributor ${query.username} doesn't exist` }
-                        )
-                    )
-                } else if (query.rank) {
-                    // Gets list of contributors sorted by parameter if provided
-                    // else defaults to sorting by mergedprs
-                    const contributors = await API.getRanks(obj, query.parameter)
-                    res.end(JSON.stringify(obj[contributors[query.rank - 1]]))
-                } else {
-                    res.end(JSON.stringify(obj))
-                }
-            })
-            break
-        default:
+    case '/contributor':
+        if (req.method !== 'GET') {
             res.end('Permission denied\n')
-            break
+            return
         }
-    })
+
+        jsonfile.readFile(dataPath, async (err, obj) => {
+            if (err) console.log('[ERROR]' + err)
+            const query = url.parse(req.url, true).query
+
+            if (query.username) {
+                res.end(
+                    JSON.stringify(
+                        obj[query.username]
+                            ? obj[query.username]
+                            : { error: `Contributor ${query.username} doesn't exist` }
+                    )
+                )
+            } else if (query.rank) {
+                // Gets list of contributors sorted by parameter if provided
+                // else defaults to sorting by mergedprs
+                const contributors = await API.getRanks(obj, query.parameter)
+                res.end(JSON.stringify(obj[contributors[query.rank - 1]]))
+            } else {
+                res.end(JSON.stringify(obj))
+            }
+        })
+        break
+    default:
+        res.end('Permission denied\n')
+        break
+    }
+})
 
 const io = require('socket.io')(server)
 io.on('connection', (socket) => {
