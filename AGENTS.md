@@ -50,7 +50,9 @@ The rank column and some aggregate stats are rendered with invisible/white text.
 ```bash
 git clone <repo-url> && cd Opensource-Contribution-Leaderboard
 cp src/server/config-example.json src/server/config.json
-# Edit config.json with your GitHub token + org + contributors
+cp src/server/.env.example src/server/.env
+# Edit .env with your GitHub token, org, admin password, etc.
+# Edit config.json with your contributors list
 npm run add
 npm run build
 cd dist/server
@@ -72,26 +74,36 @@ npm run serve  # backend API server
 ```
 
 Frontend: http://localhost:8080
-Backend port: whatever `serverPort` is set to in config.json (default 62050)
+Backend port: whatever `SERVER_PORT` is set to in .env (default 62050)
 
 ## Config Reference
 
+Static/environment settings live in `.env` (copy from `src/server/.env.example`):
+
+```bash
+AUTH_TOKEN=ghp_YOUR_GITHUB_TOKEN      # required — GitHub personal access token
+ORGANIZATION=YourOrg                  # required — GitHub org name
+ORGANIZATION_HOMEPAGE=https://yourorg.com/
+ORGANIZATION_GITHUB_URL=https://github.com/YourOrg
+ADMIN_PASSWORD=change-this            # required — admin panel password
+SERVER_PORT=62050                     # backend API port
+```
+
+Dynamic/runtime values stay in `config.json` (modifiable via admin panel):
+
 ```json
 {
-  "organization": "YourOrg",
-  "organizationHomepage": "https://yourorg.com/",
-  "organizationGithubUrl": "https://github.com/YourOrg",
-  "authToken": "ghp_YOUR_GITHUB_TOKEN",
-  "adminPassword": "change-this",
   "delay": "10",
-  "serverPort": "62050",
-  "contributors": ["user1", "user2"]
+  "startDate": "2025-06-01",
+  "contributors": ["user1", "user2"],
+  "includedRepositories": ["Repo1", "Repo2"]
 }
 ```
 
-- `authToken` — required. GitHub personal access token with repo read access.
 - `delay` — seconds between API calls per contributor (respect rate limits).
-- `contributors` — array of GitHub usernames to track. Add users here even before their first contribution.
+- `startDate` — filter contributions from this date onwards.
+- `contributors` — array of GitHub usernames to track.
+- `includedRepositories` — repos to include in contribution tracking.
 
 ## Rules for Agents
 

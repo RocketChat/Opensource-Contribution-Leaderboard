@@ -2,11 +2,19 @@ const axios = require('axios')
 const chalk = require('chalk')
 const path = require('path')
 
-const Config = require(
-    process.env.LEADERBOARD_CONFIG_PATH
-        ? path.resolve(process.env.LEADERBOARD_CONFIG_PATH)
-        : path.resolve(__dirname, '../config.json')
-)
+function resolveConfigPath() {
+    if (process.env.LEADERBOARD_CONFIG_PATH) {
+        return path.resolve(process.env.LEADERBOARD_CONFIG_PATH)
+    }
+
+    if (process.env.CONFIG_PATH) {
+        return path.resolve(process.env.CONFIG_PATH)
+    }
+
+    return path.resolve(__dirname, '../config.json')
+}
+
+const Config = require(resolveConfigPath())
 
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'
@@ -17,7 +25,7 @@ async function get(url, _authToken) {
             headers: {
                 Accept: 'application/vnd.github.v3+json',
                 'User-Agent': 'GSoC-Contribution-Leaderboard',
-                Authorization: 'token ' + Config.authToken,
+                Authorization: 'token ' + (process.env.AUTH_TOKEN || Config.authToken),
             },
         })
         return new Promise((resolve) => {
@@ -38,7 +46,7 @@ async function get(url, _authToken) {
             case 'Bad credentials':
                 console.log(
                     chalk.red(
-                        '[ERROR] Your GitHub Token is not correct! Please check it in the config.json.'
+                        '[ERROR] Your GitHub Token is not correct! Please check the AUTH_TOKEN env variable.'
                     )
                 )
                 process.exit()
@@ -134,16 +142,22 @@ async function getIssuesNumber(IssuesURL) {
 async function getContributorInfo(
     organization,
     contributor,
-    includedRepositories
+    includedRepositories,
+    startDate
 ) {
+    if (!Array.isArray(includedRepositories)) {
+        includedRepositories = []
+    }
+
+    const effectiveStartDate = startDate || Config.startDate
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
-    let OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${Config.startDate}`
-    let openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:>=${Config.startDate}`
-    let MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:>=${Config.startDate}`
-    let mergedPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:merged+created:>=${Config.startDate}`
-    let IssuesURL = `/search/issues?q=is:issue+author:${contributor}+created:>=${Config.startDate}`
-    let issuesLink = `${BASEURL}/search?q=type:issue+author:${contributor}+created:>=${Config.startDate}`
+    let OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${effectiveStartDate}`
+    let openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:>=${effectiveStartDate}`
+    let MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:>=${effectiveStartDate}`
+    let mergedPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:merged+created:>=${effectiveStartDate}`
+    let IssuesURL = `/search/issues?q=is:issue+author:${contributor}+created:>=${effectiveStartDate}`
+    let issuesLink = `${BASEURL}/search?q=type:issue+author:${contributor}+created:>=${effectiveStartDate}`
     includedRepositories.forEach((repository) => {
         openPRsLink += `+repo:${organization}/${repository}`
         mergedPRsLink += `+repo:${organization}/${repository}`
