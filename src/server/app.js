@@ -1,3 +1,4 @@
+require('dotenv').config()
 const http = require('http')
 const jsonfile = require('jsonfile')
 const url = require('url')
@@ -10,12 +11,16 @@ const app = express()
 const proxy = require('http-proxy-middleware')
 const path = require('path')
 
-const configPath = './config.json'
-const admindataPath = './admindata.json'
-const dataPath = '../assets/data/data.json'
-const logPath = '../assets/data/log.json'
-const port = jsonfile.readFileSync(configPath).serverPort
-const configBackupPath = '../../configBackup.json'
+const configPath = process.env.CONFIG_PATH || './config.json'
+const admindataPath = process.env.ADMINDATA_PATH || './admindata.json'
+const dataPath = process.env.DATA_PATH || '../assets/data/data.json'
+const logPath = process.env.LOG_PATH || '../assets/data/log.json'
+const port = process.env.SERVER_PORT || 62050
+const configBackupPath = process.env.CONFIG_BACKUP_PATH || '../../configBackup.json'
+const organization = process.env.ORGANIZATION
+const organizationHomepage = process.env.ORGANIZATION_HOMEPAGE
+const organizationGithubUrl = process.env.ORGANIZATION_GITHUB_URL
+const adminPassword = process.env.ADMIN_PASSWORD
 const proxyOption = {
     target: 'http://localhost:' + port + '/',
     pathRewrite: { '^/api': '' },
@@ -66,7 +71,6 @@ process.on('exit', () => {
 const server = http
     .createServer((req, res) => {
         const route = url.parse(req.url).pathname
-        const { adminPassword } = jsonfile.readFileSync(configPath)
 
         switch (route) {
         case '/data':
@@ -84,12 +88,11 @@ const server = http
             })
             break
         case '/config':
-            var Config = jsonfile.readFileSync(configPath)
             res.end(
                 JSON.stringify({
-                    organization: Config.organization,
-                    organizationHomepage: Config.organizationHomepage,
-                    organizationGithubUrl: Config.organizationGithubUrl,
+                    organization: organization,
+                    organizationHomepage: organizationHomepage,
+                    organizationGithubUrl: organizationGithubUrl,
                 })
             )
             break
@@ -154,7 +157,7 @@ const server = http
                 res.end('Permission denied\n')
                 return
             }
-            var { organization, includedRepositories } = jsonfile.readFileSync(
+            var { includedRepositories } = jsonfile.readFileSync(
                 configPath
             )
             API.getRepositories(organization).then((repositories) => {
@@ -297,9 +300,10 @@ const server = http
                             // Add this contributor in the data.json
                             const data = jsonfile.readFileSync(dataPath)
                             API.getContributorInfo(
-                                Config.organization,
+                                organization,
                                 username,
-                                Config.includedRepositories
+                                Config.includedRepositories,
+                                Config.startDate
                             ).then((result) => {
                                 if (
                                     result.avatarUrl !== '' &&
