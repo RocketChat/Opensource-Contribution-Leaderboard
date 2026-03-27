@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   ci:
@@ -18,7 +18,7 @@ jobs:
       - name: Install root deps
         run: npm ci --legacy-peer-deps
       - name: Install server deps
-        run: npm --prefix src/server install
+        run: npm --prefix src/server ci
       - name: Lint
         run: npm run lint
       - name: Test
