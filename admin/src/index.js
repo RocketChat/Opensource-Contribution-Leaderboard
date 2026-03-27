@@ -36,11 +36,13 @@ submit.addEventListener('click', () => {
             const table = document.querySelector('.contributors-list')
             const totalTd = document.querySelector('td.total')
             const startDateInput = document.querySelector('.set-start-date')
+            const spamPenaltyInput = document.querySelector('.set-spam-penalty')
 
             loginPanel.classList.add('hide') // hide loading animation
             configPanel.classList.remove('hide')
             intervalInput.setAttribute('placeholder', delay)
             startDateInput.setAttribute('value', startDate)
+            spamPenaltyInput.setAttribute('placeholder', res.data.spamPenaltyThreshold || 0)
 
             contributors = sortByAlphabet(contributors, 'username')
 
@@ -176,6 +178,37 @@ submit.addEventListener('click', () => {
 
                     if (message === 'Success') {
                         mgsSuccess('Success')
+                    } else {
+                        msgError('Unexpected error')
+                    }
+                })
+            })
+
+            // Set spam penalty threshold
+            const setSpamPenaltyButton = document.querySelector('.set-spam-penalty-button.button')
+            setSpamPenaltyButton.addEventListener('click', () => {
+                const threshold = document.querySelector('.set-spam-penalty').value
+
+                if (threshold === '') {
+                    msgError('your input is empty')
+                    return
+                }
+
+                if (parseInt(threshold) < 0) {
+                    msgError('Threshold cannot be negative')
+                    return
+                }
+
+                axios.post('/api/setSpamPenaltyThreshold', {
+                    token: password,
+                    spamPenaltyThreshold: threshold
+                }).then( res => {
+                    const { message } = res.data
+
+                    if (message === 'Success') {
+                        mgsSuccess('Spam penalty threshold updated!')
+                        spamPenaltyInput.value = ''
+                        spamPenaltyInput.setAttribute('placeholder', threshold)
                     } else {
                         msgError('Unexpected error')
                     }

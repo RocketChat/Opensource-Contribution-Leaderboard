@@ -138,6 +138,7 @@ const server = http
                             delay,
                             contributors: contributorsList,
                             startDate,
+                            spamPenaltyThreshold: parseInt(jsonfile.readFileSync(configPath).spamPenaltyThreshold) || 0,
                         })
                     ) // success
                     jsonfile.writeFileSync(admindataPath, contributorsList)
