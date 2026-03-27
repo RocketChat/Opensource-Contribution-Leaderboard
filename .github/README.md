@@ -4,6 +4,8 @@
 
 [`workflows/ci.yml`](workflows/ci.yml) runs on pull requests and pushes to `master`: install dependencies, `npm run lint`, and `npm test`.
 
+It uses `npm install` for both the repo root and `src/server`, which matches the current repository setup after lockfiles were removed from `master`.
+
 ## Require CI before merging (branch protection)
 
 After this workflow is on the default branch:
