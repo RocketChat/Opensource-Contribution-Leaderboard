@@ -30,7 +30,7 @@
     "build": "npm --prefix admin run build && NODE_ENV=production webpack --config build/webpack.config.js",
     "serve": "cd src/server && NODE_ENV=development node app.js",
     "lint": "eslint .",
-    "test": "node --test \"test/**/*.test.js\""
+    "test": "node --test"
   },
   "husky": {
     "hooks": {
