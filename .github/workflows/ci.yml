@@ -14,10 +14,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
       - name: Install root deps
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
       - name: Install server deps
-        run: npm --prefix src/server install
+        run: npm --prefix src/server ci
       - name: Lint
         run: npm run lint
       - name: Test
