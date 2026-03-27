@@ -22,3 +22,5 @@ npm test
 ```
 
 Note: `npm i` at the repo root installs only root dependencies. The regression test boots `src/server/app.js`, so `src/server` dependencies must also be installed before running `npm test`.
+
+The test itself uses the env/path override support already available in the upstream dotenv-based server setup (`CONFIG_PATH`, `DATA_PATH`, `LOG_PATH`, `ADMINDATA_PATH`, `CONFIG_BACKUP_PATH`, `SERVER_PORT`) and does not require additional source changes under `src/server`.

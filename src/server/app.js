@@ -11,55 +11,23 @@ const app = express()
 const proxy = require('http-proxy-middleware')
 const path = require('path')
 
-function resolvePathFromEnv(primaryEnvName, secondaryEnvName, defaultRelativeToCwd) {
-    if (process.env[primaryEnvName]) {
-        return path.resolve(process.env[primaryEnvName])
-    }
-    if (process.env[secondaryEnvName]) {
-        return path.resolve(process.env[secondaryEnvName])
-    }
-    return path.resolve(process.cwd(), defaultRelativeToCwd)
-}
-
-const configPath = resolvePathFromEnv('LEADERBOARD_CONFIG_PATH', 'CONFIG_PATH', 'config.json')
-const admindataPath = resolvePathFromEnv('LEADERBOARD_ADMINDATA_PATH', 'ADMINDATA_PATH', 'admindata.json')
-const dataPath = resolvePathFromEnv('LEADERBOARD_DATA_PATH', 'DATA_PATH', '../assets/data/data.json')
-const logPath = resolvePathFromEnv('LEADERBOARD_LOG_PATH', 'LOG_PATH', '../assets/data/log.json')
-const configBackupPath = resolvePathFromEnv(
-    'LEADERBOARD_CONFIG_BACKUP_PATH',
-    'CONFIG_BACKUP_PATH',
-    '../../configBackup.json'
-)
-
-function getConfig() {
-    return jsonfile.readFileSync(configPath)
-}
-
-function getAdminPassword() {
-    return process.env.ADMIN_PASSWORD || getConfig().adminPassword
-}
-
-function getOrganizationConfig() {
-    const config = getConfig()
-    return {
-        organization: process.env.ORGANIZATION || config.organization,
-        organizationHomepage: process.env.ORGANIZATION_HOMEPAGE || config.organizationHomepage,
-        organizationGithubUrl: process.env.ORGANIZATION_GITHUB_URL || config.organizationGithubUrl,
-    }
-}
-
-const httpPort =
-    process.env.LEADERBOARD_PORT ||
-    process.env.SERVER_PORT ||
-    String(getConfig().serverPort || 62050)
-
+const configPath = process.env.CONFIG_PATH || './config.json'
+const admindataPath = process.env.ADMINDATA_PATH || './admindata.json'
+const dataPath = process.env.DATA_PATH || '../assets/data/data.json'
+const logPath = process.env.LOG_PATH || '../assets/data/log.json'
+const port = process.env.SERVER_PORT || 62050
+const configBackupPath = process.env.CONFIG_BACKUP_PATH || '../../configBackup.json'
+const organization = process.env.ORGANIZATION
+const organizationHomepage = process.env.ORGANIZATION_HOMEPAGE
+const organizationGithubUrl = process.env.ORGANIZATION_GITHUB_URL
+const adminPassword = process.env.ADMIN_PASSWORD
 const proxyOption = {
-    target: 'http://localhost:' + httpPort + '/',
+    target: 'http://localhost:' + port + '/',
     pathRewrite: { '^/api': '' },
     changeOrigin: true,
 }
 const websocketProxyOption = {
-    target: 'http://localhost:' + httpPort + '/',
+    target: 'http://localhost:' + port + '/',
     changeOrigin: true,
 }
 
@@ -91,19 +59,18 @@ if (!fs.existsSync(admindataPath)) {
     jsonfile.writeFileSync(admindataPath, [])
 }
 
-if (process.env.LEADERBOARD_SKIP_REFRESH !== '1') {
-    const refresh = spawn('node', ['refresh.js'], {
-        shell: true,
-        stdio: 'inherit',
-    })
-    process.on('exit', () => {
-        refresh.kill()
-    })
-}
+// spawn - `node refresh.js`
+const refresh = spawn('node', ['refresh.js'], {
+    shell: true,
+    stdio: 'inherit',
+})
+process.on('exit', () => {
+    refresh.kill() // kill it when exit
+})
 
-const server = http.createServer((req, res) => {
+const server = http
+    .createServer((req, res) => {
         const route = url.parse(req.url).pathname
-        const adminPassword = getAdminPassword()
 
         switch (route) {
         case '/data':
@@ -121,12 +88,11 @@ const server = http.createServer((req, res) => {
             })
             break
         case '/config':
-            var Config = getOrganizationConfig()
             res.end(
                 JSON.stringify({
-                    organization: Config.organization,
-                    organizationHomepage: Config.organizationHomepage,
-                    organizationGithubUrl: Config.organizationGithubUrl,
+                    organization: organization,
+                    organizationHomepage: organizationHomepage,
+                    organizationGithubUrl: organizationGithubUrl,
                 })
             )
             break
@@ -136,7 +102,9 @@ const server = http.createServer((req, res) => {
                 return
             }
 
-            var { delay, contributors, startDate } = getConfig()
+            var { delay, contributors, startDate } = jsonfile.readFileSync(
+                configPath
+            )
             var contributorsList = []
 
             Util.post(req, async (params) => {
@@ -144,7 +112,7 @@ const server = http.createServer((req, res) => {
                 if (token === adminPassword) {
                     await Promise.all(
                         contributors.map(async (contributor) => {
-                            const admindata = jsonfile.readFileSync(admindataPath)
+                            const admindata = jsonfile.readFileSync('./admindata.json')
                             const existContributor = findContributor(
                                 contributor,
                                 admindata
@@ -189,8 +157,10 @@ const server = http.createServer((req, res) => {
                 res.end('Permission denied\n')
                 return
             }
-            var { includedRepositories } = getConfig()
-            API.getRepositories(getOrganizationConfig().organization).then((repositories) => {
+            var { includedRepositories } = jsonfile.readFileSync(
+                configPath
+            )
+            API.getRepositories(organization).then((repositories) => {
                 if (repositories !== '') {
                     res.end(
                         JSON.stringify({
@@ -216,7 +186,7 @@ const server = http.createServer((req, res) => {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
                     // set includedRepositories in config.json
-                    const Config = getConfig()
+                    const Config = jsonfile.readFileSync(configPath)
                     Config.includedRepositories = includedRepositories
                     jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
                     jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
@@ -237,7 +207,7 @@ const server = http.createServer((req, res) => {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
                     // set startDate in config.json
-                    const Config = getConfig()
+                    const Config = jsonfile.readFileSync(configPath)
                     Config.startDate = startDate
                     jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
                     jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
@@ -259,7 +229,7 @@ const server = http.createServer((req, res) => {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
                     // set delay in config.json
-                    const Config = getConfig()
+                    const Config = jsonfile.readFileSync(configPath)
                     Config.delay = interval
                     jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
                     jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
@@ -280,7 +250,7 @@ const server = http.createServer((req, res) => {
                 if (token !== adminPassword) {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
-                    const Config = getConfig()
+                    const Config = jsonfile.readFileSync(configPath)
                     // Remove this contributor in config.json
                     Config.contributors.forEach((contributor, index, object) => {
                         if (contributor == username) {
@@ -311,7 +281,7 @@ const server = http.createServer((req, res) => {
                 if (token !== adminPassword) {
                     res.end(JSON.stringify({ message: 'Authentication failed' }))
                 } else {
-                    const Config = getConfig()
+                    const Config = jsonfile.readFileSync(configPath)
 
                     if (Config.contributors.includes(username)) {
                         res.end(JSON.stringify({ message: `${username} aready exists` }))
@@ -330,18 +300,18 @@ const server = http.createServer((req, res) => {
                             // Add this contributor in the data.json
                             const data = jsonfile.readFileSync(dataPath)
                             API.getContributorInfo(
-                                getOrganizationConfig().organization,
+                                organization,
                                 username,
                                 Config.includedRepositories,
                                 Config.startDate
-                            ).then((contributorInfo) => {
+                            ).then((result) => {
                                 if (
-                                    contributorInfo.avatarUrl !== '' &&
-                                    contributorInfo.issuesNumber !== -1 &&
-                                    contributorInfo.mergedPRsNumber !== -1 &&
-                                    contributorInfo.openPRsNumber !== -1
+                                    result.avatarUrl !== '' &&
+                    result.issuesNumber !== -1 &&
+                    result.mergedPRsNumber !== -1 &&
+                    result.openPRsNumber != -1
                                 ) {
-                                    data[`${username}`] = contributorInfo
+                                    data[`${username}`] = result
                                     // Update contributors infomation
                                     jsonfile.writeFile(dataPath, data, { spaces: 2 }, (err) => {
                                         if (err) console.error(err)
@@ -388,9 +358,9 @@ const server = http.createServer((req, res) => {
                 // Responds with rank of username
                 if (query.username) {
                     const rank =
-                        contributors
-                            .map((c) => c.toLowerCase())
-                            .indexOf(query.username.toLowerCase()) + 1
+              contributors
+                  .map((c) => c.toLowerCase())
+                  .indexOf(query.username.toLowerCase()) + 1
                     res.end(
                         JSON.stringify(
                             rank
@@ -442,6 +412,7 @@ const server = http.createServer((req, res) => {
             break
         }
     })
+    .listen(port)
 
 const io = require('socket.io')(server)
 io.on('connection', (socket) => {
@@ -455,10 +426,6 @@ io.on('connection', (socket) => {
         clearInterval(intervalId)
     })
 })
-
-server.listen(httpPort)
-
-module.exports = { server }
 
 function findContributor(contributorName, admindata) {
     let result = null

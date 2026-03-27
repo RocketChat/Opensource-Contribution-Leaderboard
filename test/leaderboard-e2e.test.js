@@ -1,7 +1,9 @@
 const { after, before, test } = require('node:test')
 const assert = require('assert')
+const childProcess = require('child_process')
 const fs = require('fs')
 const http = require('http')
+const nodeHttp = require('http')
 const path = require('path')
 const net = require('net')
 
@@ -19,6 +21,8 @@ const configBackupPath = path.join(fixturesDir, 'gsoc2025final.configBackup.json
 let server
 let baseUrl
 let expected
+const originalCreateServer = nodeHttp.createServer
+const originalSpawn = childProcess.spawn
 
 function getOpenPort() {
     return new Promise((resolve, reject) => {
@@ -71,19 +75,33 @@ before(async () => {
     const port = await getOpenPort()
 
     process.env.NODE_ENV = 'development'
-    process.env.LEADERBOARD_SKIP_REFRESH = '1'
-    process.env.LEADERBOARD_PORT = String(port)
-    process.env.LEADERBOARD_CONFIG_PATH = configPath
-    process.env.LEADERBOARD_DATA_PATH = dataPath
-    process.env.LEADERBOARD_LOG_PATH = logPath
-    process.env.LEADERBOARD_ADMINDATA_PATH = admindataPath
-    process.env.LEADERBOARD_CONFIG_BACKUP_PATH = configBackupPath
+    process.env.SERVER_PORT = String(port)
+    process.env.CONFIG_PATH = configPath
+    process.env.DATA_PATH = dataPath
+    process.env.LOG_PATH = logPath
+    process.env.ADMINDATA_PATH = admindataPath
+    process.env.CONFIG_BACKUP_PATH = configBackupPath
 
     expected = JSON.parse(fs.readFileSync(expectedPath, 'utf8'))
 
+    childProcess.spawn = function (command, args) {
+        if (command === 'node' && Array.isArray(args) && args[0] === 'refresh.js') {
+            return {
+                kill() {},
+            }
+        }
+
+        return originalSpawn.apply(this, arguments)
+    }
+
+    nodeHttp.createServer = function () {
+        server = originalCreateServer.apply(this, arguments)
+        return server
+    }
+
     const appPath = path.resolve(__dirname, '../src/server/app.js')
     delete require.cache[appPath]
-    ;({ server } = require(appPath))
+    require(appPath)
 
     baseUrl = `http://127.0.0.1:${port}`
 
@@ -107,6 +125,9 @@ after(async () => {
         })
     }
 
+    nodeHttp.createServer = originalCreateServer
+    childProcess.spawn = originalSpawn
+
     if (fs.existsSync(admindataPath)) {
         fs.unlinkSync(admindataPath)
     }
@@ -115,13 +136,12 @@ after(async () => {
         fs.unlinkSync(configBackupPath)
     }
 
-    delete process.env.LEADERBOARD_SKIP_REFRESH
-    delete process.env.LEADERBOARD_PORT
-    delete process.env.LEADERBOARD_CONFIG_PATH
-    delete process.env.LEADERBOARD_DATA_PATH
-    delete process.env.LEADERBOARD_LOG_PATH
-    delete process.env.LEADERBOARD_ADMINDATA_PATH
-    delete process.env.LEADERBOARD_CONFIG_BACKUP_PATH
+    delete process.env.SERVER_PORT
+    delete process.env.CONFIG_PATH
+    delete process.env.DATA_PATH
+    delete process.env.LOG_PATH
+    delete process.env.ADMINDATA_PATH
+    delete process.env.CONFIG_BACKUP_PATH
 })
 
 test('stable leaderboard stats and rankings match the golden snapshot', async () => {
