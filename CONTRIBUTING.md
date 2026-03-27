@@ -42,6 +42,15 @@ npm run serve
 
 Frontend at http://localhost:8080.
 
+> **Note**
+> If `npm run add` fails with an `ERESOLVE` peer dependency error on newer npm versions, install the workspaces manually with legacy peer dependency resolution:
+> ```bash
+> npm install --legacy-peer-deps
+> npm --prefix src/server install --legacy-peer-deps
+> npm --prefix admin install --legacy-peer-deps
+> ```
+> Different Node.js, npm, or yarn versions can regenerate lockfiles even when you did not intend to change dependencies. Keep your local tool versions in mind when testing setup issues, and do not include `package-lock.json`, `yarn.lock`, `admin/package-lock.json`, or `admin/yarn.lock` changes in a PR unless your contribution is intentionally updating dependencies or install behavior.
+
 For production build:
 ```bash
 NODE_OPTIONS=--openssl-legacy-provider npm run build

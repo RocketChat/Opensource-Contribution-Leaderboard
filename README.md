@@ -60,6 +60,14 @@ cd dist/server
 node app.js
 ```
 
+If `npm run add` fails with an `ERESOLVE` peer dependency error on newer npm versions, install the workspaces manually with legacy peer dependency resolution:
+
+```bash
+npm install --legacy-peer-deps
+npm --prefix src/server install --legacy-peer-deps
+npm --prefix admin install --legacy-peer-deps
+```
+
 Open **http://localhost:8080** — you're done.
 
 ## Config Reference
