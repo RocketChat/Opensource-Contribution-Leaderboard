@@ -1,5 +1,4 @@
 const axios = require('axios')
-const Config = require('../config.json')
 const chalk = require('chalk')
 
 const BASEURL = 'https://github.com'
@@ -24,7 +23,7 @@ async function get(url, _authToken) {
             headers: {
                 Accept: 'application/vnd.github.v3+json',
                 'User-Agent': 'GSoC-Contribution-Leaderboard',
-                Authorization: 'token ' + Config.authToken,
+                Authorization: 'token ' + process.env.AUTH_TOKEN,
             },
         })
         return new Promise((resolve) => {
@@ -45,7 +44,7 @@ async function get(url, _authToken) {
                 if (!hasLoggedBadCredentials) {
                     console.log(
                         chalk.red(
-                            '[ERROR] GitHub token is invalid or expired. Please update src/server/config.json (authToken) and restart the server.'
+                            '[ERROR] GitHub token is invalid or expired. Please update the AUTH_TOKEN env variable and restart the server.'
                         )
                     )
                     hasLoggedBadCredentials = true
@@ -156,19 +155,20 @@ async function getIssuesNumber(IssuesURL) {
 async function getContributorInfo(
     organization,
     contributor,
-    includedRepositories
+    includedRepositories,
+    startDate
 ) {
     if (!Array.isArray(includedRepositories)) {
         includedRepositories = []
     }
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
-    let OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${Config.startDate}`
-    let openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:>=${Config.startDate}`
-    let MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:>=${Config.startDate}`
-    let mergedPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:merged+created:>=${Config.startDate}`
-    let IssuesURL = `/search/issues?q=is:issue+author:${contributor}+created:>=${Config.startDate}`
-    let issuesLink = `${BASEURL}/search?q=type:issue+author:${contributor}+created:>=${Config.startDate}`
+    let OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${startDate}`
+    let openPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:open+created:>=${startDate}`
+    let MergedPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Merged+created:>=${startDate}`
+    let mergedPRsLink = `${BASEURL}/search?q=type:pr+author:${contributor}+is:merged+created:>=${startDate}`
+    let IssuesURL = `/search/issues?q=is:issue+author:${contributor}+created:>=${startDate}`
+    let issuesLink = `${BASEURL}/search?q=type:issue+author:${contributor}+created:>=${startDate}`
     includedRepositories.forEach((repository) => {
         openPRsLink += `+repo:${organization}/${repository}`
         mergedPRsLink += `+repo:${organization}/${repository}`

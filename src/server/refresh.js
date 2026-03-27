@@ -1,12 +1,13 @@
+require('dotenv').config()
 const Promise = require('bluebird')
 const API = require('./util/API')
 const jsonfile = require('jsonfile')
 const fs = require('fs')
 
-const dataBasePath = '../assets/data'
-const dataPath = '../assets/data/data.json'
-const logPath = '../assets/data/log.json'
-const configPath = './config.json'
+const dataBasePath = process.env.DATA_BASE_PATH || '../assets/data'
+const dataPath = process.env.DATA_PATH || '../assets/data/data.json'
+const logPath = process.env.LOG_PATH || '../assets/data/log.json'
+const configPath = process.env.CONFIG_PATH || './config.json'
 
 let interval = 150
 let dataBuffer = {}
@@ -27,9 +28,10 @@ if (fs.existsSync(logPath)) {
 
 async function getAllContributorsInfo() {
     let Config = jsonfile.readFileSync(configPath)
-    let organization = Config.organization
+    let organization = process.env.ORGANIZATION || Config.organization
     let contributors = Array.isArray(Config.contributors) ? Config.contributors : []
     let includedRepositories = Array.isArray(Config.includedRepositories) ? Config.includedRepositories : []
+    let startDate = Config.startDate
 
     interval = contributors.length < 150 ? 150 : (contributors.length + 10) // update interval
 
@@ -41,7 +43,12 @@ async function getAllContributorsInfo() {
         await Promise.delay(delay * 1000)
 
         try {
-            const res = await API.getContributorInfo(organization, contributor, includedRepositories)
+            const res = await API.getContributorInfo(
+                organization,
+                contributor,
+                includedRepositories,
+                startDate
+            )
             Config = jsonfile.readFileSync(configPath) // update Config
             delay = Config.delay // update delay
 

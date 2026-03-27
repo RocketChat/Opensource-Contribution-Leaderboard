@@ -1,11 +1,5 @@
 {
-  "organization": "RocketChat",
-  "organizationHomepage": "https://rocket.chat/",
-  "organizationGithubUrl": "https://github.com/RocketChat",
-  "authToken": "",
-  "adminPassword": "123456",
   "delay": "10",
-  "serverPort": "62050",
   "contributors": [
     "HusseinElFeky",
     "rodriq",

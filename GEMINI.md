@@ -42,24 +42,34 @@ npm start         # webpack-dev-server on :8080
 npm run serve     # backend on :62050 (in a second terminal)
 ```
 
-## Config File (src/server/config.json)
+## Config
+
+Static/environment settings live in `.env` (copy from `src/server/.env.example`):
+
+```bash
+AUTH_TOKEN=ghp_...              # GitHub personal access token
+ORGANIZATION=YourOrg             # GitHub org name
+ORGANIZATION_HOMEPAGE=https://yourorg.com/
+ORGANIZATION_GITHUB_URL=https://github.com/YourOrg
+ADMIN_PASSWORD=change-this       # admin panel password
+SERVER_PORT=62050                # backend API port
+```
+
+Dynamic/runtime values stay in `config.json` (modifiable via admin panel):
 
 ```json
 {
-  "organization": "YourOrg",
-  "organizationHomepage": "https://yourorg.com/",
-  "organizationGithubUrl": "https://github.com/YourOrg",
-  "authToken": "ghp_...",
-  "adminPassword": "change-this",
   "delay": "10",
-  "serverPort": "62050",
-  "contributors": ["username1", "username2"]
+  "startDate": "2025-06-01",
+  "contributors": ["username1", "username2"],
+  "includedRepositories": ["Repo1", "Repo2"]
 }
 ```
 
-- `authToken` — GitHub personal access token (needed for API rate limits)
 - `delay` — seconds between each contributor's API poll
+- `startDate` — filter contributions from this date onwards
 - `contributors` — GitHub usernames to track
+- `includedRepositories` — repos to include in tracking
 
 ## Design Decisions You Must Respect
 

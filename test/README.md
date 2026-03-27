@@ -1,15 +1,31 @@
 # Regression tests
 
-This directory holds **automated regression tests** for server behavior (starting with invalid JSON handling for admin `POST` bodies and related error-handling work).
+This directory holds automated regression tests for server behavior.
 
-Tests are run with Node’s built-in test runner (`node --test`). **Node.js 18+** is required.
+Current suites:
 
-`npm test` runs `test/**/*.test.js` so new files can be added without changing the script.
+- `util-post.test.js` covers invalid JSON handling for admin `POST` bodies and related error-handling behavior.
+- `leaderboard-e2e.test.js` starts the current server code against a fixed Rocket.Chat snapshot and verifies that `/stats`, `/rank`, and selected `/contributor` and `/rank?username=` responses still match the checked-in expected output.
 
-Some tests were initially drafted with AI assistance; they are **kept in the repository on purpose** so the project builds a lasting regression suite instead of generating tests only to discard them after a green run.
+Tests are run with Node's built-in test runner (`node --test`). Node.js 18+ is required.
+
+Node version used for the leaderboard regression test:
+
+- Node.js `v25.4.0`
+
+Fixtures:
+
+- `../contrib/rocketchat/gsoc/2025/gsoc2025final.json` is the canonical snapshot used as the fixed leaderboard input.
+- `fixtures/gsoc2025final.expected.json` is the checked-in golden output generated from the current stable ranking logic and used for regression comparisons.
 
 From the repo root:
 
 ```bash
+npm i
+npm --prefix src/server install
 npm test
 ```
+
+Note: `npm i` at the repo root installs only root dependencies. The leaderboard regression test boots `src/server/app.js`, so `src/server` dependencies must also be installed before running `npm test`.
+
+The leaderboard test uses the env/path override support already available in the upstream dotenv-based server setup (`CONFIG_PATH`, `DATA_PATH`, `LOG_PATH`, `ADMINDATA_PATH`, `CONFIG_BACKUP_PATH`, `SERVER_PORT`) and does not require additional source changes under `src/server`.
