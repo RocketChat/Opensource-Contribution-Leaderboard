@@ -3,6 +3,7 @@ const chalk = require('chalk')
 
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'
+let rateLimitExceeded = false
 
 async function get(url, _authToken) {
     try {
@@ -37,6 +38,9 @@ async function get(url, _authToken) {
                 process.exit()
                 break
             default:
+                if (message.startsWith('API rate limit exceeded')) {
+                    rateLimitExceeded = true
+                }
                 console.log(chalk.yellow('[WARNING] ' + message))
             }
         } else {
@@ -243,4 +247,8 @@ module.exports = {
     checkRateLimit,
     getStats,
     getRanks,
+    isRateLimitExceeded: () => rateLimitExceeded,
+    resetRateLimitExceeded: () => {
+        rateLimitExceeded = false
+    },
 }
