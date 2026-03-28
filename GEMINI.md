@@ -1,4 +1,4 @@
-# Gemini AI Context — Opensource Contribution Leaderboard
+# Gemini AI Context — OpenSource Contribution Leaderboard
 
 ## What This Project Is
 
@@ -9,11 +9,11 @@ Built originally for Rocket.Chat's GSoC contributor tracking, but works for any 
 ## Project Architecture (keep it simple)
 
 ```
-index.html          ← frontend (vanilla HTML, rendered via webpack)
-src/index.js        ← frontend JS entry point (axios + socket.io-client)
-src/server/app.js   ← Express server (serves static files + proxies API + spawns refresh)
-src/server/refresh.js ← background worker that polls GitHub API and writes data.json
-src/server/config.json ← YOUR config (copy from config-example.json)
+index.html              ← frontend (vanilla HTML, rendered via webpack)
+src/index.js            ← frontend JS entry point (axios + socket.io-client)
+src/server/app.js       ← Express server (serves static files + proxies API + spawns refresh)
+src/server/refresh.js   ← background worker that polls GitHub API and writes data.json
+src/server/config.json  ← YOUR config (copy from config-example.json)
 src/server/util/API.js  ← GitHub API calls
 src/server/util/Util.js ← helper utilities
 admin/              ← admin panel (separate webpack build)
@@ -64,7 +64,9 @@ npm run serve     # backend on :62050 (in a second terminal)
 ## Design Decisions You Must Respect
 
 1. **No code changes without explicit request.** This project favors documentation and configuration changes. Keep the codebase stable.
+
 2. **Hidden rank column.** The rank column and some metadata are intentionally invisible on-screen. Admins can scrape the full stats by mouse-drag selecting the leaderboard table and copying — that's a one-stroke capture by design. Do not "fix" this by changing CSS or rendering logic.
+
 3. **Simplicity over complexity.** Avoid over-engineering. 
 
 ## REST API

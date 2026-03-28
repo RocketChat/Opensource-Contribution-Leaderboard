@@ -1,5 +1,5 @@
-import './style/style.css'
-import './style/bootstrap.css'
+// import './style/style.css'
+// import './style/bootstrap.css'
 import axios from 'axios'
 import moment from 'moment'
 import { io } from 'socket.io-client'
@@ -18,10 +18,11 @@ function refreshTable(newData) {
         })
     })
 
-    // reder total contributor numbers
+    // render total contributor numbers
     const totalNumbers = list.length
     const totalEm = document.querySelector('.total')
     totalEm.innerText = 'Total: ' + totalNumbers
+
 
     contributors = contributors.sort((a, b) => {
         var pref1, pref2, pref3 // preference is specified here
@@ -95,7 +96,7 @@ function refreshTable(newData) {
 
         // empty td tag
         tr.appendChild(document.createElement('td'))
-
+        
         // Open PRs
         const tdOpenPRs = document.createElement('td')
         const openPRs = document.createElement('a')

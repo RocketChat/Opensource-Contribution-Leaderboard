@@ -84,6 +84,7 @@ git rebase upstream/main
 ## Design Decisions You Must Respect
 
 1. **Hidden rank column** — The rank column and some stats are intentionally invisible. Admins can select-all and copy the table for one-stroke data capture. Do not "fix" this visibility.
+
 2. **Keep it simple** — Avoid over-engineering. no unnecessary abstractions.
 
 ## AI-Assisted Contributions
