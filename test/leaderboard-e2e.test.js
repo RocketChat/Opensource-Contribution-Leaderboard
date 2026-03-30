@@ -86,9 +86,16 @@ before(async () => {
 
     childProcess.spawn = function (command, args) {
         if (command === 'node' && Array.isArray(args) && args[0] === 'refresh.js') {
-            return {
+            const mockChild = {
                 kill() {},
+                on() {
+                    return mockChild
+                },
+                once() {
+                    return mockChild
+                },
             }
+            return mockChild
         }
 
         return originalSpawn.apply(this, arguments)
