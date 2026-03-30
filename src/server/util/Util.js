@@ -16,6 +16,9 @@ function post(req, callback) {
     }
 }
 
+
+
+
 function renderGoodFirstIssues(issues){
     const container = document.getElementById('goodFirstIssues')
     container.innerHTML ='<h2> Good First Issues</h2>'

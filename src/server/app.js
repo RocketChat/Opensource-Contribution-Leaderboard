@@ -67,7 +67,7 @@ const server = http
     .createServer((req, res) => {
         const route = url.parse(req.url).pathname
         const { adminPassword } = jsonfile.readFileSync(configPath)
-
+        
         switch (route) {
         case '/data':
             res.setHeader('Cache-Control', 'no-store')
@@ -240,7 +240,7 @@ const server = http
                 res.end('Permission denied\n')
                 return
             }
-
+                
             Util.post(req, (params) => {
                 const { token, username } = params
 
