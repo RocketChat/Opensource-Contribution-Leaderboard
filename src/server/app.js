@@ -93,6 +93,7 @@ const server = http
                     organization: organization,
                     organizationHomepage: organizationHomepage,
                     organizationGithubUrl: organizationGithubUrl,
+                    spamPenaltyThreshold: parseInt(jsonfile.readFileSync(configPath).spamPenaltyThreshold) || 0,
                 })
             )
             break
@@ -137,6 +138,7 @@ const server = http
                             delay,
                             contributors: contributorsList,
                             startDate,
+                            spamPenaltyThreshold: parseInt(jsonfile.readFileSync(configPath).spamPenaltyThreshold) || 0,
                         })
                     ) // success
                     jsonfile.writeFileSync(admindataPath, contributorsList)
@@ -234,6 +236,26 @@ const server = http
                     jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
                     jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
 
+                    res.end(JSON.stringify({ message: 'Success' }))
+                }
+            })
+            break
+        case '/setSpamPenaltyThreshold':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+
+            Util.post(req, (params) => {
+                const { token, spamPenaltyThreshold } = params
+
+                if (token !== adminPassword) {
+                    res.end(JSON.stringify({ message: 'Authentication failed' }))
+                } else {
+                    const Config = jsonfile.readFileSync(configPath)
+                    Config.spamPenaltyThreshold = parseInt(spamPenaltyThreshold) || 0
+                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
                     res.end(JSON.stringify({ message: 'Success' }))
                 }
             })
@@ -350,10 +372,11 @@ const server = http
             jsonfile.readFile(dataPath, async (err, obj) => {
                 if (err) console.log('[ERROR]' + err)
                 const query = url.parse(req.url, true).query
+                const Config = jsonfile.readFileSync(configPath)
 
                 // Gets list of contributors sorted by parameter if provided
                 // else defaults to sorting by mergedprs
-                const contributors = await API.getRanks(obj, query.parameter)
+                const contributors = await API.getRanks(obj, query.parameter, Config.spamPenaltyThreshold)
 
                 // Responds with rank of username
                 if (query.username) {
@@ -400,7 +423,8 @@ const server = http
                 } else if (query.rank) {
                     // Gets list of contributors sorted by parameter if provided
                     // else defaults to sorting by mergedprs
-                    const contributors = await API.getRanks(obj, query.parameter)
+                    const Config = jsonfile.readFileSync(configPath)
+                    const contributors = await API.getRanks(obj, query.parameter, Config.spamPenaltyThreshold)
                     res.end(JSON.stringify(obj[contributors[query.rank - 1]]))
                 } else {
                     res.end(JSON.stringify(obj))

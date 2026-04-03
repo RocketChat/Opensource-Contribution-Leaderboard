@@ -4,6 +4,8 @@ import axios from 'axios'
 import moment from 'moment'
 import { io } from 'socket.io-client'
 
+let spamPenaltyThreshold = 0
+
 function refreshTable(newData) {
     const table = document.querySelector('table')
     const data = newData
@@ -24,6 +26,15 @@ function refreshTable(newData) {
     totalEm.innerText = 'Total: ' + totalNumbers
 
     contributors = contributors.sort((a, b) => {
+        if (spamPenaltyThreshold > 0) {
+            const aPenalized = a.openPRsNumber > spamPenaltyThreshold || a.issuesNumber > spamPenaltyThreshold
+            const bPenalized = b.openPRsNumber > spamPenaltyThreshold || b.issuesNumber > spamPenaltyThreshold
+            const aTopTier = !aPenalized && a.mergedPRsNumber > 0
+            const bTopTier = !bPenalized && b.mergedPRsNumber > 0
+            if (aTopTier && !bTopTier) return -1
+            if (!aTopTier && bTopTier) return 1
+        }
+
         var pref1, pref2, pref3 // preference is specified here
         const queryString = window.location.search
         const urlParams = new URLSearchParams(queryString)
@@ -145,18 +156,18 @@ function refreshTable(newData) {
     allContributionsInfoRef.innerText = allMergedPRs + ' Merged PRs, ' + allOpenPRs + ' Open PRs, and ' + allIssues + ' Issues.'
 }
 
-axios.get('/api/data')
-    .then(res => {
-        refreshTable(res.data)
-    })
-
 axios.get('/api/config')
     .then(res => {
         const { organization, organizationGithubUrl, organizationHomepage } = res.data
+        spamPenaltyThreshold = res.data.spamPenaltyThreshold || 0
         const footer = document.querySelector('.footer .text-muted')
         footer.innerHTML = `
         <a href="${organizationHomepage}" target="_blank" rel="noopener noreferrer">${organizationHomepage}</a> |
         <a href="${organizationGithubUrl}" target="_blank" rel="noopener noreferrer">Github(${organization})</a>`.trim()
+        return axios.get('/api/data')
+    })
+    .then(res => {
+        refreshTable(res.data)
     })
 
 axios.get('/api/log')

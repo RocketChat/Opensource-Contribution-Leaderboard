@@ -147,7 +147,7 @@ table tr:hover {
   background: rgba(234, 241, 251, .4); 
 }
 
-.add-contributor, .set-interval, .set-start-date {
+.add-contributor, .set-interval, .set-start-date, .set-spam-penalty {
   border: 1px solid #dcdfe6;
   padding: 0 15px;
   margin-bottom: 20px;

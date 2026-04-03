@@ -186,7 +186,7 @@ async function getStats(data) {
     }
 }
 
-async function getRanks(data, parameter = 'mergedprs') {
+async function getRanks(data, parameter = 'mergedprs', spamPenaltyThreshold = 0) {
     var pref1, pref2, pref3 // preference is specified here
     switch (
         parameter //assigns according to parameter-sort (default 'mergedprs')
@@ -209,8 +209,19 @@ async function getRanks(data, parameter = 'mergedprs') {
         break
     }
 
+    const threshold = parseInt(spamPenaltyThreshold) || 0
+
     const contributors = Object.keys(data)
     return contributors.sort((a, b) => {
+        if (threshold > 0) {
+            const aPenalized = data[a].openPRsNumber > threshold || data[a].issuesNumber > threshold
+            const bPenalized = data[b].openPRsNumber > threshold || data[b].issuesNumber > threshold
+            const aTopTier = !aPenalized && data[a].mergedPRsNumber > 0
+            const bTopTier = !bPenalized && data[b].mergedPRsNumber > 0
+            if (aTopTier && !bTopTier) return -1
+            if (!aTopTier && bTopTier) return 1
+        }
+
         if (data[a][pref1] < data[b][pref1]) {
             return 1
         }
