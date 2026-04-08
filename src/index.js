@@ -76,7 +76,9 @@ function refreshTable(newData) {
         }
         return 0
     })
-    table.innerHTML = table.rows[0].innerHTML
+    while (table.rows.length > 1) {
+        table.deleteRow(1)
+    }
     var allOpenPRs = 0
     var allMergedPRs = 0
     var allIssues = 0
@@ -161,9 +163,26 @@ axios.get('/api/config')
         const { organization, organizationGithubUrl, organizationHomepage } = res.data
         spamPenaltyThreshold = res.data.spamPenaltyThreshold || 0
         const footer = document.querySelector('.footer .text-muted')
-        footer.innerHTML = `
-        <a href="${organizationHomepage}" target="_blank" rel="noopener noreferrer">${organizationHomepage}</a> |
-        <a href="${organizationGithubUrl}" target="_blank" rel="noopener noreferrer">Github(${organization})</a>`.trim()
+        footer.textContent = ''
+
+        const homepageLink = document.createElement('a')
+        homepageLink.href = organizationHomepage
+        homepageLink.target = '_blank'
+        homepageLink.rel = 'noopener noreferrer'
+        homepageLink.textContent = organizationHomepage
+
+        const separator = document.createTextNode(' | ')
+
+        const githubLink = document.createElement('a')
+        githubLink.href = organizationGithubUrl
+        githubLink.target = '_blank'
+        githubLink.rel = 'noopener noreferrer'
+        githubLink.textContent = 'Github(' + organization + ')'
+
+        footer.appendChild(homepageLink)
+        footer.appendChild(separator)
+        footer.appendChild(githubLink)
+
         return axios.get('/api/data')
     })
     .then(res => {
