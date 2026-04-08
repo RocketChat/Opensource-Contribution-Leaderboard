@@ -28,8 +28,9 @@ if (fs.existsSync(logPath)) {
 
 async function getAllContributorsInfo() {
     let Config = jsonfile.readFileSync(configPath)
-    let contributors = Config.contributors
-    let includedRepositories = Config.includedRepositories
+    let organization = process.env.ORGANIZATION || Config.organization
+    let contributors = Array.isArray(Config.contributors) ? Config.contributors : []
+    let includedRepositories = Array.isArray(Config.includedRepositories) ? Config.includedRepositories : []
     let startDate = Config.startDate
 
     interval = contributors.length < 150 ? 150 : (contributors.length + 10) // update interval
@@ -41,11 +42,17 @@ async function getAllContributorsInfo() {
 
         await Promise.delay(delay * 1000)
 
-        API.getContributorInfo(process.env.ORGANIZATION, contributor, includedRepositories, startDate).then( res => {
+        try {
+            const res = await API.getContributorInfo(
+                organization,
+                contributor,
+                includedRepositories,
+                startDate
+            )
             Config = jsonfile.readFileSync(configPath) // update Config
             delay = Config.delay // update delay
 
-            if (res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsNumber !== -1 && res.openPRsNumber != -1) {
+            if (res && res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsNumber !== -1 && res.openPRsNumber !== -1) {
                 
                 dataBuffer = jsonfile.readFileSync(dataPath)
 
@@ -58,8 +65,12 @@ async function getAllContributorsInfo() {
                         if (err) console.error(err)
                     })
                 }
+            } else {
+                console.log(`[WARNING] Skipped update for ${contributor}. Check GitHub token, rate limit, or network status.`)
             }
-        })
+        } catch (err) {
+            console.log(`[ERROR] Failed to update ${contributor}: ${err && err.message ? err.message : err}`)
+        }
 
         // Record time
         logBuffer.endtime = Date.now()

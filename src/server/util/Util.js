@@ -1,4 +1,4 @@
-function post(req, callback) {
+function post(req, res, callback) {
     if(req.method === 'POST') {
         let body = ''
         
@@ -10,6 +10,9 @@ function post(req, callback) {
             try {
                 callback(JSON.parse(body))
             } catch (ex) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ message: 'Invalid JSON body' }))
                 return
             }
         })

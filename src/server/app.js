@@ -31,6 +31,23 @@ const websocketProxyOption = {
     changeOrigin: true,
 }
 
+function sendJson(res, statusCode, payload) {
+    res.statusCode = statusCode
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(payload))
+}
+
+function readJsonFileOr500(res, filePath, callback) {
+    jsonfile.readFile(filePath, (err, obj) => {
+        if (err) {
+            console.log('[ERROR]' + err)
+            sendJson(res, 500, { message: 'Failed to read server data' })
+            return
+        }
+        callback(obj)
+    })
+}
+
 Object.defineProperty(Array.prototype, 'flat', {
     value: function (depth = 1) {
         return this.reduce(function (flat, toFlatten) {
@@ -64,6 +81,12 @@ const refresh = spawn('node', ['refresh.js'], {
     shell: true,
     stdio: 'inherit',
 })
+refresh.on('exit', (code) => {
+    console.log(`[ERROR] refresh.js exited with code ${code}. Leaderboard data may become stale.`)
+})
+refresh.on('error', (err) => {
+    console.log(`[ERROR] Failed to start refresh.js: ${err.message}`)
+})
 process.on('exit', () => {
     refresh.kill() // kill it when exit
 })
@@ -75,15 +98,13 @@ const server = http
         switch (route) {
         case '/data':
             res.setHeader('Cache-Control', 'no-store')
-            jsonfile.readFile(dataPath, (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
+            readJsonFileOr500(res, dataPath, (obj) => {
                 res.end(JSON.stringify(obj))
             })
             break
         case '/log':
             res.setHeader('Cache-Control', 'no-store')
-            jsonfile.readFile(logPath, (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
+            readJsonFileOr500(res, logPath, (obj) => {
                 res.end(JSON.stringify(obj))
             })
             break
@@ -108,7 +129,7 @@ const server = http
             )
             var contributorsList = []
 
-            Util.post(req, async (params) => {
+            Util.post(req, res, async (params) => {
                 const { token } = params
                 if (token === adminPassword) {
                     await Promise.all(
@@ -181,7 +202,7 @@ const server = http
                 return
             }
 
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, includedRepositories } = params
 
                 if (token !== adminPassword) {
@@ -202,7 +223,7 @@ const server = http
                 res.end('Permission denied\n')
                 return
             }
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, startDate } = params
 
                 if (token !== adminPassword) {
@@ -224,7 +245,7 @@ const server = http
                 return
             }
 
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, interval } = params
 
                 if (token !== adminPassword) {
@@ -266,7 +287,7 @@ const server = http
                 return
             }
 
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, username } = params
 
                 if (token !== adminPassword) {
@@ -297,7 +318,7 @@ const server = http
                 return
             }
 
-            Util.post(req, (params) => {
+            Util.post(req, res, (params) => {
                 const { token, username } = params
 
                 if (token !== adminPassword) {
@@ -313,6 +334,10 @@ const server = http
                     API.getContributorAvatar(username).then((result) => {
                         if (result === '') {
                             res.end(JSON.stringify({ message: 'Not found' }))
+                        } else if (!result) {
+                            res.end(JSON.stringify({
+                                message: 'Unable to fetch contributor profile. Check GitHub token and network connectivity.',
+                            }))
                         } else {
                             // Add this contributor in config.json
                             Config.contributors.unshift(username)
@@ -358,8 +383,7 @@ const server = http
                 return
             }
 
-            jsonfile.readFile(dataPath, async (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
+            readJsonFileOr500(res, dataPath, async (obj) => {
                 res.end(JSON.stringify(await API.getStats(obj)))
             })
             break
@@ -369,8 +393,7 @@ const server = http
                 return
             }
 
-            jsonfile.readFile(dataPath, async (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
+            readJsonFileOr500(res, dataPath, async (obj) => {
                 const query = url.parse(req.url, true).query
                 const Config = jsonfile.readFileSync(configPath)
 
@@ -408,8 +431,7 @@ const server = http
                 return
             }
 
-            jsonfile.readFile(dataPath, async (err, obj) => {
-                if (err) console.log('[ERROR]' + err)
+            readJsonFileOr500(res, dataPath, async (obj) => {
                 const query = url.parse(req.url, true).query
 
                 if (query.username) {

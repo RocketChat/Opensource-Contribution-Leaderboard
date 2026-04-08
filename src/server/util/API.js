@@ -3,6 +3,19 @@ const chalk = require('chalk')
 
 const BASEURL = 'https://github.com'
 const APIHOST = 'https://api.github.com'
+let hasLoggedBadCredentials = false
+
+function getRateLimitResetMessage(headers) {
+    const resetHeader = headers && headers['x-ratelimit-reset']
+    if (!resetHeader) {
+        return ''
+    }
+    const resetTime = Number(resetHeader) * 1000
+    if (!Number.isFinite(resetTime)) {
+        return ''
+    }
+    return ` Retry after ${new Date(resetTime).toISOString()}.`
+}
 
 async function get(url, _authToken) {
     try {
@@ -22,25 +35,40 @@ async function get(url, _authToken) {
         })
     } catch (err) {
         if (err.code === 'ECONNABORTED') {
-            console.log(chalk.yellow('[WARNING] Time Out.'))
+            console.log(chalk.yellow('[WARNING] GitHub API request timed out.'))
             return
         }
         if (err.response !== undefined) {
             const message = err.response.data.message
-            switch (message) {
-            case 'Bad credentials':
+            if (message === 'Bad credentials') {
+                if (!hasLoggedBadCredentials) {
+                    console.log(
+                        chalk.red(
+                            '[ERROR] GitHub token is invalid or expired. Please update the AUTH_TOKEN env variable and restart the server.'
+                        )
+                    )
+                    hasLoggedBadCredentials = true
+                }
+                return
+            }
+            if (message && message.indexOf('API rate limit exceeded') === 0) {
                 console.log(
-                    chalk.red(
-                        '[ERROR] Your GitHub Token is not correct! Please check the AUTH_TOKEN env variable.'
+                    chalk.yellow(
+                        '[WARNING] GitHub API rate limit exceeded.' +
+                            getRateLimitResetMessage(err.response.headers)
                     )
                 )
-                process.exit()
-                break
-            default:
-                console.log(chalk.yellow('[WARNING] ' + message))
+                return
             }
+            console.log(chalk.yellow('[WARNING] ' + message))
         } else {
-            console.log(err)
+            console.log(
+                chalk.yellow(
+                    `[WARNING] GitHub API request failed: ${
+                        err.message || 'Unknown network error'
+                    }`
+                )
+            )
         }
     }
 }
@@ -130,6 +158,9 @@ async function getContributorInfo(
     includedRepositories,
     startDate
 ) {
+    if (!Array.isArray(includedRepositories)) {
+        includedRepositories = []
+    }
     const home = BASEURL + '/' + contributor
     const avatarUrl = await getContributorAvatar(contributor)
     let OpenPRsURL = `/search/issues?q=is:pr+author:${contributor}+is:Open+created:>=${startDate}`
