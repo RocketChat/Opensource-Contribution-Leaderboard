@@ -5,6 +5,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>GSoC Contribution Leaderboard</title>
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (theme) document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 
 <body>
@@ -13,7 +19,8 @@
         src="https://cdn.worldvectorlogo.com/logos/rocket-chat.svg" height="42" width="42"> GSoC Contribution
       Leaderboard</a>
     <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
+      <li class="nav-item text-nowrap" style="display:flex;align-items:center;">
+        <button id="theme-toggle" class="theme-toggle-btn" title="Toggle dark/light mode"></button>
         <a class="nav-link" id="github" href="https://github.com/RocketChat/GSoC-Contribution-Leaderboard-Node"
           target="_blank" rel="noopener noreferrer">
           <img src="https://pluspng.com/img-png/github-octocat-vector-png--1600.png" height="45" width="45">
@@ -22,33 +29,31 @@
     </ul>
   </nav>
   <div class="container">
-    <hr>
     <h2 style="display:inline;">Contributors</h2>
-    <em class="total" style="font-size: 16px;color:white">Total:</em>
+    <em class="total hidden-stat" style="font-size: 16px;">Total:</em>
     <span class="text-muted lastupdate" style="float:right;text-align: right;font-size: 12px;"></span>
     <table style="margin: 0; width: 100%; font-size: 16px;" cellpadding="0" cellspacing="0">
       <tr>
         <td></td>
-        <td colspan="1" style="font-weight: bold; padding: 32px 8px 8px 8px; color: #333;">
+        <td colspan="1" class="col-header" style="font-weight: bold; padding: 32px 8px 8px 8px;">
           Username
         </td>
         <td></td>
         <td
           style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
-          <a href="?sort=p">Open PRs</a><div id="allOpenPRs" style="color: white;display:inline; position: absolute;"></div>
+          <a href="?sort=p">Open PRs</a><div id="allOpenPRs" class="hidden-stat" style="display:inline; position: absolute;"></div>
         </td>
         <td
           style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
-          <a href="?sort=m">Merged PRs</a><div id="allMergedPRs" style="color: white;display:inline; position: absolute;"></div>
+          <a href="?sort=m">Merged PRs</a><div id="allMergedPRs" class="hidden-stat" style="display:inline; position: absolute;"></div>
         </td>
         <td
           style="padding: 32px 8px 8px 8px; margin: 0; font-size: 12px; color: #9BA2AB; font-family: Helvetica, Arial, sans-serif;">
-          <a href="?sort=i">Issues</a><div id="allIssues" style="color: white;display:inline; position: absolute;"></div>
+          <a href="?sort=i">Issues</a><div id="allIssues" class="hidden-stat" style="display:inline; position: absolute;"></div>
         </td>
       </tr>
     </table>
-    <hr>
-    <div id="allContributionsInfo" style="color: white;">Test</div>
+    <div id="allContributionsInfo" class="hidden-stat">Test</div>
   </div>
   <footer class="footer mt-auto py-3">
       <div class="container">
