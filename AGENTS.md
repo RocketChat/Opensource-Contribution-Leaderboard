@@ -17,7 +17,7 @@ This file provides context for any AI coding agent (Copilot, Cursor, Windsurf, C
 | Admin panel | `admin/` (separate webpack build) |
 | Webpack config (main) | `build/webpack.config.js` |
 | Webpack config (admin) | `admin/build/webpack.config.js` |
-| REST API docs | `REST-API.md` |
+| REST API docs | `docs/rest-api.md` |
 | Cached leaderboard data | `src/assets/data/data.json` (auto-generated) |
 
 ## npm Scripts
@@ -34,7 +34,7 @@ This file provides context for any AI coding agent (Copilot, Cursor, Windsurf, C
 
 1. `app.js` starts an Express server on port 8080
 2. It spawns `refresh.js` as a child process
-3. `refresh.js` reads `config.json`, loops through the `contributors` array, and calls the GitHub API for each one
+3. `refresh.js` reads `config.json` (auto-created from `config-example.json` if missing), loops through the `contributors` array, and calls the GitHub API for each one
 4. Results are written to `src/assets/data/data.json`
 5. The frontend fetches `/data` endpoint which serves `data.json`
 6. Real-time updates via socket.io
@@ -79,6 +79,8 @@ Backend port: whatever `SERVER_PORT` is set to in .env (default 62050)
 ## Config Reference
 
 Static/environment settings live in `.env` (copy from `src/server/.env.example`):
+
+For a quick local demo, the app can run without `.env` by using built-in defaults.
 
 ```bash
 AUTH_TOKEN=ghp_YOUR_GITHUB_TOKEN      # required — GitHub personal access token

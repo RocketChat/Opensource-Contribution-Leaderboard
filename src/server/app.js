@@ -11,16 +11,25 @@ const app = express()
 const proxy = require('http-proxy-middleware')
 const path = require('path')
 
-const configPath = process.env.CONFIG_PATH || './config.json'
+const configuredConfigPath = process.env.CONFIG_PATH || './config.json'
+const defaultConfigPath = './config-example.json'
+if (!fs.existsSync(configuredConfigPath) && fs.existsSync(defaultConfigPath)) {
+    jsonfile.writeFileSync(
+        configuredConfigPath,
+        jsonfile.readFileSync(defaultConfigPath),
+        { spaces: 2 }
+    )
+}
+const configPath = configuredConfigPath
 const admindataPath = process.env.ADMINDATA_PATH || './admindata.json'
 const dataPath = process.env.DATA_PATH || '../assets/data/data.json'
 const logPath = process.env.LOG_PATH || '../assets/data/log.json'
 const port = process.env.SERVER_PORT || 62050
 const configBackupPath = process.env.CONFIG_BACKUP_PATH || '../../configBackup.json'
-const organization = process.env.ORGANIZATION
-const organizationHomepage = process.env.ORGANIZATION_HOMEPAGE
-const organizationGithubUrl = process.env.ORGANIZATION_GITHUB_URL
-const adminPassword = process.env.ADMIN_PASSWORD
+const organization = process.env.ORGANIZATION || 'RocketChat'
+const organizationHomepage = process.env.ORGANIZATION_HOMEPAGE || 'https://rocket.chat/'
+const organizationGithubUrl = process.env.ORGANIZATION_GITHUB_URL || 'https://github.com/RocketChat'
+const adminPassword = process.env.ADMIN_PASSWORD || 'admin'
 const proxyOption = {
     target: 'http://localhost:' + port + '/',
     pathRewrite: { '^/api': '' },
