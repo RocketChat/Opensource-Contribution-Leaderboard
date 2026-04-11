@@ -84,7 +84,7 @@ Endpoints at `/api/`:
 - `GET /api/rank?username=X&parameter=mergedprs|openprs|issues` — get rank
 - `GET /api/contributor?username=X&rank=N&parameter=...` — get contributor details
 
-See `REST-API.md` for full docs.
+See `docs/rest-api.md` for full docs.
 
 ## Key Dependencies
 

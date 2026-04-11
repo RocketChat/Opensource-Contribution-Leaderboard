@@ -7,24 +7,39 @@ const fs = require('fs')
 const dataBasePath = process.env.DATA_BASE_PATH || '../assets/data'
 const dataPath = process.env.DATA_PATH || '../assets/data/data.json'
 const logPath = process.env.LOG_PATH || '../assets/data/log.json'
-const configPath = process.env.CONFIG_PATH || './config.json'
+const configuredConfigPath = process.env.CONFIG_PATH || './config.json'
+const defaultConfigPath = './config-example.json'
+if (!fs.existsSync(configuredConfigPath) && fs.existsSync(defaultConfigPath)) {
+    jsonfile.writeFileSync(
+        configuredConfigPath,
+        jsonfile.readFileSync(defaultConfigPath),
+        { spaces: 2 }
+    )
+}
+const configPath = configuredConfigPath
+
+function ensureJsonFile(filePath, defaultValue) {
+    if (!fs.existsSync(filePath)) {
+        jsonfile.writeFileSync(filePath, defaultValue, { spaces: 2 })
+        return defaultValue
+    }
+
+    try {
+        return jsonfile.readFileSync(filePath)
+    } catch (error) {
+        jsonfile.writeFileSync(filePath, defaultValue, { spaces: 2 })
+        return defaultValue
+    }
+}
 
 let interval = 150
-let dataBuffer = {}
-let logBuffer = {}
-let delay = jsonfile.readFileSync(configPath).delay
-
 if (!fs.existsSync(dataBasePath)) {
     fs.mkdirSync(dataBasePath)
 }
 
-if (!fs.existsSync(dataPath)) {
-    jsonfile.writeFileSync(dataPath, {} )
-}
-
-if (fs.existsSync(logPath)) {
-    logBuffer = jsonfile.readFileSync(logPath)
-}
+let dataBuffer = ensureJsonFile(dataPath, {})
+let logBuffer = ensureJsonFile(logPath, {})
+let delay = jsonfile.readFileSync(configPath).delay
 
 async function getAllContributorsInfo() {
     let Config = jsonfile.readFileSync(configPath)
@@ -41,13 +56,13 @@ async function getAllContributorsInfo() {
 
         await Promise.delay(delay * 1000)
 
-        API.getContributorInfo(process.env.ORGANIZATION, contributor, includedRepositories, startDate).then( res => {
+        API.getContributorInfo(process.env.ORGANIZATION || 'RocketChat', contributor, includedRepositories, startDate).then( res => {
             Config = jsonfile.readFileSync(configPath) // update Config
             delay = Config.delay // update delay
 
             if (res.avatarUrl !== '' && res.issuesNumber !== -1 && res.mergedPRsNumber !== -1 && res.openPRsNumber != -1) {
                 
-                dataBuffer = jsonfile.readFileSync(dataPath)
+                dataBuffer = ensureJsonFile(dataPath, {})
 
                 if (Config.contributors.includes(contributor)) {
                     dataBuffer[`${contributor}`] = res

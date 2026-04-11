@@ -1,10 +1,10 @@
-## Automated Data Fetch REST-API
+## Automated Data Fetch REST API
 
 The following endpoints can be used to fetch leaderboard data.
 
 `/stats`
 
-Gets important statistics about the leaderboard. 
+Gets important statistics about the leaderboard.
 
 **Example Call**
 
@@ -27,15 +27,15 @@ curl --request GET 'http://localhost:8080/api/stats'
 
 `/rank`
 
-Used to rank contributors by a parameter. Can be used to fetch the rank of a contributor based on a parameter (defaults to number of merged PRs). 
+Used to rank contributors by a parameter. Can be used to fetch the rank of a contributor based on a parameter (defaults to number of merged PRs).
 
-Provides ranked list of contributor usernames sorted by `mergedprs` if no parameters provided. 
+Provides ranked list of contributor usernames sorted by `mergedprs` if no parameters provided.
 
 **Query Parameters**
 
 | Argument  | Example | Required | Description
 | ------------- | ------------- | ------------- | -------------
-| parameter  | openprs | Optional | Can take values `openprs`, `issues`, `mergedprs` to rank contributors by. Defaults to `mergedprs`. 
+| parameter  | openprs | Optional | Can take values `openprs`, `issues`, `mergedprs` to rank contributors by. Defaults to `mergedprs`.
 | username | RonLek | Optional | Username of any contributor within the leaderboard. Returns error response if username not found. Case-insensitive.
 
 **Example Call 1**
@@ -84,7 +84,7 @@ Provides all contributor data if no parameters provided.
 
 | Argument  | Example | Required | Description
 | ------------- | ------------- | ------------- | -------------
-| parameter  | openprs | Optional | Can take values `openprs`, `issues`, `mergedprs` to rank contributors by. Defaults to `mergedprs`. 
+| parameter  | openprs | Optional | Can take values `openprs`, `issues`, `mergedprs` to rank contributors by. Defaults to `mergedprs`.
 | username | RonLek | Optional | Username of any contributor within the leaderboard. Returns error response if username not found. Case-sensitive.
 | rank | 3 | Optional | Rank starting with 1.
 

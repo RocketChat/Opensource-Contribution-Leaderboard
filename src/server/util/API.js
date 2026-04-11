@@ -6,12 +6,17 @@ const APIHOST = 'https://api.github.com'
 
 async function get(url, _authToken) {
     try {
+        const headers = {
+            Accept: 'application/vnd.github.v3+json',
+            'User-Agent': 'GSoC-Contribution-Leaderboard',
+        }
+
+        if (process.env.AUTH_TOKEN) {
+            headers.Authorization = 'token ' + process.env.AUTH_TOKEN
+        }
+
         let res = await axios.get(url, {
-            headers: {
-                Accept: 'application/vnd.github.v3+json',
-                'User-Agent': 'GSoC-Contribution-Leaderboard',
-                Authorization: 'token ' + process.env.AUTH_TOKEN,
-            },
+            headers,
         })
         return new Promise((resolve) => {
             if (res.code === 0) {
