@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const path = require('path')
-console.log("Using TerserPlugin ") 
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')

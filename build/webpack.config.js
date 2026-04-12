@@ -170,7 +170,7 @@ const production = merge(common, {
     ]
 })
 
-//process.env.NODE_ENV === 'production'?module.exports = production:module.exports = development
+
 module.exports =
   process.env.NODE_ENV === 'production'
     ? production

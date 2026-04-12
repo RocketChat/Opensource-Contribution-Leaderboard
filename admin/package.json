@@ -16,8 +16,8 @@
     "webpack-merge": "^4.2.1"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js"
+    "start": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
+    "build": "NODE_ENV=production webpack --config build/webpack.config.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
