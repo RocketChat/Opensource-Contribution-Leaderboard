@@ -11,7 +11,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "uglifyjs-webpack-plugin": "1.1.6",
+    "terser-webpack-plugin": "^4.2.3",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
@@ -20,6 +20,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "chalk": "^2.4.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "jsonfile": "^5.0.0",
     "moment": "^2.24.0",
     "socket.io-client": "^3.0.4"
@@ -27,10 +29,11 @@
   "scripts": {
     "add": "npm install && npm --prefix src/server install && npm --prefix admin install",
     "start": "npm run build && NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
-    "build": "npm --prefix admin run build && NODE_ENV=production webpack --config build/webpack.config.js",
-    "serve": "cd src/server && NODE_ENV=development node app.js",
+    "build": "npm --prefix admin run build && NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production webpack --config build/webpack.config.js",
+    "serve": "cd src/server &&  NODE_ENV=development node app.js",
     "lint": "eslint .",
     "test": "node --test"
+    
   },
   "husky": {
     "hooks": {

@@ -11,7 +11,7 @@ const configPath = process.env.CONFIG_PATH || './config.json'
 
 let interval = 150
 let dataBuffer = {}
-let logBuffer = {}
+let logBuffer =  {}
 let delay = jsonfile.readFileSync(configPath).delay
 
 if (!fs.existsSync(dataBasePath)) {

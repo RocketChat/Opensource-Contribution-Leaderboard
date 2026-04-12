@@ -8,5 +8,8 @@
     "http-proxy-middleware": "^0.19.1",
     "jsonfile": "^5.0.0",
     "socket.io": "^3.0.4"
+  },
+  "scripts": {
+    "start": "node src/server/index.js"
   }
 }

@@ -3,7 +3,7 @@ const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const optimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const merge = require('webpack-merge')
@@ -121,23 +121,24 @@ const production = merge(common, {
             }
         },
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserPlugin({
                 exclude: /\.min\.js$/,
                 cache: true,
+                parallel: true,
                 sourceMap: false,
                 extractComments: false,
-                uglifyOptions: {
-                    parallel: 4,
+                terserOptions: {
                     ecma: 8,
                     compress: {
                         toplevel: true,
-                        warnings: false,
                     },
                     output: {
                         comments: false
                     }
                 }
-            }),
+                
+            }),     
+            
             new optimizeCssAssetsPlugin({
                 assetNameRegExp: /\.css$/g,
                 cssProcessorOptions: {
