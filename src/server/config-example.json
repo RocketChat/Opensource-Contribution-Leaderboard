@@ -1,11 +1,5 @@
 {
-  "organization": "RocketChat",
-  "organizationHomepage": "https://rocket.chat/",
-  "organizationGithubUrl": "https://github.com/RocketChat",
-  "authToken": "",
-  "adminPassword": "123456",
   "delay": "10",
-  "serverPort": "62050",
   "contributors": [
     "HusseinElFeky",
     "rodriq",
@@ -140,6 +134,7 @@
     "abdelazeem777\t"
   ],
   "startDate": "1970-01-15",
+  "spamPenaltyThreshold": 10,
   "includedRepositories": [
     "Rocket.Chat",
     "Opensource-Contribution-Leaderboard",

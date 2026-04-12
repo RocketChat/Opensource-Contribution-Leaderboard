@@ -36,15 +36,17 @@ submit.addEventListener('click', () => {
             const table = document.querySelector('.contributors-list')
             const totalTd = document.querySelector('td.total')
             const startDateInput = document.querySelector('.set-start-date')
+            const spamPenaltyInput = document.querySelector('.set-spam-penalty')
 
             loginPanel.classList.add('hide') // hide loading animation
             configPanel.classList.remove('hide')
             intervalInput.setAttribute('placeholder', delay)
             startDateInput.setAttribute('value', startDate)
+            spamPenaltyInput.setAttribute('placeholder', res.data.spamPenaltyThreshold || 0)
 
             contributors = sortByAlphabet(contributors, 'username')
 
-            totalTd.innerHTML = 'Total: ' + contributors.length
+            totalTd.textContent = 'Total: ' + contributors.length
 
             contributors.forEach( contributor => {
                 const { username, avatarUrl } = contributor
@@ -59,10 +61,17 @@ submit.addEventListener('click', () => {
                 avatarTd.appendChild(avatarImg)
 
                 const usernameTd = document.createElement('td')
-                usernameTd.innerHTML = `<a href="${usernameLink}">${username}</a>`
+                const usernameA = document.createElement('a')
+                usernameA.href = usernameLink
+                usernameA.textContent = username
+                usernameTd.appendChild(usernameA)
 
                 const removeTd = document.createElement('td')
-                removeTd.innerHTML = `<div class="button remove" value="${username}">Remove</div>`
+                const removeDiv = document.createElement('div')
+                removeDiv.className = 'button remove'
+                removeDiv.setAttribute('value', username)
+                removeDiv.textContent = 'Remove'
+                removeTd.appendChild(removeDiv)
 
                 tr.appendChild(avatarTd)
                 tr.appendChild(usernameTd)
@@ -100,7 +109,7 @@ submit.addEventListener('click', () => {
                         checkboxTd.appendChild(checkbox)
                         
                         const repositoryTd = document.createElement('td')
-                        repositoryTd.innerHTML = repoName
+                        repositoryTd.textContent = repoName
                         repositoryTd.style.textAlign = 'right'
 
                         repoRow.appendChild(repositoryTd)
@@ -182,6 +191,37 @@ submit.addEventListener('click', () => {
                 })
             })
 
+            // Set spam penalty threshold
+            const setSpamPenaltyButton = document.querySelector('.set-spam-penalty-button.button')
+            setSpamPenaltyButton.addEventListener('click', () => {
+                const threshold = document.querySelector('.set-spam-penalty').value
+
+                if (threshold === '') {
+                    msgError('your input is empty')
+                    return
+                }
+
+                if (parseInt(threshold) < 0) {
+                    msgError('Threshold cannot be negative')
+                    return
+                }
+
+                axios.post('/api/setSpamPenaltyThreshold', {
+                    token: password,
+                    spamPenaltyThreshold: threshold
+                }).then( res => {
+                    const { message } = res.data
+
+                    if (message === 'Success') {
+                        mgsSuccess('Spam penalty threshold updated!')
+                        spamPenaltyInput.value = ''
+                        spamPenaltyInput.setAttribute('placeholder', threshold)
+                    } else {
+                        msgError('Unexpected error')
+                    }
+                })
+            })
+
             // Set interval value
             const setIntervalButton = document.querySelector('.set-interval-button.button')
             setIntervalButton.addEventListener('click', () => {
@@ -245,7 +285,7 @@ submit.addEventListener('click', () => {
                             }
                         })
                         
-                        totalTd.innerHTML = 'Total: ' + contributors.length
+                        totalTd.textContent = 'Total: ' + contributors.length
 
                         const { avatarUrl } = contributors[insertPos]
                         const usernameLink = 'https://github.com/' + username
@@ -259,11 +299,18 @@ submit.addEventListener('click', () => {
                         avatarTd.appendChild(avatarImg)
         
                         const usernameTd = document.createElement('td')
-                        usernameTd.innerHTML = `<a href="${usernameLink}">${username}</a>`
-                        
+                        const usernameA = document.createElement('a')
+                        usernameA.href = usernameLink
+                        usernameA.textContent = username
+                        usernameTd.appendChild(usernameA)
+
                         const removeTd = document.createElement('td')
-                        removeTd.innerHTML = `<div class="button remove" value="${username}">Remove</div>`
-                        removeTd.firstChild.addEventListener('click', e => {
+                        const removeDiv = document.createElement('div')
+                        removeDiv.className = 'button remove'
+                        removeDiv.setAttribute('value', username)
+                        removeDiv.textContent = 'Remove'
+                        removeTd.appendChild(removeDiv)
+                        removeDiv.addEventListener('click', e => {
                             removeContributor(e, contributors, totalTd)
                         })
         
@@ -345,7 +392,7 @@ function removeContributor(e, contributors, totalTd) {
                         object.splice(index, 1)
                     }
                 })
-                totalTd.innerHTML = 'Total: ' + contributors.length
+                totalTd.textContent = 'Total: ' + contributors.length
 
                 layer.closeAll('dialog')
             } else {

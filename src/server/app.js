@@ -1,3 +1,4 @@
+require('dotenv').config()
 const http = require('http')
 const jsonfile = require('jsonfile')
 const url = require('url')
@@ -10,12 +11,16 @@ const app = express()
 const proxy = require('http-proxy-middleware')
 const path = require('path')
 
-const configPath = './config.json'
-const admindataPath = './admindata.json'
-const dataPath = '../assets/data/data.json'
-const logPath = '../assets/data/log.json'
-const port = jsonfile.readFileSync(configPath).serverPort
-const configBackupPath = '../../configBackup.json'
+const configPath = process.env.CONFIG_PATH || './config.json'
+const admindataPath = process.env.ADMINDATA_PATH || './admindata.json'
+const dataPath = process.env.DATA_PATH || '../assets/data/data.json'
+const logPath = process.env.LOG_PATH || '../assets/data/log.json'
+const port = process.env.SERVER_PORT || 62050
+const configBackupPath = process.env.CONFIG_BACKUP_PATH || '../../configBackup.json'
+const organization = process.env.ORGANIZATION
+const organizationHomepage = process.env.ORGANIZATION_HOMEPAGE
+const organizationGithubUrl = process.env.ORGANIZATION_GITHUB_URL
+const adminPassword = process.env.ADMIN_PASSWORD
 const proxyOption = {
     target: 'http://localhost:' + port + '/',
     pathRewrite: { '^/api': '' },
@@ -66,8 +71,6 @@ process.on('exit', () => {
 const server = http
     .createServer((req, res) => {
         const route = url.parse(req.url).pathname
-        const { adminPassword } = jsonfile.readFileSync(configPath)
-        
         switch (route) {
         case '/data':
             res.setHeader('Cache-Control', 'no-store')
@@ -84,12 +87,12 @@ const server = http
             })
             break
         case '/config':
-            var Config = jsonfile.readFileSync(configPath)
             res.end(
                 JSON.stringify({
-                    organization: Config.organization,
-                    organizationHomepage: Config.organizationHomepage,
-                    organizationGithubUrl: Config.organizationGithubUrl,
+                    organization: organization,
+                    organizationHomepage: organizationHomepage,
+                    organizationGithubUrl: organizationGithubUrl,
+                    spamPenaltyThreshold: parseInt(jsonfile.readFileSync(configPath).spamPenaltyThreshold) || 0,
                 })
             )
             break
@@ -134,6 +137,7 @@ const server = http
                             delay,
                             contributors: contributorsList,
                             startDate,
+                            spamPenaltyThreshold: parseInt(jsonfile.readFileSync(configPath).spamPenaltyThreshold) || 0,
                         })
                     ) // success
                     jsonfile.writeFileSync(admindataPath, contributorsList)
@@ -154,7 +158,7 @@ const server = http
                 res.end('Permission denied\n')
                 return
             }
-            var { organization, includedRepositories } = jsonfile.readFileSync(
+            var { includedRepositories } = jsonfile.readFileSync(
                 configPath
             )
             API.getRepositories(organization).then((repositories) => {
@@ -235,6 +239,26 @@ const server = http
                 }
             })
             break
+        case '/setSpamPenaltyThreshold':
+            if (req.method === 'GET') {
+                res.end('Permission denied\n')
+                return
+            }
+
+            Util.post(req, (params) => {
+                const { token, spamPenaltyThreshold } = params
+
+                if (token !== adminPassword) {
+                    res.end(JSON.stringify({ message: 'Authentication failed' }))
+                } else {
+                    const Config = jsonfile.readFileSync(configPath)
+                    Config.spamPenaltyThreshold = parseInt(spamPenaltyThreshold) || 0
+                    jsonfile.writeFileSync(configPath, Config, { spaces: 2 })
+                    jsonfile.writeFileSync(configBackupPath, Config, { spaces: 2 })
+                    res.end(JSON.stringify({ message: 'Success' }))
+                }
+            })
+            break
         case '/remove':
             if (req.method === 'GET') {
                 res.end('Permission denied\n')
@@ -297,9 +321,10 @@ const server = http
                             // Add this contributor in the data.json
                             const data = jsonfile.readFileSync(dataPath)
                             API.getContributorInfo(
-                                Config.organization,
+                                organization,
                                 username,
-                                Config.includedRepositories
+                                Config.includedRepositories,
+                                Config.startDate
                             ).then((result) => {
                                 if (
                                     result.avatarUrl !== '' &&
@@ -346,10 +371,11 @@ const server = http
             jsonfile.readFile(dataPath, async (err, obj) => {
                 if (err) console.log('[ERROR]' + err)
                 const query = url.parse(req.url, true).query
+                const Config = jsonfile.readFileSync(configPath)
 
                 // Gets list of contributors sorted by parameter if provided
                 // else defaults to sorting by mergedprs
-                const contributors = await API.getRanks(obj, query.parameter)
+                const contributors = await API.getRanks(obj, query.parameter, Config.spamPenaltyThreshold)
 
                 // Responds with rank of username
                 if (query.username) {
@@ -396,7 +422,8 @@ const server = http
                 } else if (query.rank) {
                     // Gets list of contributors sorted by parameter if provided
                     // else defaults to sorting by mergedprs
-                    const contributors = await API.getRanks(obj, query.parameter)
+                    const Config = jsonfile.readFileSync(configPath)
+                    const contributors = await API.getRanks(obj, query.parameter, Config.spamPenaltyThreshold)
                     res.end(JSON.stringify(obj[contributors[query.rank - 1]]))
                 } else {
                     res.end(JSON.stringify(obj))

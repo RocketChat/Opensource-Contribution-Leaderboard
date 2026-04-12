@@ -23,20 +23,28 @@ cd Opensource-Contribution-Leaderboard
 
 # 2. Create your config
 cp src/server/config-example.json src/server/config.json
+cp src/server/.env.example src/server/.env
 ```
 
-Edit `src/server/config.json`:
+Edit `src/server/.env` with your static settings:
+
+```bash
+AUTH_TOKEN=ghp_YOUR_GITHUB_TOKEN
+ORGANIZATION=YourOrg
+ORGANIZATION_HOMEPAGE=https://yourorg.com/
+ORGANIZATION_GITHUB_URL=https://github.com/YourOrg
+ADMIN_PASSWORD=pick-something-better
+SERVER_PORT=62050
+```
+
+Edit `src/server/config.json` with dynamic/runtime values:
 
 ```json
 {
-  "organization": "YourOrg",
-  "organizationHomepage": "https://yourorg.com/",
-  "organizationGithubUrl": "https://github.com/YourOrg",
-  "authToken": "ghp_YOUR_GITHUB_TOKEN",
-  "adminPassword": "pick-something-better",
   "delay": "10",
-  "serverPort": "62050",
-  "contributors": ["contributor1", "contributor2", "contributor3"]
+  "startDate": "2025-06-01",
+  "contributors": ["contributor1", "contributor2"],
+  "includedRepositories": ["Repo1", "Repo2"]
 }
 ```
 
@@ -56,14 +64,25 @@ Open **http://localhost:8080** — you're done.
 
 ## Config Reference
 
+Static settings live in `.env`:
+
+| Env Variable | What it is |
+|---|---|
+| `AUTH_TOKEN` | GitHub personal access token (repo read access) |
+| `ORGANIZATION` | Your GitHub org name |
+| `ORGANIZATION_HOMEPAGE` | Org homepage URL |
+| `ORGANIZATION_GITHUB_URL` | Org GitHub URL |
+| `ADMIN_PASSWORD` | Password for the admin panel |
+| `SERVER_PORT` | Internal backend port (default 62050) |
+
+Dynamic settings live in `config.json` (modifiable via admin panel):
+
 | Key | What it is |
 |---|---|
-| `organization` | Your GitHub org name |
-| `authToken` | GitHub personal access token (repo read access) |
-| `adminPassword` | Password for the admin panel |
 | `delay` | Seconds between API calls per contributor (respect rate limits) |
-| `serverPort` | Internal backend port (default 62050) |
+| `startDate` | Filter contributions from this date onwards |
 | `contributors` | Array of GitHub usernames to track |
+| `includedRepositories` | Repos to include in contribution tracking |
 
 ## Local Development
 
