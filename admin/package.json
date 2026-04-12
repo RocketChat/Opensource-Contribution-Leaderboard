@@ -9,15 +9,15 @@
     "inline-manifest-webpack-plugin": "^4.0.2",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "style-loader": "^0.23.1",
-    "uglifyjs-webpack-plugin": "1.1.6",
+    "terser-webpack-plugin": "^4.2.3",
     "webpack": "^4.29.4",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.2.1"
   },
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
-    "build": "NODE_ENV=production webpack --config build/webpack.config.js"
+    "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --open --hot --config build/webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js"
   },
   "dependencies": {
     "axios": "^0.18.0",

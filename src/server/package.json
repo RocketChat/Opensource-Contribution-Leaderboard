@@ -8,8 +8,10 @@
     "jsonfile": "^5.0.0",
     "socket.io": "^3.0.4"
   },
-  "scripts":{
-    "start" : "node src/server/index.js"
+  "scripts": {
+    "start": "node src/server/index.js"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
   }
-
 }
