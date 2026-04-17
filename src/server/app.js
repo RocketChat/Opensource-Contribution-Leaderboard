@@ -31,6 +31,20 @@ const websocketProxyOption = {
     changeOrigin: true,
 }
 
+if (!fs.existsSync(configPath) && fs.existsSync('./config-example.json')) {
+    fs.copyFileSync('./config-example.json', configPath)
+}
+
+if (!fs.existsSync(dataPath)) {
+    const defaultDataPath = path.resolve(__dirname, '../../contrib/rocketchat/gsoc/2025/gsoc2025final.json')
+    if (fs.existsSync(defaultDataPath)) {
+        if (!fs.existsSync(path.dirname(dataPath))) {
+            fs.mkdirSync(path.dirname(dataPath), { recursive: true })
+        }
+        fs.copyFileSync(defaultDataPath, dataPath)
+    }
+}
+
 Object.defineProperty(Array.prototype, 'flat', {
     value: function (depth = 1) {
         return this.reduce(function (flat, toFlatten) {

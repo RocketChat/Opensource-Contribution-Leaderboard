@@ -9,6 +9,15 @@ const dataPath = process.env.DATA_PATH || '../assets/data/data.json'
 const logPath = process.env.LOG_PATH || '../assets/data/log.json'
 const configPath = process.env.CONFIG_PATH || './config.json'
 
+if (!fs.existsSync(configPath) && fs.existsSync('./config-example.json')) {
+    fs.copyFileSync('./config-example.json', configPath)
+}
+
+if (!process.env.AUTH_TOKEN || process.env.AUTH_TOKEN === 'ghp_YOUR_GITHUB_TOKEN' || process.env.AUTH_TOKEN.trim() === '') {
+    console.log('[WARNING] AUTH_TOKEN not set or is default. Auto-refresh strictly disabled. Using static CONTRIB data out-of-box.')
+    process.exit(0)
+}
+
 let interval = 150
 let dataBuffer = {}
 let logBuffer = {}
